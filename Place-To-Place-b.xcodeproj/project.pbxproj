@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		749AC752DB8CBF8ED004B9AE /* Pods_Place_To_Place_b.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */; };
 		87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AF726CD47CE00DC22A9 /* AppDelegate.swift */; };
 		87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AF926CD47CE00DC22A9 /* SceneDelegate.swift */; };
 		87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AFB26CD47CE00DC22A9 /* ContentView.swift */; };
@@ -28,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Place_To_Place_b.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		654F4CBE1792F9BD6AD04733 /* Pods-Place-To-Place-b.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.release.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.release.xcconfig"; sourceTree = "<group>"; };
 		87251AF426CD47CE00DC22A9 /* Place-To-Place-b.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Place-To-Place-b.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87251AF726CD47CE00DC22A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87251AF926CD47CE00DC22A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +51,7 @@
 		87251B2426CD8D0800DC22A9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
+		ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.debug.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,17 +59,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				749AC752DB8CBF8ED004B9AE /* Pods_Place_To_Place_b.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072FDF6ECD356F88DC1BC555 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		863C2AABD746DB498978940B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */,
+				654F4CBE1792F9BD6AD04733 /* Pods-Place-To-Place-b.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		87251AEB26CD47CE00DC22A9 = {
 			isa = PBXGroup;
 			children = (
 				87251AF626CD47CE00DC22A9 /* Place-To-Place-b */,
 				87251AF526CD47CE00DC22A9 /* Products */,
+				863C2AABD746DB498978940B /* Pods */,
+				072FDF6ECD356F88DC1BC555 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,9 +206,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 87251B0B26CD47D200DC22A9 /* Build configuration list for PBXNativeTarget "Place-To-Place-b" */;
 			buildPhases = (
+				DF681E5269F246BF5DA13C60 /* [CP] Check Pods Manifest.lock */,
 				87251AF026CD47CE00DC22A9 /* Sources */,
 				87251AF126CD47CE00DC22A9 /* Frameworks */,
 				87251AF226CD47CE00DC22A9 /* Resources */,
+				CB3472BA9E1F0D83E96BCD22 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -239,6 +265,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CB3472BA9E1F0D83E96BCD22 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF681E5269F246BF5DA13C60 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Place-To-Place-b-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		87251AF026CD47CE00DC22A9 /* Sources */ = {
@@ -395,6 +463,7 @@
 		};
 		87251B0C26CD47D200DC22A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -403,6 +472,7 @@
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Place-To-Place-b/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -410,12 +480,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "SergeyGolubnik.Place-To-Place-b";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		87251B0D26CD47D200DC22A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 654F4CBE1792F9BD6AD04733 /* Pods-Place-To-Place-b.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -424,6 +495,7 @@
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Place-To-Place-b/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -431,7 +503,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "SergeyGolubnik.Place-To-Place-b";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
