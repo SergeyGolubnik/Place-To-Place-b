@@ -8,8 +8,116 @@
 import SwiftUI
 
 struct LoginView: View {
+    @State private var goToViewRegister = false
+    @State private var goToViewRePassword = false
+    @State var email = ""
+    @State var pass = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            Color.hex("FEE086")
+                .ignoresSafeArea()
+            VStack{
+                Text("Вход").fontWeight(.heavy).font(.largeTitle).padding(.bottom, 60)
+               VStack{
+                   
+                   VStack(alignment: .leading){
+                       
+                       VStack(alignment: .leading){
+                           
+                           Text("E-mail").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
+                           
+                           HStack{
+                               
+                               TextField("Введите e-mail", text: $email)
+                               
+                               if email != ""{
+                                   
+                                   Image("check").foregroundColor(Color.init(.label))
+                               }
+                               
+                           }
+                           
+                           Divider()
+                           
+                       }.padding(.bottom, 15)
+                       
+                       VStack(alignment: .leading){
+                           
+                           Text("Пароль").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
+                           
+                           SecureField("Введите пароль", text: $pass)
+                           
+                           Divider()
+                       }
+                         
+                   }.padding(.horizontal, 6)
+                
+               }.padding()
+               VStack{
+                   
+                   Button(action: {
+                       
+                   }) {
+                       
+                    Text("Войти")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(width: UIScreen.main.bounds.width - 120)
+                        .padding()
+                       
+                       
+                   }.background(Color.green)
+                       .clipShape(Capsule())
+                       .padding(.top, 45)
+                   .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                
+                   
+                   Text("(или)").foregroundColor(Color.gray.opacity(0.5)).padding(.top,8)
+                   
+                Button(action: {
+                    self.goToViewRegister.toggle()
+                }) {
+                    
+                    Text("Зарегестрироватся")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                     .foregroundColor(.white)
+                     .frame(width: UIScreen.main.bounds.width - 120)
+                        
+                     .padding()
+                        
+                        .sheet(isPresented: $goToViewRegister, content: {
+                        RegisterView()
+                     })
+                    
+                    
+                }.background(Color.blue)
+                    .clipShape(Capsule())
+                    .padding(.top,8)
+                .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                   
+                   HStack(spacing: 8){
+                       
+                       Text("Забыл пароль?").foregroundColor(Color.gray.opacity(0.5))
+                       
+                       Button(action: {
+                        self.goToViewRePassword.toggle()
+                       }) {
+                           
+                           Text("Жми")
+                            .sheet(isPresented: $goToViewRePassword, content: {
+                            RePasswordView()
+                            })
+                       }.foregroundColor(.blue)
+                       
+                   }.padding(.top, 50)
+                   
+               }
+           }
+            
+        }
+        
     }
 }
 

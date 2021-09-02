@@ -59,7 +59,7 @@ struct LoaderView_Previews: PreviewProvider {
 import Combine
 
 class ViewModel: ObservableObject {
-    var isLoaderVisible = PassthroughSubject<Bool, Never>()
-    var webTitle = PassthroughSubject<String, Never>()
+   var isLoaderVisible = PassthroughSubject<Bool, Never>()
+   var webTitle = PassthroughSubject<String, Never>()
     
 }

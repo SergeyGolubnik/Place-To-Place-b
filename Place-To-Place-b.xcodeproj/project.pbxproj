@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		749AC752DB8CBF8ED004B9AE /* Pods_Place_To_Place_b.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */; };
+		87089B4F26E10DBC007AA131 /* RePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87089B4E26E10DBC007AA131 /* RePasswordView.swift */; };
 		87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AF726CD47CE00DC22A9 /* AppDelegate.swift */; };
 		87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AF926CD47CE00DC22A9 /* SceneDelegate.swift */; };
 		87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251AFB26CD47CE00DC22A9 /* ContentView.swift */; };
@@ -24,6 +25,8 @@
 		87251B2126CD634700DC22A9 /* TabViewPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2026CD634700DC22A9 /* TabViewPlace.swift */; };
 		87251B2326CD8B8200DC22A9 /* PlaceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2226CD8B8200DC22A9 /* PlaceList.swift */; };
 		87251B2526CD8D0800DC22A9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2426CD8D0800DC22A9 /* LoginView.swift */; };
+		873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873243DF26DD5EB100E4F1FD /* RegisterView.swift */; };
+		873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873243E226DD66D400E4F1FD /* OpenGallary.swift */; };
 		87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0326D03BBF0008C719 /* PolicyView.swift */; };
 		87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */; };
 /* End PBXBuildFile section */
@@ -31,6 +34,7 @@
 /* Begin PBXFileReference section */
 		0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Place_To_Place_b.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		654F4CBE1792F9BD6AD04733 /* Pods-Place-To-Place-b.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.release.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.release.xcconfig"; sourceTree = "<group>"; };
+		87089B4E26E10DBC007AA131 /* RePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RePasswordView.swift; sourceTree = "<group>"; };
 		87251AF426CD47CE00DC22A9 /* Place-To-Place-b.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Place-To-Place-b.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87251AF726CD47CE00DC22A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87251AF926CD47CE00DC22A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +53,8 @@
 		87251B2026CD634700DC22A9 /* TabViewPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewPlace.swift; sourceTree = "<group>"; };
 		87251B2226CD8B8200DC22A9 /* PlaceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceList.swift; sourceTree = "<group>"; };
 		87251B2426CD8D0800DC22A9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		873243DF26DD5EB100E4F1FD /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		873243E226DD66D400E4F1FD /* OpenGallary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGallary.swift; sourceTree = "<group>"; };
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
 		ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.debug.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.debug.xcconfig"; sourceTree = "<group>"; };
@@ -104,7 +110,7 @@
 		87251AF626CD47CE00DC22A9 /* Place-To-Place-b */ = {
 			isa = PBXGroup;
 			children = (
-				87B25E0B26D051600008C719 /* PlaceList */,
+				873243E126DD669200E4F1FD /* Helper */,
 				87B25E0926D050AD0008C719 /* LoginRegister */,
 				87B25E0526D03C030008C719 /* StartView */,
 				87251B1F26CD632000DC22A9 /* TabView */,
@@ -149,33 +155,44 @@
 		87251B1F26CD632000DC22A9 /* TabView */ = {
 			isa = PBXGroup;
 			children = (
+				87B25E0B26D051600008C719 /* PlaceList */,
 				87251B2026CD634700DC22A9 /* TabViewPlace.swift */,
 			);
 			path = TabView;
 			sourceTree = "<group>";
 		};
+		873243E126DD669200E4F1FD /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				873243E226DD66D400E4F1FD /* OpenGallary.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		87B25E0526D03C030008C719 /* StartView */ = {
 			isa = PBXGroup;
 			children = (
-				87B25E0626D03E510008C719 /* UIKit-SwiftUI */,
+				87B25E0626D03E510008C719 /* UIKit-WebView */,
 				87251B1026CD48D500DC22A9 /* PageView */,
 				87251AFB26CD47CE00DC22A9 /* ContentView.swift */,
 			);
 			path = StartView;
 			sourceTree = "<group>";
 		};
-		87B25E0626D03E510008C719 /* UIKit-SwiftUI */ = {
+		87B25E0626D03E510008C719 /* UIKit-WebView */ = {
 			isa = PBXGroup;
 			children = (
 				87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */,
 			);
-			path = "UIKit-SwiftUI";
+			path = "UIKit-WebView";
 			sourceTree = "<group>";
 		};
 		87B25E0926D050AD0008C719 /* LoginRegister */ = {
 			isa = PBXGroup;
 			children = (
 				87251B2426CD8D0800DC22A9 /* LoginView.swift */,
+				873243DF26DD5EB100E4F1FD /* RegisterView.swift */,
+				87089B4E26E10DBC007AA131 /* RePasswordView.swift */,
 			);
 			path = LoginRegister;
 			sourceTree = "<group>";
@@ -318,14 +335,17 @@
 				87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */,
 				87251B2326CD8B8200DC22A9 /* PlaceList.swift in Sources */,
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
+				873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */,
 				87251AFF26CD47CE00DC22A9 /* Place_To_Place_b.xcdatamodeld in Sources */,
 				87251B1D26CD62AC00DC22A9 /* PageView5.swift in Sources */,
+				87089B4F26E10DBC007AA131 /* RePasswordView.swift in Sources */,
 				87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */,
 				87251B1526CD530A00DC22A9 /* ColorExtansion.swift in Sources */,
 				87251B1726CD603F00DC22A9 /* PageViev2.swift in Sources */,
 				87251B1926CD608B00DC22A9 /* PageView3.swift in Sources */,
 				87251B2526CD8D0800DC22A9 /* LoginView.swift in Sources */,
 				87251B1226CD490300DC22A9 /* PageViev1.swift in Sources */,
+				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
 				87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */,
 				87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */,
 			);
