@@ -10,9 +10,15 @@ import SwiftUI
 struct LoginView: View {
     @State private var goToViewRegister = false
     @State private var goToViewRePassword = false
+    @State private var goToViewTabViev = false
+    @State private var alert = false
+    @State private var message = ""
     @State var email = ""
     @State var pass = ""
     var body: some View {
+        if goToViewTabViev {
+            TabViewPlace().transition(.scale)
+        }
         ZStack{
             Color.hex("FEE086")
                 .ignoresSafeArea()
@@ -56,7 +62,18 @@ struct LoginView: View {
                VStack{
                    
                    Button(action: {
-                       
+                    
+                    FirebaseAuthDatabase.loginPressed(email: self.email, password: self.pass) { (rezalt, status) in
+                        switch rezalt{
+                        
+                        case true:
+                            self.goToViewTabViev = true
+                        case false:
+                            self.message = status
+                            self.alert = true
+                            
+                        }
+                    }
                    }) {
                        
                     Text("Войти")
@@ -65,7 +82,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .frame(width: UIScreen.main.bounds.width - 120)
                         .padding()
-                       
+                        
                        
                    }.background(Color.green)
                        .clipShape(Capsule())
@@ -74,7 +91,7 @@ struct LoginView: View {
                 
                    
                    Text("(или)").foregroundColor(Color.gray.opacity(0.5)).padding(.top,8)
-                   
+                    
                 Button(action: {
                     self.goToViewRegister.toggle()
                 }) {
@@ -117,8 +134,13 @@ struct LoginView: View {
            }
             
         }
+        .alert(isPresented: $alert) {
+            Alert(title: Text("Ошибка"), message: Text(message), dismissButton: .default(Text("Ок")))
+            
+        }
         
     }
+    
 }
 
 struct LoginView_Previews: PreviewProvider {
