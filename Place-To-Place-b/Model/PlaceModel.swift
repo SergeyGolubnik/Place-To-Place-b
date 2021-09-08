@@ -8,8 +8,9 @@
 import UIKit
 import Firebase
 
-struct PlaceModel {
-    
+struct PlaceModel: Hashable {
+
+    var id = UUID()
     var userId: String
     var name: String?
     var key: String
