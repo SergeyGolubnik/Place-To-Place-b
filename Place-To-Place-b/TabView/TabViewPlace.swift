@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TabViewPlace: View {
-    @State var selected = 1
+    @State var selected = 0
     @StateObject var data = FirebaseData()
     @State var place = [PlaceModel]()
     
@@ -92,7 +92,7 @@ struct CurvedShape: View {
             path.addArc(center: CGPoint(x: UIScreen.main.bounds.width / 2, y: 90), radius: 30, startAngle: .zero, endAngle: .init(degrees: 180), clockwise: true)
             path.addLine(to: CGPoint(x: 0, y: 90))
         }
-        .fill(Color.green)
+        .fill(Color.init(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1)))
         .rotationEffect(.init(degrees: 180))
         
         

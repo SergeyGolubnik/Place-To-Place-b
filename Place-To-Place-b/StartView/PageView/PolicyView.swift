@@ -12,7 +12,7 @@ struct PolicyView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var isActive1 = false
     @State var isActive2 = false
-    @ObservedObject var viewModel = ViewModel()
+    @ObservedObject var webModel = WebModel()
     @State var isLoaderVisible = false
     
     

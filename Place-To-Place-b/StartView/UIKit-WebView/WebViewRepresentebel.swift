@@ -58,7 +58,7 @@ struct LoaderView_Previews: PreviewProvider {
 }
 import Combine
 
-class ViewModel: ObservableObject {
+class WebModel: ObservableObject {
    var isLoaderVisible = PassthroughSubject<Bool, Never>()
    var webTitle = PassthroughSubject<String, Never>()
     

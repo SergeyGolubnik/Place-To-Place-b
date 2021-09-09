@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlaceList: View {
     
-    @EnvironmentObject var viewModel: FirebaseData
+    @EnvironmentObject var firebaseModel: FirebaseData
     
     var body: some View {
         
@@ -17,7 +17,7 @@ struct PlaceList: View {
             
             ScrollView{
                 VStack(spacing: 20){
-                    ForEach(viewModel.places, id: \.id) { item in
+                    ForEach(firebaseModel.places, id: \.id) { item in
                         Text(item.name ?? "ytn")
                     }
                 }
@@ -40,43 +40,3 @@ struct PlaceList_Previews: PreviewProvider {
 }
 
 
-struct NavigationBarModifier: ViewModifier {
-        
-    var backgroundColor: UIColor?
-    
-    init( backgroundColor: UIColor?) {
-        self.backgroundColor = backgroundColor
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = .clear
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().compactAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-        UINavigationBar.appearance().tintColor = .white
-
-    }
-    
-    func body(content: Content) -> some View {
-        ZStack{
-            content
-            VStack {
-                GeometryReader { geometry in
-                    Color(self.backgroundColor ?? .clear)
-                        .frame(height: geometry.safeAreaInsets.top)
-                        .edgesIgnoringSafeArea(.top)
-                    Spacer()
-                }
-            }
-        }
-    }
-}
-extension View {
- 
-    func navigationBarColor(_ backgroundColor: UIColor?) -> some View {
-        self.modifier(NavigationBarModifier(backgroundColor: backgroundColor))
-    }
-
-}
