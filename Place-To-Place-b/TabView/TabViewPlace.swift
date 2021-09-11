@@ -10,13 +10,16 @@ import SwiftUI
 
 struct TabViewPlace: View {
     @State var selected = 0
+    @State var idAnnatation = ""
+    @State var goDetail = false
+    @State var placeD = PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")
     @StateObject var data = FirebaseData()
     @State var place = [PlaceModel]()
     
     var body: some View {
         ZStack {
             if selected == 0 {
-                PlaceListMap(place: data.places)
+                PlaceListMap(idann: $idAnnatation, goDetail: $goDetail, placeDetail: $placeD, place: data.places)
             } else if selected == 1 {
                 PlaceList()
             }
@@ -75,12 +78,18 @@ struct TabViewPlace: View {
             
         }
         .environmentObject(data)
+        .sheet(isPresented: $goDetail, content: {
+            
+                PlaceDetals(identifer: placeD)
+            
+        })
     }
+    
 }
 
 struct TabViewPlace_Previews: PreviewProvider {
     static var previews: some View {
-        TabViewPlace()
+        TabViewPlace(placeD: .init(key: "", userId: "", switchPlace: "", deviseToken: ""))
     }
 }
 struct CurvedShape: View {

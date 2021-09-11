@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct PlaceDetals: View {
-   @State var identifer = ""
+    @State var identifer: PlaceModel
     var body: some View {
-        Text(identifer)
+        Text(identifer.name!)
     }
 }
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceDetals()
+        PlaceDetals(identifer: .init(key: "", userId: "", switchPlace: "", deviseToken: ""))
     }
 }
