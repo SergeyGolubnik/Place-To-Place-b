@@ -9,87 +9,92 @@
 import SwiftUI
 
 struct TabViewPlace: View {
+    @State var user: Users?
     @State var selected = 0
-    @State var idAnnatation = ""
-    @State var goDetail = false
     @State var placeD = PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")
+    @State var goDetail = false
     @StateObject var data = FirebaseData()
     @State var place = [PlaceModel]()
     
     var body: some View {
-        ZStack {
-            if selected == 0 {
-                PlaceListMap(idann: $idAnnatation, goDetail: $goDetail, placeDetail: $placeD, place: data.places)
-            } else if selected == 1 {
-                PlaceList()
-            }
-            VStack{
-                
-                Spacer()
-                
-                ZStack{
-                    HStack{
-     
-                        Button(action: {
-                            self.selected = 0
-                        }) {
-                            Image(systemName: "lineweight")
-                                .font(.system(size: 25))
-                        }.foregroundColor(self.selected == 0 ? .black : .gray)
-                        Spacer(minLength: 12)
-                        Button(action: {
-                            self.selected = 1
-                        }) {
-                            Image(systemName: "location.circle")
-                                .font(.system(size: 25))
-                        }.foregroundColor(self.selected == 1 ? .black : .gray)
-                        Spacer().frame(width: 110)
-                        Button(action: {
-                            self.selected = 2
-                        }) {
-                            Image(systemName: "bubble.left.and.bubble.right")
-                                .font(.system(size: 25))
-                        }.foregroundColor(self.selected == 2 ? .black : .gray)
-                        Spacer(minLength: 12)
-                        Button(action: {
-                            self.selected = 3
-                        }) {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 25))
-                        }.foregroundColor(self.selected == 3 ? .black : .gray)
-                    }
-                    .padding()
-                    .padding(.horizontal, 10)
-                    .background(CurvedShape().ignoresSafeArea())
-                    
-                    Button(action: {
-                        self.selected = 4
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.yellow)
-                            .font(.system(size: 50))
-                            .padding(2)
-                    }
-                    .background(Color.blue)
-                    .clipShape(Circle())
-                    .offset(y: -22)
+        
+        if data.places == [] {
+            LoaderView()
+        } else {
+            ZStack {
+                if selected == 0 {
+                    PlaceListMap(placeDetail: $placeD, goDetail: $goDetail, place: data.places)
+                } else if selected == 1 {
+                    PlaceList()
                 }
+                VStack{
+                    
+                    Spacer()
+                    
+                    ZStack{
+                        HStack{
+         
+                            Button(action: {
+                                self.selected = 0
+                            }) {
+                                Image(systemName: "lineweight")
+                                    .font(.system(size: 25))
+                            }.foregroundColor(self.selected == 0 ? .black : .gray)
+                            Spacer(minLength: 12)
+                            Button(action: {
+                                self.selected = 1
+                            }) {
+                                Image(systemName: "location.circle")
+                                    .font(.system(size: 25))
+                            }.foregroundColor(self.selected == 1 ? .black : .gray)
+                            Spacer().frame(width: 110)
+                            Button(action: {
+                                self.selected = 2
+                            }) {
+                                Image(systemName: "bubble.left.and.bubble.right")
+                                    .font(.system(size: 25))
+                            }.foregroundColor(self.selected == 2 ? .black : .gray)
+                            Spacer(minLength: 12)
+                            Button(action: {
+                                self.selected = 3
+                            }) {
+                                Image(systemName: "person.circle")
+                                    .font(.system(size: 25))
+                            }.foregroundColor(self.selected == 3 ? .black : .gray)
+                        }
+                        .padding()
+                        .padding(.horizontal, 10)
+                        .background(CurvedShape().ignoresSafeArea())
+                        
+                        Button(action: {
+                            self.selected = 4
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.yellow)
+                                .font(.system(size: 50))
+                                .padding(2)
+                        }
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .offset(y: -22)
+                    }
+                }
+                
             }
+            .environmentObject(data)
+            .sheet(isPresented: $goDetail, content: {
+                PlaceDetals(identifer: placeD)
+                Text(placeD.key)
+            })
             
         }
-        .environmentObject(data)
-        .sheet(isPresented: $goDetail, content: {
-            
-                PlaceDetals(identifer: placeD)
-            
-        })
+        
     }
-    
 }
 
 struct TabViewPlace_Previews: PreviewProvider {
     static var previews: some View {
-        TabViewPlace(placeD: .init(key: "", userId: "", switchPlace: "", deviseToken: ""))
+        TabViewPlace()
     }
 }
 struct CurvedShape: View {

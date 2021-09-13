@@ -9,6 +9,8 @@ import Foundation
 import Firebase
 
 class FirebaseData: ObservableObject {
+    
+    static var shared = FirebaseData()
     private var ref: DatabaseReference!
     private var user: Users!
     @Published var places = [PlaceModel]()
@@ -17,7 +19,7 @@ class FirebaseData: ObservableObject {
         fetchData()
     }
     
-    private func fetchData() {
+    func fetchData() {
         ref = Database.database().reference(withPath: "user")
         guard let currentUser = Auth.auth().currentUser else {return}
         user = Users(user: currentUser)

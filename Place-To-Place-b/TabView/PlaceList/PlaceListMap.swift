@@ -9,13 +9,15 @@ import SwiftUI
 import MapKit
 
 struct PlaceListMap: View {
-    @Binding var idann: String
-    @Binding var goDetail: Bool
+    
     @Binding var placeDetail: PlaceModel
+    
+    @Binding var goDetail: Bool
     @State var place = [PlaceModel]()
+    
     var body: some View {
             NavigationView {
-                MapView(idAnatation: $idann, goDetalsBool: $goDetail, placeDetail: $placeDetail)
+                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
                     .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
                     .navigationBarTitle("idann", displayMode: .inline)
             }
@@ -28,16 +30,18 @@ struct PlaceListMap: View {
 //    }
 //}
 struct MapView: UIViewRepresentable {
-    @Binding var idAnatation: String
-    @Binding var goDetalsBool: Bool
+    
+    
     @Binding var placeDetail: PlaceModel
+    @Binding var goDetalsBool: Bool
     @EnvironmentObject var firebaseModel: FirebaseData
     var annatationArray = [PlaceAnatation]()
     var initalisator = ""
     
     
-    
     func makeUIView(context: Context) -> MKMapView {
+        
+        
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
         var array = [PlaceAnatation]()
@@ -53,27 +57,36 @@ struct MapView: UIViewRepresentable {
                                                 coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
             array.append(placeAnatation)
         }
+        
+       
         mapView.addAnnotations(array)
+        
         return mapView
+        
     }
+    
+    
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
     }
+    
+    
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, idAnatation: $idAnatation, goDetalsBool: $goDetalsBool, placeDetail: $placeDetail)
+        Coordinator(self, placeDetail: $placeDetail, goDetalsBool: $goDetalsBool, firebaseData: firebaseModel)
     }
+    
+    
     class Coordinator: NSObject, MKMapViewDelegate {
-        @EnvironmentObject var firebaseModel: FirebaseData
-        @Binding private var idAnatation: String
-        @Binding private var goDetalsBool: Bool
+        var firebaseModel: FirebaseData
+        
         @Binding private var placeDetail: PlaceModel
-        var placeDet: PlaceModel!
+        @Binding private var goDetalsBool: Bool
         var parent: MapView
-        init(_ parent: MapView, idAnatation: Binding<String>, goDetalsBool: Binding<Bool>, placeDetail: Binding<PlaceModel>) {
+        init(_ parent: MapView, placeDetail: Binding<PlaceModel>, goDetalsBool: Binding<Bool>, firebaseData: FirebaseData) {
             self.parent = parent
-            self._idAnatation = idAnatation
-            self._goDetalsBool = goDetalsBool
             self._placeDetail = placeDetail
+            self._goDetalsBool = goDetalsBool
+            self.firebaseModel = firebaseData
         }
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard let annotation = annotation as? PlaceAnatation else {return nil}
@@ -96,14 +109,17 @@ struct MapView: UIViewRepresentable {
         }
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let place = view.annotation as? PlaceAnatation else {return}
-            idAnatation = place.placeId!
+            let idAnatation = place.placeId!
             if idAnatation != "" {
                 for item in firebaseModel.places {
                     if item.key == idAnatation {
                         placeDetail = item
+                        goDetalsBool = true
+                        
                     }
+                    
                 }
-                goDetalsBool = true
+                
             }
             
         }

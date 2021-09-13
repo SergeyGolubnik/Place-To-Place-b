@@ -9,8 +9,14 @@ import SwiftUI
 
 struct PlaceDetals: View {
     @State var identifer: PlaceModel
+    @State var updateView = false
     var body: some View {
-        Text(identifer.name!)
+        if identifer.key == "" {
+            Button(action: {updateView.toggle()}, label: {
+                
+            })
+        }
+        Text(identifer.key)
     }
 }
 
