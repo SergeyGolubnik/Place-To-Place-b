@@ -8,20 +8,17 @@
 import SwiftUI
 
 struct PlaceDetals: View {
-    @State var identifer: PlaceModel
+    @Binding var identifer: PlaceModel
     @State var updateView = false
     var body: some View {
-        if identifer.key == "" {
-            Button(action: {updateView.toggle()}, label: {
-                
-            })
-        }
+        
         Text(identifer.key)
+            
     }
 }
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceDetals(identifer: .init(key: "", userId: "", switchPlace: "", deviseToken: ""))
+        PlaceDetals(identifer: .constant(PlaceModel(key: "111", userId: "", switchPlace: "", deviseToken: "")))
     }
 }

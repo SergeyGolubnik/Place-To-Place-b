@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct TabViewPlace: View {
+    @State var newPlace = false
     @State var user: Users?
     @State var selected = 0
     @State var placeD = PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")
@@ -37,14 +38,14 @@ struct TabViewPlace: View {
                             Button(action: {
                                 self.selected = 0
                             }) {
-                                Image(systemName: "lineweight")
+                                Image(systemName: "location.circle")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 0 ? .black : .gray)
                             Spacer(minLength: 12)
                             Button(action: {
                                 self.selected = 1
                             }) {
-                                Image(systemName: "location.circle")
+                                Image(systemName: "lineweight")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 1 ? .black : .gray)
                             Spacer().frame(width: 110)
@@ -67,7 +68,8 @@ struct TabViewPlace: View {
                         .background(CurvedShape().ignoresSafeArea())
                         
                         Button(action: {
-                            self.selected = 4
+                            
+                            self.newPlace = true
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(.yellow)
@@ -83,10 +85,11 @@ struct TabViewPlace: View {
             }
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {
-                PlaceDetals(identifer: placeD)
-                Text(placeD.key)
+                PlaceDetals(identifer: $placeD)
             })
-            
+            .sheet(isPresented: $newPlace, content: {
+                    NewPlaceView()
+            })
         }
         
     }

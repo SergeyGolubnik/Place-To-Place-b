@@ -14,29 +14,41 @@ struct PlaceListMap: View {
     
     @Binding var goDetail: Bool
     @State var place = [PlaceModel]()
-    
+    @State var filter = ""
     var body: some View {
-            NavigationView {
-                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
-                    .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-                    .navigationBarTitle("idann", displayMode: .inline)
+        
+        NavigationView {
+            ZStack {
+                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail, filter: filter)
+                Button(action: {
+                    filter = "Гостиницы"
+                }, label: {
+                    Text("Button")
+                })
             }
+            
+                .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
+                .navigationBarTitle("Карта", displayMode: .inline)
+        }
     }
 }
 
 //struct PlaceListMap_Previews: PreviewProvider {
 //    static var previews: some View {
-//        PlaceListMap(idann: .constant(""), goDetail: .constant(true), placeDetail: )
+//        PlaceListMap(placeDetail: .constant(PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")), goDetail: .constant(false))
 //    }
 //}
 struct MapView: UIViewRepresentable {
-    
+    let locationManager = CLLocationManager()
     
     @Binding var placeDetail: PlaceModel
     @Binding var goDetalsBool: Bool
     @EnvironmentObject var firebaseModel: FirebaseData
-    var annatationArray = [PlaceAnatation]()
+    var filter: String
+    
+    
     var initalisator = ""
+    
     
     
     func makeUIView(context: Context) -> MKMapView {
@@ -44,8 +56,14 @@ struct MapView: UIViewRepresentable {
         
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
+        var place = [PlaceModel]()
+        if filter != "" {
+            place = firebaseModel.places.filter {$0.type == filter}
+        } else {
+            place = firebaseModel.places
+        }
         var array = [PlaceAnatation]()
-        for anatacionPL in self.firebaseModel.places {
+        for anatacionPL in place {
             guard let latitude = Double(anatacionPL.latitude!), let longitude = Double(anatacionPL.longitude!) else {continue}
             let placeAnatation = PlaceAnatation(title: anatacionPL.name,
                                                 locationName: anatacionPL.name,
@@ -57,9 +75,10 @@ struct MapView: UIViewRepresentable {
                                                 coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
             array.append(placeAnatation)
         }
-        
        
-        mapView.addAnnotations(array)
+            mapView.addAnnotations(array)
+        
+        
         
         return mapView
         
@@ -68,6 +87,26 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
+        
+        
+        uiView.showsUserLocation = true
+        
+        locationManager.requestAlwaysAuthorization()
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if let locValue: CLLocationCoordinate2D = locationManager.location?.coordinate {
+                    let coordinate = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
+                    let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
+                    uiView.setRegion(region, animated: true)
+                }
+            }
+        }
     }
     
     
