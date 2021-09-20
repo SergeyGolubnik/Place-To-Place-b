@@ -9,9 +9,9 @@ import SwiftUI
 import MapKit
 
 struct PlaceListMap: View {
-    
+    @State var locationManager = CLLocationManager()
     @Binding var placeDetail: PlaceModel
-    
+    @StateObject var mapData = MapViewModel()
     @Binding var goDetail: Bool
     @State var place = [PlaceModel]()
     @State var filter = ""
@@ -20,17 +20,49 @@ struct PlaceListMap: View {
         NavigationView {
             ZStack {
                 MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail, filter: filter)
-                Button(action: {
-                    filter = "Гостиницы"
-                }, label: {
-                    Text("Button")
+                    .environmentObject(mapData)
+                VStack {
+                    Button(action: {
+                        filter = "Гостиницы"
+                        var placeF = [PlaceModel]()
+                        if filter != "" {
+                            placeF = place.filter {$0.type == filter}
+                            mapData.rmovePlace(place: placeF)
+                        } else {
+                            placeF = place
+                            mapData.rmovePlace(place: placeF)
+                        }
+                    }, label: {
+                        Text("Button")
                 })
+                    Button(action: {
+                        filter = ""
+                        var placeF = [PlaceModel]()
+                        if filter != "" {
+                            placeF = place.filter {$0.type == filter}
+                            mapData.rmovePlace(place: placeF)
+                        } else {
+                            placeF = place
+                            mapData.rmovePlace(place: placeF)
+                        }
+                    }, label: {
+                        Text("waevfw")
+                    })
+                }
+                
             }
             
-                .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-                .navigationBarTitle("Карта", displayMode: .inline)
-        }
+            .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
+            .navigationBarTitle("Карта", displayMode: .inline)
+        }.onAppear(perform: {
+            locationManager.delegate = mapData
+            locationManager.requestWhenInUseAuthorization()
+            mapData.rmovePlace(place: place)
+            
+        })
     }
+    
+    
 }
 
 //struct PlaceListMap_Previews: PreviewProvider {
@@ -40,11 +72,11 @@ struct PlaceListMap: View {
 //}
 struct MapView: UIViewRepresentable {
     let locationManager = CLLocationManager()
-    
+    @EnvironmentObject var mapDAta: MapViewModel
     @Binding var placeDetail: PlaceModel
     @Binding var goDetalsBool: Bool
     @EnvironmentObject var firebaseModel: FirebaseData
-    var filter: String
+    @State var filter: String
     
     
     var initalisator = ""
@@ -53,60 +85,19 @@ struct MapView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> MKMapView {
         
+        let view = mapDAta.mapView
         
-        let mapView = MKMapView()
-        mapView.delegate = context.coordinator
-        var place = [PlaceModel]()
-        if filter != "" {
-            place = firebaseModel.places.filter {$0.type == filter}
-        } else {
-            place = firebaseModel.places
-        }
-        var array = [PlaceAnatation]()
-        for anatacionPL in place {
-            guard let latitude = Double(anatacionPL.latitude!), let longitude = Double(anatacionPL.longitude!) else {continue}
-            let placeAnatation = PlaceAnatation(title: anatacionPL.name,
-                                                locationName: anatacionPL.name,
-                                                discipLine: anatacionPL.name,
-                                                subtitle: anatacionPL.type,
-                                                placeId: anatacionPL.key,
-                                                placeUid: anatacionPL.userId,
-                                                favorit: anatacionPL.favorit,
-                                                coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-            array.append(placeAnatation)
-        }
-       
-            mapView.addAnnotations(array)
+        view.showsUserLocation = true
+        view.delegate = context.coordinator
         
-        
-        
-        return mapView
+        return view
         
     }
     
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
-        
-        
-        uiView.showsUserLocation = true
-        
-        locationManager.requestAlwaysAuthorization()
-        
-        locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                if let locValue: CLLocationCoordinate2D = locationManager.location?.coordinate {
-                    let coordinate = CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude)
-                    let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
-                    uiView.setRegion(region, animated: true)
-                }
-            }
-        }
+       
     }
     
     
@@ -162,5 +153,59 @@ struct MapView: UIViewRepresentable {
             }
             
         }
+    }
+    
+    
+}
+
+class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @Published var mapView = MKMapView()
+    var firebaseModel: FirebaseData!
+    @Published var region: MKCoordinateRegion!
+    
+    func rmovePlace(place: [PlaceModel]) {
+        
+        mapView.removeAnnotations(mapView.annotations)
+        var array = [PlaceAnatation]()
+        for anatacionPL in place {
+            guard let latitude = Double(anatacionPL.latitude!), let longitude = Double(anatacionPL.longitude!) else {continue}
+            let placeAnatation = PlaceAnatation(title: anatacionPL.name,
+                                                locationName: anatacionPL.name,
+                                                discipLine: anatacionPL.name,
+                                                subtitle: anatacionPL.type,
+                                                placeId: anatacionPL.key,
+                                                placeUid: anatacionPL.userId,
+                                                favorit: anatacionPL.favorit,
+                                                coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+            array.append(placeAnatation)
+        }
+        mapView.addAnnotations(array)
+    }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+//        case .denied:
+            //alert
+//            permissionDenited.toggle()
+        case .authorizedWhenInUse:
+            manager.requestLocation()
+        default:
+            ()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {return}
+        self.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        
+        self.mapView.setRegion(self.region, animated: true)
+        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
+        
     }
 }
