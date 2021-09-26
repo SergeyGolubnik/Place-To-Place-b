@@ -43,6 +43,9 @@
 		879512B226EA9E5100DFD212 /* PlaceDetals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512B126EA9E5100DFD212 /* PlaceDetals.swift */; };
 		87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0326D03BBF0008C719 /* PolicyView.swift */; };
 		87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */; };
+		87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204726FBCC3400C22D55 /* CategoryModel.swift */; };
+		87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204B26FBD3A100C22D55 /* CategoryView.swift */; };
+		87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204D26FE820100C22D55 /* UrlImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +88,9 @@
 		879512B126EA9E5100DFD212 /* PlaceDetals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetals.swift; sourceTree = "<group>"; };
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
+		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
+		87D0204B26FBD3A100C22D55 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		87D0204D26FE820100C22D55 /* UrlImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
 		ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.debug.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +138,7 @@
 				87089B5F26E167BC007AA131 /* PlaceModel.swift */,
 				879512A926E7E1E600DFD212 /* UserModel.swift */,
 				879512AF26EA904500DFD212 /* PlaceAnnatation.swift */,
+				87D0204726FBCC3400C22D55 /* CategoryModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -220,6 +227,7 @@
 				87089B5826E1671B007AA131 /* AuthResalt.swift */,
 				87089B5A26E16739007AA131 /* UserError.swift */,
 				87089B5C26E1675D007AA131 /* Validators.swift */,
+				87D0204D26FE820100C22D55 /* UrlImageView.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -270,6 +278,7 @@
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
 				879512AB26E8028400DFD212 /* PlaceList.swift */,
 				879512B126EA9E5100DFD212 /* PlaceDetals.swift */,
+				87D0204B26FBD3A100C22D55 /* CategoryView.swift */,
 			);
 			path = PlaceList;
 			sourceTree = "<group>";
@@ -394,10 +403,12 @@
 				87089B6026E167BC007AA131 /* PlaceModel.swift in Sources */,
 				87089B5926E1671B007AA131 /* AuthResalt.swift in Sources */,
 				877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */,
+				87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */,
 				87251B1B26CD621500DC22A9 /* PageView4.swift in Sources */,
 				87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */,
 				879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */,
 				87251B2326CD8B8200DC22A9 /* PlaceListMap.swift in Sources */,
+				87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */,
 				879512AC26E8028400DFD212 /* PlaceList.swift in Sources */,
 				87089B5B26E16739007AA131 /* UserError.swift in Sources */,
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
@@ -418,6 +429,7 @@
 				87089B5D26E1675D007AA131 /* Validators.swift in Sources */,
 				87251B1226CD490300DC22A9 /* PageViev1.swift in Sources */,
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
+				87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */,
 				87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */,
 				87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */,
 			);

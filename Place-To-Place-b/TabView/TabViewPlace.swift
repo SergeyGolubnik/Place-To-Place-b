@@ -85,7 +85,7 @@ struct TabViewPlace: View {
             }
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {
-                PlaceDetals(identifer: $placeD)
+                PlaceDetals(placeModel: $placeD)
             })
             .sheet(isPresented: $newPlace, content: {
                     NewPlaceView()

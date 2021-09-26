@@ -15,68 +15,97 @@ struct PlaceListMap: View {
     @Binding var goDetail: Bool
     @State var place = [PlaceModel]()
     @State var filter = ""
+    @State var tranferCategory = false
     var body: some View {
         
         NavigationView {
             ZStack {
-                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail, filter: filter)
+                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
                     .environmentObject(mapData)
-                VStack {
-                    Button(action: {
-                        filter = "Гостиницы"
-                        var placeF = [PlaceModel]()
-                        if filter != "" {
-                            placeF = place.filter {$0.type == filter}
-                            mapData.rmovePlace(place: placeF)
-                        } else {
-                            placeF = place
-                            mapData.rmovePlace(place: placeF)
+                if filter != "" {
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                filter = ""
+                            }) {
+                                Text("Сброс фильтра")
+                                    .font(.caption)
+                                
+                            }
+                            .frame(width: 70, height: 36)
+                            .background(Color.blue)
+                            .foregroundColor(.black)
+                            .cornerRadius(10)
+                            .shadow(color: .gray, radius: 5, x: 0, y: 0)
+                            .padding(.top, 4)
+                            .padding(.trailing, 4)
                         }
-                    }, label: {
-                        Text("Button")
-                })
-                    Button(action: {
-                        filter = ""
-                        var placeF = [PlaceModel]()
-                        if filter != "" {
-                            placeF = place.filter {$0.type == filter}
-                            mapData.rmovePlace(place: placeF)
-                        } else {
-                            placeF = place
-                            mapData.rmovePlace(place: placeF)
-                        }
-                    }, label: {
-                        Text("waevfw")
-                    })
+                        
+                        Spacer()
+                    }
                 }
+                
                 
             }
             
             .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
+            .navigationBarItems(trailing:
+                                    Button(action: {
+                tranferCategory.toggle()
+            }) {
+                Image("Filtr")
+                    .resizable()
+                    .frame(width: 18, height: 18)
+                    .padding(.trailing, 5)
+            })
             .navigationBarTitle("Карта", displayMode: .inline)
+            
         }.onAppear(perform: {
             locationManager.delegate = mapData
             locationManager.requestWhenInUseAuthorization()
             mapData.rmovePlace(place: place)
             
         })
+            .onChange(of: filter) { value in
+                
+                if value == filter, filter != "" {
+                    let placeF = place.filter {$0.type == filter}
+                    mapData.rmovePlace(place: placeF)
+                } else {
+                    mapData.rmovePlace(place: place)
+                }
+            }
+            .sheet(isPresented: $tranferCategory) {
+                CategoryView(enterType: $filter)
+            }
     }
     
     
 }
 
-//struct PlaceListMap_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaceListMap(placeDetail: .constant(PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")), goDetail: .constant(false))
-//    }
-//}
+struct DiamondBackground: View {
+    var body: some View {
+        VStack {
+            Rectangle()
+                .fill(Color.gray)
+                .frame(width: 250, height: 250, alignment: .center)
+                .rotationEffect(.degrees(45.0))
+        }
+    }
+}
+struct PlaceListMap_Previews: PreviewProvider {
+    static var previews: some View {
+        TabViewPlace()
+    }
+}
 struct MapView: UIViewRepresentable {
     let locationManager = CLLocationManager()
     @EnvironmentObject var mapDAta: MapViewModel
     @Binding var placeDetail: PlaceModel
     @Binding var goDetalsBool: Bool
     @EnvironmentObject var firebaseModel: FirebaseData
-    @State var filter: String
+    
     
     
     var initalisator = ""
@@ -97,7 +126,7 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
-       
+        
     }
     
     
@@ -160,7 +189,7 @@ struct MapView: UIViewRepresentable {
 
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var mapView = MKMapView()
-    var firebaseModel: FirebaseData!
+    
     @Published var region: MKCoordinateRegion!
     
     func rmovePlace(place: [PlaceModel]) {
@@ -183,12 +212,12 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
-        
+            
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
-//        case .denied:
+            //        case .denied:
             //alert
-//            permissionDenited.toggle()
+            //            permissionDenited.toggle()
         case .authorizedWhenInUse:
             manager.requestLocation()
         default:

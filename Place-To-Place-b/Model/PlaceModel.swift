@@ -59,5 +59,23 @@ struct PlaceModel: Hashable {
         ref = snapshot.ref
     }
 
+    init(userId: String, name: String, key: String, location: String, type: String, rating: [String: Int], imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?) {
+        self.userId = userId
+        self.name = name
+        self.key = key
+        self.location = location
+        self.type = type
+        self.rating = rating
+        self.imageUrl = imageUrl
+        self.latitude = latitude
+        self.deviseToken = deviseToken
+        self.longitude = longitude
+        self.discription = discription
+        self.switchPlace = switchPlace
+        self.gellery = gellery
+        self.favorit = favorit
+        self.date = date
+        self.ref = nil
+    }
 }
 

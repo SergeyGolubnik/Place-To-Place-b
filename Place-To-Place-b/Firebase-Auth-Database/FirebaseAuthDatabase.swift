@@ -298,4 +298,10 @@ class FirebaseAuthDatabase {
             "gellery": gellery as [String]
         ])
     }
+    static func aploadRating(key: String, rating: [String: Int], ref: DatabaseReference, comletion: @escaping(Result <Void, Error>) -> Void) {
+        let placeRef = ref.child(key)
+        placeRef.updateChildValues([
+            "rating": rating as [String: Int]
+        ])
+    }
 }
