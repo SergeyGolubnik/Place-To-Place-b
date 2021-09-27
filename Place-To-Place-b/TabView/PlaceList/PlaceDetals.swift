@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaceDetals: View {
-    @Binding var placeModel: PlaceModel
+    @Binding var place: PlaceModel
     @State var updateView = false
     @State var redactPlace = false
     @State var messageBool = false
@@ -16,6 +16,45 @@ struct PlaceDetals: View {
     @State var starsBool = false
     @State var stars = "-"
     @State var userPlace: Users!
+    @State var userPlaceBool = false
+    @State var type = ""
+    @State var avatar = ""
+    let category: [CategoryModel] = [
+        CategoryModel(imageString: "bar", name: "Бары и пабы"),
+        CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
+        CategoryModel(imageString: "fasfud", name: "Фасфуд"),
+        CategoryModel(imageString: "salon", name: "Красота"),
+        CategoryModel(imageString: "marcet", name: "Магазины"),
+        CategoryModel(imageString: "tc", name: "Торговые центры"),
+        CategoryModel(imageString: "kinder", name: "Для детей"),
+        CategoryModel(imageString: "hotel", name: "Гостиницы"),
+        CategoryModel(imageString: "bisnes", name: "Бизнес"),
+        CategoryModel(imageString: "dicovery", name: "Места культуры"),
+        CategoryModel(imageString: "parc", name: "Парки и скверы"),
+        CategoryModel(imageString: "razvlechenia", name: "Развлечения"),
+        CategoryModel(imageString: "servis", name: "Сервис"),
+        CategoryModel(imageString: "servisAuto", name: "Автосервис"),
+        CategoryModel(imageString: "direct", name: "Объявления"),
+        CategoryModel(imageString: "adalt", name: "Для взрослых"),
+        CategoryModel(imageString: "tinder", name: "Для общения")
+    ]
+    @State var placeModel = PlaceModel(
+        userId: "10101010111",
+        name: "Kreml",
+        key: "100000001",
+        location: "Москва, Красная пffffffffffffffffffffffffff ffff fffff fffff ffff лощад",
+        type: "bar",
+        rating: ["10101010111": 1, "1013401010111": 5, "101010124540111": 3],
+        imageUrl: "https://avatars.mds.yandex.net/get-zen_doc/3512190/pub_600f1c978dfe7b3b2dd841cc_600f235527add74df605f5de/scale_1200",
+        latitude: "22222222",
+        deviseToken: "10101010101010101010",
+        longitude: "111111111",
+        discription: "Центр москвы и всей Руси",
+        switchPlace: "Делится",
+        gellery: ["https://www.funomania.ru/uploads/posts/2021-06/1623987922_1600745655_7-p-koreyanki-9.jpg","https://im0-tub-ru.yandex.net/i?id=0fcb4ce76e51714887776490ee0316c3&ref=rim&n=33&w=450&h=300","https://shop.salonsecret.ru/media/setka_editor/post/3-2_2.jpg","https://volosyinform.ru/wp-content/uploads/2020/10/pochemu-ryzhij-cvet-volos.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-30.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-1.png","https://i.redd.it/7hrcxl42kcwz.jpg"],
+        favorit: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1","DDQMzZ33WKQSK9CRXyzndKSPf7s2"],
+        date: "2021-08-05 11:04:58"
+    )
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
     
     
@@ -34,11 +73,12 @@ struct PlaceDetals: View {
                             .frame(width: 60, height: 12, alignment: .center)
                             .padding(.vertical)
                         HStack{
-                            Text(place.name!)
-                                .font(.title)
-                                .fontWeight(.heavy)
-                                .padding(.leading)
-                                
+                            if place.name != "", place.name != nil {
+                                Text(place.name!)
+                                    .font(.title)
+                                    .fontWeight(.heavy)
+                                    .padding(.leading)
+                            }
                             Spacer()
                             Button(action: {
                                 redactPlace.toggle()
@@ -54,13 +94,16 @@ struct PlaceDetals: View {
                     VStack {
                         ScrollView(.horizontal) {
                             HStack {
-                                HStack {
-                                    UrlImageView(urlString: place.imageUrl, wight: 210, height: 210)
-                                    
+                                if place.imageUrl != "",place.imageUrl != nil {
+                                    HStack {
+                                        UrlImageView(urlString: place.imageUrl, wight: 210, height: 210)
+                                        
+                                    }
+                                    .padding(.leading, 30)
                                 }
-                                .padding(.leading, 30)
-                                HStack{
-                                    if place.gellery != nil {
+                                if place.gellery != nil, place.gellery != [] {
+                                    HStack{
+                                        
                                         
                                         LazyHGrid(rows: columns) {
                                             ForEach(place.gellery!, id: \.self) { image in
@@ -70,8 +113,9 @@ struct PlaceDetals: View {
                                         }
                                         
                                     }
+                                    .frame(height: 210)
                                 }
-                                .frame(height: 210)
+                                
                             }
                             Divider().foregroundColor(.black)
                         }
@@ -91,6 +135,17 @@ struct PlaceDetals: View {
                                 .cornerRadius(10)
                                 .shadow(radius: 5)
                                 .padding(.leading, 20)
+                            
+                            if avatar != "" {
+                                Button(action: {
+                                    userPlaceBool.toggle()
+                                }) {
+                                    UrlImageView(urlString: avatar, wight: 40, height: 40)
+                                        .clipShape(Circle())
+                                        .padding(.leading)
+                                }
+                            }
+                            
                             Spacer()
                             Button(action: {
                                 starsBool.toggle()
@@ -122,13 +177,16 @@ struct PlaceDetals: View {
                                 .shadow(radius: 5)
                                 .padding(.leading, 20)
                             Spacer()
-                            Image(place.type!)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(8)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .padding(.trailing)
+                            if type != "" {
+                                Image(type)
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(8)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .padding(.trailing)
+                            }
+                            
                         }
                     }
                     VStack {
@@ -136,7 +194,7 @@ struct PlaceDetals: View {
                         HStack {
                             Text("Подробней")
                                 .font(.title3)
-                                
+                            
                                 .padding(.leading)
                             Spacer()
                         }
@@ -150,10 +208,14 @@ struct PlaceDetals: View {
                             }
                             Spacer()
                             VStack{
-                                HStack {
-                                    Text(place.location!)
+                                if place.location != nil, place.location != "" {
+                                    HStack {
+                                        Text(place.location!)
+                                            .padding(.trailing)
                                         
+                                    }
                                 }
+                                
                             }
                         }
                         .padding(.top)
@@ -172,13 +234,16 @@ struct PlaceDetals: View {
                     }
                     .padding(.top)
                     VStack{
-                        HStack {
-                            Text(place.discription!)
-                                .lineLimit(10)
-                                .padding(.top)
-                            Spacer()
+                        if place.discription != "", place.discription != nil {
+                            HStack {
+                                Text(place.discription!)
+                                    .lineLimit(10)
+                                    .padding(.top)
+                                Spacer()
+                            }
+                            .padding([.leading,.trailing])
                         }
-                        .padding([.leading,.trailing])
+                        
                         
                     }
                     
@@ -191,40 +256,43 @@ struct PlaceDetals: View {
             
         }
         .onAppear {
+            if place.userId == "" {
+                self.place = placeModel
+            }
+            if place.type != "" {
+                for i in category {
+                    if i.name == place.type {
+                        self.type = i.imageString!
+                    }
+                }
+            }
+            print(type)
             if place.rating != nil {
                 starsRating()
             }
-            FirebaseData.shared.getFrendUserData(userId: placeModel.userId) { resalt in
-                switch resalt {
+            if place.userId != "" {
+                FirebaseData.shared.getFrendUserData(userId: place.userId) { resalt in
                     
-                case .success(let userPlace):
-                    self.userPlace = userPlace
-                    print(userPlace)
-                case .failure(let error):
-                    print(error.localizedDescription)
+                    switch resalt {
+                        
+                    case .success(let userPlace):
+                        self.userPlace = userPlace
+                        if userPlace.avatarsURL != nil {
+                            self.avatar = userPlace.avatarsURL!
+                        }
+                        print(userPlace)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        return
+                    }
                 }
             }
+            
         }
     }
-        
-    let place = PlaceModel(
-        userId: "10101010111",
-        name: "Kreml",
-        key: "100000001",
-        location: "Москва, Красная пffffffffffffffffffffffffff ffff fffff fffff ffff лощад",
-        type: "bar",
-        rating: ["10101010111": 1, "1013401010111": 5, "101010124540111": 3],
-        imageUrl: "https://avatars.mds.yandex.net/get-zen_doc/3512190/pub_600f1c978dfe7b3b2dd841cc_600f235527add74df605f5de/scale_1200",
-        latitude: "22222222",
-        deviseToken: "10101010101010101010",
-        longitude: "111111111",
-        discription: "Центр москвы и всей Руси",
-        switchPlace: "Делится",
-        gellery: ["https://www.funomania.ru/uploads/posts/2021-06/1623987922_1600745655_7-p-koreyanki-9.jpg","https://im0-tub-ru.yandex.net/i?id=0fcb4ce76e51714887776490ee0316c3&ref=rim&n=33&w=450&h=300","https://shop.salonsecret.ru/media/setka_editor/post/3-2_2.jpg","https://volosyinform.ru/wp-content/uploads/2020/10/pochemu-ryzhij-cvet-volos.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-30.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-1.png","https://i.redd.it/7hrcxl42kcwz.jpg"],
-        favorit: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1","DDQMzZ33WKQSK9CRXyzndKSPf7s2"],
-        date: "2021-08-05 11:04:58"
-    )
-        
+    
+    
+    
     
     func starsRating() {
         var resalt = 0.0
@@ -245,6 +313,6 @@ struct PlaceDetals: View {
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceDetals(placeModel: .constant(PlaceModel(key: "111", userId: "", switchPlace: "", deviseToken: "")))
+        PlaceDetals(place: .constant(PlaceModel(key: "111", userId: "", switchPlace: "", deviseToken: "")))
     }
 }

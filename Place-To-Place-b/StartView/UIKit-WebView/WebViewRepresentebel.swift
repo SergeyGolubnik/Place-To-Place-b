@@ -33,6 +33,8 @@ struct LoaderView: View {
     @State var isSpinCircle = false
     var body: some View {
         ZStack {
+            Color.hex("FEE086")
+                        .ignoresSafeArea()
             Circle()
                 .frame(width: 60, height: 60, alignment: .center)
             VStack {
@@ -53,6 +55,7 @@ struct LoaderView: View {
 
 struct LoaderView_Previews: PreviewProvider {
     static var previews: some View {
+        
         LoaderView()
     }
 }
