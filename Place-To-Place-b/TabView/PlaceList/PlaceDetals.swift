@@ -61,6 +61,7 @@ struct PlaceDetals: View {
     
     
     var body: some View {
+        
         ZStack {
             Color.hex("FEE086")
                 .ignoresSafeArea()
@@ -288,6 +289,9 @@ struct PlaceDetals: View {
                 }
             }
             
+        }
+        .sheet(isPresented: $starsBool) {
+            StarsRatingView(starsBoolView: $starsBool)
         }
     }
     
