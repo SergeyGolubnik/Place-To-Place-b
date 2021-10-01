@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct StarsRatingView: View {
+    @State var placeModel: PlaceModel?
+    @State var userPlace: Users?
+    @State var user: Users?
     @Binding var starsBoolView: Bool
     @State private var rating: Int?
     @State var comets = ""
@@ -46,9 +50,48 @@ struct StarsRatingView: View {
                 }
                 .shadow(radius: 3)
                 Button(action: {
+                    if rating != nil, userPlace != nil, user != nil {
+                        
+                        var newRating: [String: Int] = [:]
+                        
+                        if placeModel?.rating == nil {
+                            placeModel?.rating = [user!.uid: rating!]
+                            newRating = (placeModel?.rating)!
+                        }else {
+                            placeModel?.rating![user!.uid] = rating
+                            newRating = (placeModel?.rating)!
+                        }
+                        FirebaseAuthDatabase.aploadRating(key: placeModel!.key, rating: newRating, ref: FirebaseData.shared.ref) { resalt in
+                            switch resalt {
+                            case .success(_): break
+                                
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                    if comets != "", userPlace != nil, user != nil {
+                        var newComets: [String: String] = [:]
+                        if placeModel?.coments == nil {
+                            placeModel?.coments = [user!.uid: comets]
+                            newComets = (placeModel?.coments)!
+                        }else {
+                            placeModel?.coments![user!.uid] = comets
+                            newComets = (placeModel?.coments)!
+                        }
+                        
+                        FirebaseAuthDatabase.aploadComents(key: placeModel!.key, coments: newComets, ref: FirebaseData.shared.ref) { resalt in
+                            switch resalt {
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                            case .success():
+                                break
+                            }
+                        }
+                    }
                     starsBoolView = false
                 }) {
-                    Text("Сщхранить")
+                    Text("Сохранить")
                         .foregroundColor(.white)
                         .padding()
                         .background(Color.blue)
@@ -60,8 +103,13 @@ struct StarsRatingView: View {
             .background(Color.clear)
         }
         
-        
+        .onAppear {
+            
+            guard let currentUser = Auth.auth().currentUser else {return}
+            user = Users(user: currentUser)
+        }
     }
+        
 }
 
 struct StarsRatingView_Previews: PreviewProvider {

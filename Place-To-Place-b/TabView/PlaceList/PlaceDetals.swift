@@ -15,6 +15,7 @@ struct PlaceDetals: View {
     @State var navigationBool = false
     @State var starsBool = false
     @State var stars = "-"
+    @State var coment = [String]()
     @State var userPlace: Users!
     @State var userPlaceBool = false
     @State var type = ""
@@ -222,20 +223,20 @@ struct PlaceDetals: View {
                         .padding(.top)
                         
                     }
-                    
-                    VStack{
-                        Divider().foregroundColor(.black)
-                        HStack {
-                            Text("Описание:")
-                                .font(.title3)
-                                .padding(.leading)
+                    if place.discription != "", place.discription != nil {
+                        VStack{
+                            Divider().foregroundColor(.black)
+                            HStack {
+                                Text("Описание:")
+                                    .font(.title3)
+                                    .padding(.leading)
+                                Spacer()
+                            }
                             Spacer()
                         }
-                        Spacer()
-                    }
-                    .padding(.top)
-                    VStack{
-                        if place.discription != "", place.discription != nil {
+                        .padding(.top)
+                        VStack{
+                            
                             HStack {
                                 Text(place.discription!)
                                     .lineLimit(10)
@@ -244,10 +245,35 @@ struct PlaceDetals: View {
                             }
                             .padding([.leading,.trailing])
                         }
-                        
-                        
                     }
-                    
+                    if coment != [String]() {
+                        VStack{
+                            Divider().foregroundColor(.black)
+                            HStack {
+                                Text("Коментарии:")
+                                    .font(.title3)
+                                    .padding(.leading)
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                        .padding(.top)
+                        VStack{
+                            ForEach(coment, id: \.self) { index in
+                                HStack {
+                                    Text(index)
+                                        .padding(5)
+                                        .background(Color.hex("CDB56C"))
+                                        .cornerRadius(10)
+                                        .padding(.top)
+                                    Spacer()
+                                }
+                                .padding([.leading,.trailing])
+                                Divider().padding(.trailing,70)
+                            }
+                            
+                        }
+                    }
                     Spacer()
                     
                 }
@@ -257,20 +283,9 @@ struct PlaceDetals: View {
             
         }
         .onAppear {
-            if place.userId == "" {
-                self.place = placeModel
-            }
-            if place.type != "" {
-                for i in category {
-                    if i.name == place.type {
-                        self.type = i.imageString!
-                    }
-                }
-            }
-            print(type)
-            if place.rating != nil {
-                starsRating()
-            }
+            
+            
+
             if place.userId != "" {
                 FirebaseData.shared.getFrendUserData(userId: place.userId) { resalt in
                     
@@ -288,30 +303,52 @@ struct PlaceDetals: View {
                     }
                 }
             }
-            
+            if place.userId == "" {
+                self.place = placeModel
+            }
+            if place.type != "" {
+                for i in category {
+                    if i.name == place.type {
+                        self.type = i.imageString!
+                    }
+                }
+            }
+            comentPlace()
+            starsRating()
         }
         .sheet(isPresented: $starsBool) {
-            StarsRatingView(starsBoolView: $starsBool)
+            StarsRatingView(placeModel: place, userPlace: userPlace, starsBoolView: $starsBool)
         }
     }
     
     
     
-    
-    func starsRating() {
-        var resalt = 0.0
-        var starsSumm = 0
-        var starsEnty = 0
-        guard let rating = place.rating else {return}
-        for i in rating {
-            starsSumm += i.value
-            starsEnty += 1
+    private func comentPlace() {
+        self.coment.removeAll()
+        if place.coments != nil {
+            
+            var com = [String]()
+            for ( _ , valuesComent) in place.coments! {
+                com.append(valuesComent)
+            }
+            self.coment = com
         }
-        resalt = Double(starsSumm) / Double(starsEnty)
-        if resalt != 0.0 {
-            self.stars = String(format: "%.1f", resalt)
+    }
+    private func starsRating() {
+        if place.rating != nil {
+            var resalt = 0.0
+            var starsSumm = 0
+            var starsEnty = 0
+            guard let rating = place.rating else {return}
+            for i in rating {
+                starsSumm += i.value
+                starsEnty += 1
+            }
+            resalt = Double(starsSumm) / Double(starsEnty)
+            if resalt != 0.0 {
+                self.stars = String(format: "%.1f", resalt)
+            }
         }
-        
     }
 }
 

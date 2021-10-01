@@ -304,4 +304,10 @@ class FirebaseAuthDatabase {
             "rating": rating as [String: Int]
         ])
     }
+    static func aploadComents(key: String, coments: [String: String], ref: DatabaseReference, comletion: @escaping(Result <Void, Error>) -> Void) {
+        let placeRef = ref.child(key)
+        placeRef.updateChildValues([
+            "coments": coments as [String: String]
+        ])
+    }
 }

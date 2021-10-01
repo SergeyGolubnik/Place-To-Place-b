@@ -17,6 +17,7 @@ struct PlaceModel: Hashable {
     var location: String?
     var type: String?
     var rating: [String: Int]?
+    var coments: [String: String]?
     var imageUrl: String?
     var latitude: String?
     var deviseToken: String
@@ -50,6 +51,7 @@ struct PlaceModel: Hashable {
         type = snapshotVaiue["type"] as? String
         deviseToken = snapshotVaiue["deviseToken"] as! String
         rating = snapshotVaiue["rating"] as? [String: Int]
+        coments = snapshotVaiue["coments"] as? [String: String]
         imageUrl = snapshotVaiue["image"] as? String
         switchPlace = snapshotVaiue["switchPlace"] as! String
         discription = snapshotVaiue["discription"] as? String

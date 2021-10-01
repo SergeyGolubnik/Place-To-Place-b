@@ -11,8 +11,8 @@ import Firebase
 class FirebaseData: ObservableObject {
     
     static var shared = FirebaseData()
-    private var ref: DatabaseReference!
-    private var user: Users!
+    var ref: DatabaseReference!
+    var user: Users!
     let db = Firestore.firestore()
     private var usersRef: CollectionReference {
         return db.collection("users")
@@ -88,4 +88,5 @@ class FirebaseData: ObservableObject {
             }
         }
     }
+    
 }
