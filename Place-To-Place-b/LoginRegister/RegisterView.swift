@@ -11,11 +11,14 @@ struct RegisterView: View {
     @State var email = ""
     @State var name = ""
     @State var pass = ""
+    @State var pass2 = ""
+    @State var userArray = [Users]()
     @State var showSheet: Bool = false
     @State var showImagePicker: Bool = false
     @State var sourceType: UIImagePickerController.SourceType = .camera
+    @StateObject var data = FirebaseData()
     
-    @State var image: Image?
+    @State var image = UIImage(named: "avatar-1")
     
     var body: some View {
         ZStack{
@@ -43,29 +46,28 @@ struct RegisterView: View {
                                     
                                 }
                             }) {
-                                if image == nil {
-                                    Image("avatar-1").resizable().frame(width: 100, height: 100).cornerRadius(50)
-                                        .shadow(color: .gray, radius: 5, x: 0, y: 0)
-                                }
-                                image?.resizable().frame(width: 100, height: 100).cornerRadius(50)
+                                Image(uiImage: image!)
+                                    .resizable()
+                                    .frame(width: 100, height: 100)
+                                    .cornerRadius(50)
                                     .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                 
                             }.sheet(isPresented: $showImagePicker, content: {
                                 OpenGallary(isShown: $showImagePicker, image: $image, sourceType: sourceType)
                             })
-                            .actionSheet(isPresented: $showSheet) {
-                                ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
-                                    .default(Text("Галерея")) {
-                                        self.showImagePicker = true
-                                        self.sourceType = .photoLibrary
-                                    },
-                                    .default(Text("Камера")) {
-                                        self.showImagePicker = true
-                                        self.sourceType = .camera
-                                    },
-                                    .cancel(Text("Выход"))
-                                ])
-                        }
+                                .actionSheet(isPresented: $showSheet) {
+                                    ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
+                                        .default(Text("Галерея")) {
+                                            self.showImagePicker = true
+                                            self.sourceType = .photoLibrary
+                                        },
+                                        .default(Text("Камера")) {
+                                            self.showImagePicker = true
+                                            self.sourceType = .camera
+                                        },
+                                        .cancel(Text("Выход"))
+                                    ])
+                                }
                             Text("Аватар")
                             
                         }.padding(.bottom, 30)
@@ -121,7 +123,7 @@ struct RegisterView: View {
                                 
                                 Text("Пароль еще раз").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
                                 
-                                SecureField("Введите пароль еще раз", text: $pass)
+                                SecureField("Введите пароль еще раз", text: $pass2)
                                 
                                 Divider()
                             }
@@ -135,7 +137,18 @@ struct RegisterView: View {
                         
                         
                         Button(action: {
-                            
+                            //                            if email != "", Validators.isSimpleEmail(email) {
+                            //                                if name != "" {
+                            //                                    for i in data.userAll {
+                            //                                        if name != i.lastName {
+                            //
+                            //                                        }
+                            //                                    }
+                            //                                    if pass != "", pass2 != "", pass == pass2 {
+                            //                                        //
+                            //                                    }
+                            //                                }
+                            //                            }
                         }) {
                             
                             Text("Зарегестрироватся")
@@ -147,9 +160,9 @@ struct RegisterView: View {
                             
                             
                         }.background(Color.blue)
-                        .clipShape(Capsule())
-                        .padding([.top, .bottom], 20)
-                        .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                            .clipShape(Capsule())
+                            .padding([.top, .bottom], 20)
+                            .shadow(color: .gray, radius: 5, x: 5, y: 5)
                         
                         
                     }

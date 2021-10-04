@@ -46,6 +46,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window.rootViewController = UIHostingController(rootView: TabViewPlace(user: user, place: FirebaseData.shared.places).environment(\.managedObjectContext, context))
                 
             } else {
+                FirebaseData.shared.getUserAll()
                 window.rootViewController = UIHostingController(rootView: contentView)
             }
             

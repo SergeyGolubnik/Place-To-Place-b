@@ -65,7 +65,8 @@ struct TabViewPlace: View {
                         }
                         .padding()
                         .padding(.horizontal, 10)
-                        .background(CurvedShape().ignoresSafeArea())
+                        .background(CurvedShape()
+                                        .ignoresSafeArea())
                         
                         Button(action: {
                             

@@ -19,6 +19,7 @@ class FirebaseData: ObservableObject {
     }
     @Published var users: Users!
     @Published var places = [PlaceModel]()
+    @Published var userAll = [Users]()
     
     init() {
         fetchData()
@@ -88,5 +89,18 @@ class FirebaseData: ObservableObject {
             }
         }
     }
-    
+    func getUserAll() {
+        db.collection("users").getDocuments() { (resalt, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                var array = [Users]()
+                for item in resalt!.documents {
+                    let user = Users(document: item)
+                    array.append(user!)
+                }
+                self.userAll = array
+            }
+        }
+    }
 }

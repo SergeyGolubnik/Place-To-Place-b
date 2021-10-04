@@ -11,12 +11,8 @@ import Foundation
 class Validators {
     
     static func isFilled(lastName: String?, email: String?, password: String?) -> Bool {
-        guard
-            !(lastName ?? "").isEmpty,
-            !(email ?? "").isEmpty,
-            !(password ?? "").isEmpty else {
-                return false
-        }
+        guard !(lastName ?? "").isEmpty, !(email ?? "").isEmpty, !(password ?? "").isEmpty else {return false}
+        
         return true
     }
     

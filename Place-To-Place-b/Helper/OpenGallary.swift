@@ -10,15 +10,15 @@ import SwiftUI
 struct OpenGallary: UIViewControllerRepresentable {
 
     let isShown: Binding<Bool>
-    let image: Binding<Image?>
+    let image: Binding<UIImage?>
     var sourceType: UIImagePickerController.SourceType = .camera
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-
+        
         let isShown: Binding<Bool>
-        let image: Binding<Image?>
+        let image: Binding<UIImage?>
 
-        init(isShown: Binding<Bool>, image: Binding<Image?>) {
+        init(isShown: Binding<Bool>, image: Binding<UIImage?>) {
             self.isShown = isShown
             self.image = image
         }
@@ -27,7 +27,7 @@ struct OpenGallary: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             let uiImage = info[.originalImage] as! UIImage
             
-            self.image.wrappedValue = Image(uiImage: uiImage)
+            self.image.wrappedValue = uiImage
             self.isShown.wrappedValue = false
         }
 
