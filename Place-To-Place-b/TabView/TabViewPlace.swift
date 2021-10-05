@@ -14,12 +14,14 @@ struct TabViewPlace: View {
     @State var selected = 0
     @State var placeD = PlaceModel(key: "", userId: "", switchPlace: "", deviseToken: "")
     @State var goDetail = false
+    @State var exitBool = false
     @StateObject var data = FirebaseData()
     @State var place = [PlaceModel]()
     
     var body: some View {
-        
-        if data.places == [] {
+        if exitBool {
+            ContentView()
+        } else if data.places == [] {
             LoaderView()
         } else {
             ZStack {
@@ -27,6 +29,8 @@ struct TabViewPlace: View {
                     PlaceListMap(placeDetail: $placeD, goDetail: $goDetail, place: data.places)
                 } else if selected == 1 {
                     PlaceList()
+                } else if selected == 3 {
+                    UserSetings(exitBool: $exitBool)
                 }
                 VStack{
                     

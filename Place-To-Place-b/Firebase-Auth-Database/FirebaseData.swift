@@ -36,13 +36,13 @@ class FirebaseData: ObservableObject {
             for item in snapshot.children {
                 let placeModel = PlaceModel(snapshot: item as! DataSnapshot)
                 if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {} else {
-//                    if placeModel.userId == self?.user.uid {
-//                        if self?.userToken != "", placeModel.deviseToken != self?.userToken, self?.userToken != nil {
-//                            guard let userUid = self?.user.uid else {return}
-//                            UserLoginRegister.updateToken(key: placeModel.key, switchPlace: placeModel.switchPlace, userId: userUid, newToken: (self?.userToken)!, ref: (self?.ref)!)
-//                            array.append(placeModel)
-//                        }
-//                    }
+                    //                    if placeModel.userId == self?.user.uid {
+                    //                        if self?.userToken != "", placeModel.deviseToken != self?.userToken, self?.userToken != nil {
+                    //                            guard let userUid = self?.user.uid else {return}
+                    //                            UserLoginRegister.updateToken(key: placeModel.key, switchPlace: placeModel.switchPlace, userId: userUid, newToken: (self?.userToken)!, ref: (self?.ref)!)
+                    //                            array.append(placeModel)
+                    //                        }
+                    //                    }
                     array.append(placeModel)
                 }
             }
@@ -90,17 +90,21 @@ class FirebaseData: ObservableObject {
         }
     }
     func getUserAll() {
-        db.collection("users").getDocuments() { (resalt, error) in
+        
+        db.collection("users").getDocuments() { [weak self] (resalt, error) in
+            
             if let error = error {
-                print(error.localizedDescription)
-            } else {
-                var array = [Users]()
-                for item in resalt!.documents {
-                    let user = Users(document: item)
-                    array.append(user!)
-                }
-                self.userAll = array
+                print("____________________________________________________________\(error.localizedDescription)")
             }
+            var array = [Users]()
+            for item in resalt!.documents {
+                let user = Users(document: item)
+                print("____________________________________\(item.documentID) => \(item.data())")
+                array.append(user!)
+            }
+            //                print(array)
+            self?.userAll = array
         }
+//        print(self.userAll)
     }
 }
