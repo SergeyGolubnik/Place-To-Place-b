@@ -12,12 +12,13 @@ struct LoginView: View {
     @State private var goToViewRePassword = false
     @State private var goToViewTabViev = false
     @State private var alert = false
+    @State var goTabViewPlace = false
     @State private var message = ""
     @State var email = ""
     @State var pass = ""
     
     var body: some View {
-        if goToViewTabViev {
+        if goToViewTabViev || goTabViewPlace {
             TabViewPlace().transition(.scale)
         }else{
             ZStack{
@@ -98,7 +99,7 @@ struct LoginView: View {
                                 .padding()
                                 
                                 .sheet(isPresented: $goToViewRegister, content: {
-                                    RegisterView()
+                                    RegisterView(goTabViewPlace: $goTabViewPlace)
                                 })
                             
                             

@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct RePasswordView: View {
+    @Environment(\.presentationMode) var presentationMode
     @State private var textEmail: String = ""
+    @State var alertText = ""
+    @State var alertMessage = ""
+    @State var alertBool = false
     var body: some View {
         ZStack{
             Color.hex("FEE086")
@@ -34,7 +39,19 @@ struct RePasswordView: View {
                 }
                 VStack{
                     Button(action: {
-                        
+                        if Validators.isSimpleEmail(textEmail) {
+                            Auth.auth().sendPasswordReset(withEmail: textEmail) { (error) in
+                                if error != nil {
+                                    alertText = "Ошибка"
+                                    alertMessage = error!.localizedDescription
+                                    alertBool = true
+                                }
+                                alertText = "Отправлено"
+                                alertMessage = "На указанный Email отправлена ссылка для востоновления пароля"
+                                alertBool = true
+                                
+                            }
+                        }
                     }) {
                         
                      Text("Отправить")
@@ -52,6 +69,18 @@ struct RePasswordView: View {
                 }
                 Spacer()
             }
+            
+        }
+        .alert(isPresented: $alertBool) {
+            Alert(title: Text(alertText), message: Text(alertMessage), dismissButton: .default(Text("Ok"), action: {
+                if alertText == "Ошибка" {
+                    self.alertBool = false
+                } else {
+                    self.alertBool = true
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+                
+            }))
             
         }
         

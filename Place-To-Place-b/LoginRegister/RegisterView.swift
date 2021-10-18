@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct RegisterView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var email = ""
     @State var name = ""
     @State var pass = ""
@@ -15,7 +17,7 @@ struct RegisterView: View {
     @State var titleAlert = ""
     @State var messageAlert = ""
     @State var alert = false
-    @State var goTabViewPlace = false
+    @Binding var goTabViewPlace: Bool
     @State var userArray = [Users]()
     @State var showSheet: Bool = false
     @State var showImagePicker: Bool = false
@@ -25,9 +27,7 @@ struct RegisterView: View {
     @State var image = UIImage(named: "avatar-1")
     
     var body: some View {
-        if goTabViewPlace {
-            TabViewPlace(user: data.user, place: FirebaseData.shared.places)
-        } else {
+
             ZStack{
                 Color.hex("FEE086")
                     .ignoresSafeArea()
@@ -42,7 +42,12 @@ struct RegisterView: View {
                             Spacer()
                         }
                         VStack {
-                            Text("Регистрация").fontWeight(.heavy).font(.largeTitle).foregroundColor(Color.black).padding()
+                            Text("Регистрация")
+                                .fontWeight(.heavy)
+                                .font(.largeTitle)
+                                .foregroundColor(Color.black)
+                                
+                                .padding()
                         }
                         VStack{
                             VStack {
@@ -87,7 +92,7 @@ struct RegisterView: View {
                                     
                                     HStack{
                                         
-                                        TextField("Введите e-mail", text: $email)
+                                        TextField("Введите e-mail", text: $email).foregroundColor(.black).multilineTextAlignment(.leading)
                                     
                                         
                                     }
@@ -101,7 +106,7 @@ struct RegisterView: View {
                                     
                                     HStack{
                                         
-                                        TextField("Введите свое имя", text: $name)
+                                        TextField("Введите свое имя", text: $name).foregroundColor(.black).multilineTextAlignment(.leading)
 
                                         
                                     }
@@ -114,7 +119,7 @@ struct RegisterView: View {
                                     
                                     Text("Пароль").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
                                     
-                                    SecureField("Введите пароль", text: $pass)
+                                    SecureField("Введите пароль", text: $pass).foregroundColor(.black).multilineTextAlignment(.leading)
                                     
                                     Divider()
                                 }
@@ -122,7 +127,7 @@ struct RegisterView: View {
                                     
                                     Text("Пароль еще раз").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
                                     
-                                    SecureField("Введите пароль еще раз", text: $pass2)
+                                    SecureField("Введите пароль еще раз", text: $pass2).foregroundColor(.black).multilineTextAlignment(.leading)
                                     
                                     Divider()
                                 }
@@ -131,22 +136,18 @@ struct RegisterView: View {
                             
                         }.padding()
                         VStack{
-                            
-                            
-                            
-                            
                             Button(action: {
                                 if email != "", Validators.isSimpleEmail(email) {
-                                    if name != "" {
+                                    if pass != "", pass2 != "", pass == pass2 {
                                         for i in data.userAll {
                                             if name == i.lastName {
                                                 titleAlert = "Ошибка"
                                                 messageAlert = "Такое имя уже существует"
                                                 alert.toggle()
-                                                
+                                                return
                                             }
                                         }
-                                        if pass != "", pass2 != "", pass == pass2 {
+                                        if name != "" {
                                             FirebaseAuthDatabase.register(photo: image, lastName: name, email: email, password: pass, deviseToken: "временно пока не подключу нотисфакшен") { resalt in
                                                 switch resalt {
                                                 case .success:
@@ -163,16 +164,19 @@ struct RegisterView: View {
                                             titleAlert = "Ошибка"
                                             messageAlert = "Некоректно веден пароль"
                                             alert.toggle()
+                                            return
                                         }
                                     } else {
                                         titleAlert = "Ошибка"
                                         messageAlert = "Некоректно ведено имя"
                                         alert.toggle()
+                                        return
                                     }
                                 } else {
                                     titleAlert = "Ошибка"
                                     messageAlert = "Некоректно веден Email"
                                     alert.toggle()
+                                    return
                                 }
                             }) {
                                 
@@ -198,9 +202,13 @@ struct RegisterView: View {
             .alert(isPresented: $alert) {
                 Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
                     if titleAlert == "Ошибка" {
-                        goTabViewPlace = false
+                        self.goTabViewPlace = false
+                    } else if messageAlert == "Такое имя уже существует" {
+                        self.goTabViewPlace = false
+                        name = ""
                     } else {
-                        goTabViewPlace = true
+                        self.goTabViewPlace = true
+                        self.presentationMode.wrappedValue.dismiss()
                     }
                     
                 }))
@@ -211,7 +219,7 @@ struct RegisterView: View {
                 print(data.userAll)
                 
             }
-        }
+        
         
         
     }
@@ -219,6 +227,6 @@ struct RegisterView: View {
 
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterView()
+        RegisterView(goTabViewPlace: .constant(false))
     }
 }
