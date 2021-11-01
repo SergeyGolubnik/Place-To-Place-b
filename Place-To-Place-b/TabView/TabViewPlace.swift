@@ -42,28 +42,28 @@ struct TabViewPlace: View {
                             Button(action: {
                                 self.selected = 0
                             }) {
-                                Image(systemName: "location.circle")
+                                Image(systemName: self.selected == 0 ? "location.circle.fill" : "location.circle")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 0 ? .black : .gray)
                             Spacer(minLength: 12)
                             Button(action: {
                                 self.selected = 1
                             }) {
-                                Image(systemName: "lineweight")
+                                Image(systemName: self.selected == 1 ? "heart.fill" : "heart")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 1 ? .black : .gray)
                             Spacer().frame(width: 110)
                             Button(action: {
                                 self.selected = 2
                             }) {
-                                Image(systemName: "bubble.left.and.bubble.right")
+                                Image(systemName: self.selected == 2 ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 2 ? .black : .gray)
                             Spacer(minLength: 12)
                             Button(action: {
                                 self.selected = 3
                             }) {
-                                Image(systemName: "person.circle")
+                                Image(systemName: self.selected == 3 ? "person.circle.fill" : "person.circle")
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 3 ? .black : .gray)
                         }
@@ -90,7 +90,7 @@ struct TabViewPlace: View {
             }
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {
-                PlaceDetals(place: $placeD)
+                PlaceDetals(place: $placeD, user: data.user)
             })
             .sheet(isPresented: $newPlace, content: {
                     NewPlaceView()

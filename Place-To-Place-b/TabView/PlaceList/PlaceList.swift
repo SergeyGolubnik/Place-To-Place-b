@@ -23,7 +23,7 @@ struct PlaceList: View {
                 }
             }
             .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-            .navigationBarTitle("ghkknkj", displayMode: .inline)
+            .navigationBarTitle("Любимые места", displayMode: .inline)
             
             
             
@@ -40,3 +40,15 @@ struct PlaceList_Previews: PreviewProvider {
 }
 
 
+struct PlaceListView: View {
+    
+    
+    var body: some View {
+        
+        VStack{
+            
+        }
+        
+    }
+    
+}

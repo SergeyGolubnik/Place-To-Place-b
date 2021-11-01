@@ -283,9 +283,7 @@ class FirebaseAuthDatabase {
             }
         }
     }
-    static func updateFavorit(key: String,
-                            favorit: [String],
-                            ref: DatabaseReference) {
+    static func updateFavorit(key: String, favorit: [String], ref: DatabaseReference, completion: @escaping(Result <Void, Error>) -> Void) {
         let placeRef = ref.child(key)
         placeRef.updateChildValues([
             "favorit": favorit as [String]

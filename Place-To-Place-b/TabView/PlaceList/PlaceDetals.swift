@@ -13,13 +13,16 @@ struct PlaceDetals: View {
     @State var redactPlace = false
     @State var messageBool = false
     @State var navigationBool = false
+    @State var myFavorit = ""
     @State var starsBool = false
     @State var stars = "-"
     @State var coment = [String]()
+    @State var user: Users
     @State var userPlace: Users!
     @State var userPlaceBool = false
     @State var type = ""
     @State var avatar = ""
+    @State var favoritPlaceBool = false
     let category: [CategoryModel] = [
         CategoryModel(imageString: "bar", name: "Бары и пабы"),
         CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
@@ -82,13 +85,49 @@ struct PlaceDetals: View {
                                     .padding(.leading)
                             }
                             Spacer()
-                            Button(action: {
-                                redactPlace.toggle()
-                            }) {
-                                Text("Изменить")
+                            if place.userId == user.uid {
+                                Button(action: {
+                                    self.redactPlace.toggle()
+                                }) {
+                                    Text("Изменить")
+                                    
+                                }
+                                .padding(.trailing)
+                            } else {
+                                if myFavorit == "" {
+                                    Button(action: {
+                                        if user.uid != "", place.userId != "" {
+                                            var newFavorit =  [String]()
+                                            if place.favorit == nil {
+                                                place.favorit = [user.uid]
+                                                newFavorit = place.favorit!
+                                            } else {
+                                                place.favorit?.append(user.uid)
+                                                newFavorit = place.favorit!
+                                            }
+                                            FirebaseAuthDatabase.updateFavorit(key: place.key, favorit: newFavorit, ref: FirebaseData.shared.ref) { resalt in
+                                                switch resalt {
+                                                    
+                                                case .success():
+                                                    break
+                                                case .failure(let error):
+                                                    print(error.localizedDescription)
+                                                }
+                                            }
+                                        }
+                                        self.favoritPlaceBool = true
+                                    }) {
+                                        if !favoritPlaceBool {
+                                            Text("Добавить в\nизбранное")
+                                        }
+                                        
+                                        
+                                    }
+                                    .padding(.trailing)
+                                }
                                 
                             }
-                            .padding(.trailing)
+                            
                         }
                         Divider().foregroundColor(.black)
                     }
@@ -313,6 +352,13 @@ struct PlaceDetals: View {
                     }
                 }
             }
+            if place.favorit != [], place.favorit != nil {
+                for i in place.favorit! {
+                    if i == user.uid {
+                        self.myFavorit = i
+                    }
+                }
+            }
             comentPlace()
             starsRating()
         }
@@ -354,6 +400,6 @@ struct PlaceDetals: View {
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceDetals(place: .constant(PlaceModel(key: "111", userId: "", switchPlace: "", deviseToken: "")))
+        TabViewPlace()
     }
 }

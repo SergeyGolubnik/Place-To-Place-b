@@ -23,12 +23,8 @@
 		87251B0126CD47D200DC22A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87251B0026CD47D200DC22A9 /* Assets.xcassets */; };
 		87251B0426CD47D200DC22A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87251B0326CD47D200DC22A9 /* Preview Assets.xcassets */; };
 		87251B0726CD47D200DC22A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87251B0526CD47D200DC22A9 /* LaunchScreen.storyboard */; };
-		87251B1226CD490300DC22A9 /* PageViev1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1126CD490300DC22A9 /* PageViev1.swift */; };
+		87251B1226CD490300DC22A9 /* PageViev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1126CD490300DC22A9 /* PageViev.swift */; };
 		87251B1526CD530A00DC22A9 /* ColorExtansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1426CD530900DC22A9 /* ColorExtansion.swift */; };
-		87251B1726CD603F00DC22A9 /* PageViev2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1626CD603F00DC22A9 /* PageViev2.swift */; };
-		87251B1926CD608B00DC22A9 /* PageView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1826CD608B00DC22A9 /* PageView3.swift */; };
-		87251B1B26CD621500DC22A9 /* PageView4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1A26CD621500DC22A9 /* PageView4.swift */; };
-		87251B1D26CD62AC00DC22A9 /* PageView5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1C26CD62AC00DC22A9 /* PageView5.swift */; };
 		87251B2126CD634700DC22A9 /* TabViewPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2026CD634700DC22A9 /* TabViewPlace.swift */; };
 		87251B2326CD8B8200DC22A9 /* PlaceListMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */; };
 		87251B2526CD8D0800DC22A9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2426CD8D0800DC22A9 /* LoginView.swift */; };
@@ -70,12 +66,8 @@
 		87251B0326CD47D200DC22A9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		87251B0626CD47D200DC22A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87251B0826CD47D200DC22A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		87251B1126CD490300DC22A9 /* PageViev1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViev1.swift; sourceTree = "<group>"; };
+		87251B1126CD490300DC22A9 /* PageViev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViev.swift; sourceTree = "<group>"; };
 		87251B1426CD530900DC22A9 /* ColorExtansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtansion.swift; sourceTree = "<group>"; };
-		87251B1626CD603F00DC22A9 /* PageViev2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViev2.swift; sourceTree = "<group>"; };
-		87251B1826CD608B00DC22A9 /* PageView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView3.swift; sourceTree = "<group>"; };
-		87251B1A26CD621500DC22A9 /* PageView4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView4.swift; sourceTree = "<group>"; };
-		87251B1C26CD62AC00DC22A9 /* PageView5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView5.swift; sourceTree = "<group>"; };
 		87251B2026CD634700DC22A9 /* TabViewPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewPlace.swift; sourceTree = "<group>"; };
 		87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListMap.swift; sourceTree = "<group>"; };
 		87251B2426CD8D0800DC22A9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -195,11 +187,7 @@
 		87251B1026CD48D500DC22A9 /* PageView */ = {
 			isa = PBXGroup;
 			children = (
-				87251B1126CD490300DC22A9 /* PageViev1.swift */,
-				87251B1626CD603F00DC22A9 /* PageViev2.swift */,
-				87251B1826CD608B00DC22A9 /* PageView3.swift */,
-				87251B1A26CD621500DC22A9 /* PageView4.swift */,
-				87251B1C26CD62AC00DC22A9 /* PageView5.swift */,
+				87251B1126CD490300DC22A9 /* PageViev.swift */,
 				87B25E0326D03BBF0008C719 /* PolicyView.swift */,
 			);
 			path = PageView;
@@ -410,7 +398,6 @@
 				87089B5926E1671B007AA131 /* AuthResalt.swift in Sources */,
 				877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */,
 				87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */,
-				87251B1B26CD621500DC22A9 /* PageView4.swift in Sources */,
 				87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */,
 				879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */,
 				87251B2326CD8B8200DC22A9 /* PlaceListMap.swift in Sources */,
@@ -421,21 +408,18 @@
 				879512A826E7DF6500DFD212 /* FirebaseData.swift in Sources */,
 				873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */,
 				87251AFF26CD47CE00DC22A9 /* Place_To_Place_b.xcdatamodeld in Sources */,
-				87251B1D26CD62AC00DC22A9 /* PageView5.swift in Sources */,
 				87089B4F26E10DBC007AA131 /* RePasswordView.swift in Sources */,
 				87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */,
 				8771C07F270CD03300830908 /* UserSetings.swift in Sources */,
 				87251B1526CD530A00DC22A9 /* ColorExtansion.swift in Sources */,
-				87251B1726CD603F00DC22A9 /* PageViev2.swift in Sources */,
 				87089B5426E165F7007AA131 /* FirebaseAuthDatabase.swift in Sources */,
 				879512AE26EA84EF00DFD212 /* Extansion-NavigationView.swift in Sources */,
-				87251B1926CD608B00DC22A9 /* PageView3.swift in Sources */,
 				877728F92703AF5400AB244B /* StarsRatingView.swift in Sources */,
 				879512AA26E7E1E600DFD212 /* UserModel.swift in Sources */,
 				87089B5726E166F3007AA131 /* AuthError.swift in Sources */,
 				87251B2526CD8D0800DC22A9 /* LoginView.swift in Sources */,
 				87089B5D26E1675D007AA131 /* Validators.swift in Sources */,
-				87251B1226CD490300DC22A9 /* PageViev1.swift in Sources */,
+				87251B1226CD490300DC22A9 /* PageViev.swift in Sources */,
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
 				87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */,
 				87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */,
