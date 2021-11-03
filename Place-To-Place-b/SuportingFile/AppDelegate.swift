@@ -13,9 +13,48 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
+    var window: UIWindow?
+    let messagingDeleget = Messaging.messaging()
+    static let shared = AppDelegate()
+    var user: Users!
+    let natificationCenter = UNUserNotificationCenter.current()
+    let notifications = Notifications()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        
+        Messaging.messaging().delegate = self
+        notifications.requestAutorization()
+        notifications.notificationCenter.delegate = notifications
+        
+
+        if let users = Auth.auth().currentUser {
+            let user = Users(user: users)
+            FirebaseData.shared.getUserData(user: user) { (result) in
+                switch result {
+                case .success(let muser):
+                    self.user = muser
+                    let storyboard = UIStoryboard(name: "Place", bundle: nil)
+
+                       // instantiate your desired ViewController
+                    let rootController = storyboard.instantiateViewController(identifier: "FromSBA")
+
+                       // Because self.window is an optional you should check it's value first and assign your rootViewController
+                       if let window = self.window {
+                          window.rootViewController = rootController
+                       }
+                case .failure(_): break
+                }
+            }
+        }
+        Messaging.messaging().token { token, error in
+          if let error = error {
+            print("Error fetching FCM registration token: \(error)")
+          } else if let token = token {
+            print("FCM registration token: \(token)")
+            FirebaseData.shared.userData(token: token)
+          }
+        }
         return true
     }
 
@@ -33,6 +72,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken
+        deviceToken: Data) {
+
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+
+        let token = tokenParts.joined()
+        print("Device token: \(token)")
+    }
+
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError
+        error: Error) {
+
+        print("Failed to register: \(error)")
+    }
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
@@ -79,4 +138,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        guard let fcmToken = fcmToken  else {return}
+        FirebaseData.shared.userData(token: fcmToken)
+    }
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingDelegate) {
+            print("Received data message: \(remoteMessage.description)")
+        }
+}

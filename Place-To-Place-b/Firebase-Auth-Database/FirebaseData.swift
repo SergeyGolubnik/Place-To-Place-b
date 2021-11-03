@@ -20,6 +20,8 @@ class FirebaseData: ObservableObject {
     @Published var users: Users!
     @Published var places = [PlaceModel]()
     @Published var userAll = [Users]()
+    @Published var deviseToken: String?
+    @Published var arrayFavorit = [PlaceModel]()
     
     init() {
         fetchData()
@@ -49,6 +51,7 @@ class FirebaseData: ObservableObject {
             
             self?.places = array
         }
+        
         getUserData(user: user) { resalt in
             switch resalt {
                 
@@ -58,6 +61,7 @@ class FirebaseData: ObservableObject {
                 print(error.localizedDescription)
             }
         }
+        favoritFilter()
     }
     func getUserData(user: Users, completion: @escaping (Result<Users, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
@@ -106,5 +110,24 @@ class FirebaseData: ObservableObject {
             self?.userAll = array
         }
 //        print(self.userAll)
+    }
+    func favoritFilter() {
+        for item in self.places {
+            if item.favorit != nil {
+                for i in item.favorit! {
+                    if i == self.users.uid {
+                        arrayFavorit.append(item)
+                    }
+                }
+            }
+        }
+    }
+    func userData(token: String?) {
+        guard let token = token else {return}
+        UserDefaults.standard.set(token, forKey: "tokenUser")
+    }
+    func downUserData() {
+        guard let token = UserDefaults.standard.string(forKey: "tokenUser") else {return}
+        self.deviseToken = token
     }
 }

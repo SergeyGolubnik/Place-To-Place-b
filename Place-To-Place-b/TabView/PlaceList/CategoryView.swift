@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var enterType: String
+    @State var categoryArray = Category()
     let category: [CategoryModel] = [
         CategoryModel(imageString: "bar", name: "Бары и пабы"),
         CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
@@ -43,7 +44,7 @@ struct CategoryView: View {
                     .padding(.bottom, 20)
                 ScrollView {
                     LazyVGrid (columns: columns){
-                        ForEach(category, id: \.id) { cat in
+                        ForEach(categoryArray.categoryArray, id: \.id) { cat in
                             CategoryCart(cart: $enterType, image: cat.imageString!, title: cat.name!)
                         }
                     }

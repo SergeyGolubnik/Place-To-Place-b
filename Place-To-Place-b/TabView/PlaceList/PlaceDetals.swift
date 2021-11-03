@@ -23,6 +23,7 @@ struct PlaceDetals: View {
     @State var type = ""
     @State var avatar = ""
     @State var favoritPlaceBool = false
+    @State var categoryArray = Category()
     let category: [CategoryModel] = [
         CategoryModel(imageString: "bar", name: "Бары и пабы"),
         CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
@@ -346,7 +347,7 @@ struct PlaceDetals: View {
                 self.place = placeModel
             }
             if place.type != "" {
-                for i in category {
+                for i in categoryArray.categoryArray {
                     if i.name == place.type {
                         self.type = i.imageString!
                     }
