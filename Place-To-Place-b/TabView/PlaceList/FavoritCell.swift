@@ -11,7 +11,7 @@ struct FavoritCell: View {
     @State var imageURL = ""
     @State var name = "Бар Ресторан дрова и угли"
     @State var location = "Москва, Большая одинокая ордынка д12 "
-    @State var rating = 0
+    @State var rating = 3
     @State var type = "Парки и скверы"
     @State var typeString = "bar"
     @State var categoryArray = Category()
@@ -78,12 +78,14 @@ struct FavoritCell: View {
                     }
                 }
             })
-            .background(LinearGradient(gradient: Gradient(colors: [Color.hex("FEE086"), Color.hex("FEE120")]), startPoint: .top, endPoint: .bottom))
-            .cornerRadius(10)
-            .padding([.trailing,.leading], 10)
             
             .frame(height: 130)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.hex("ffffff"), Color.hex("ffffff")]), startPoint: .top, endPoint: .bottom))
             
+            .cornerRadius(10)
+            .padding(.horizontal,10)
+            
+            .shadow(radius: 5)
         }
         
     }

@@ -14,8 +14,8 @@ struct LoginView: View {
     @State private var alert = false
     @State var goTabViewPlace = false
     @State private var message = ""
-    @State var email = ""
-    @State var pass = ""
+    @State var email = "test1@mail.ru"
+    @State var pass = "123456"
     
     var body: some View {
         if goToViewTabViev || goTabViewPlace {

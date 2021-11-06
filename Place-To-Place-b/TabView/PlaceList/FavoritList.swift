@@ -18,7 +18,7 @@ struct FavoritList: View {
         NavigationView {
             
             ScrollView{
-                VStack(spacing: 20){
+                VStack(spacing: 10){
                     ForEach(placeArray, id: \.id) { item in
                         FavoritCell(imageURL: item.imageUrl!, name: item.name!, location: item.location!, placeRating: item.rating)
                             .onTapGesture {
