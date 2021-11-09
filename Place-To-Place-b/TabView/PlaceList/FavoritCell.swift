@@ -24,10 +24,11 @@ struct FavoritCell: View {
                     UrlImageView(urlString: imageURL, wight: 110, height: 110)
                         .cornerRadius(4)
                         .shadow(radius: 5)
-                        .padding()
+//                        .padding()
+                    Spacer()
                 }
                 
-                VStack(spacing: 7){
+                VStack(spacing: 0){
                     HStack{
                         Text(name)
                             .font(.title2)
@@ -64,10 +65,11 @@ struct FavoritCell: View {
                     }
 
                     Spacer()
-                }
+                }.padding(.leading)
                 Spacer()
                 
             }
+            .padding(.top, 10)
             .onAppear(perform: {
                 starsRating()
                 if type != "" {
@@ -79,13 +81,13 @@ struct FavoritCell: View {
                 }
             })
             
-            .frame(height: 130)
-            .background(LinearGradient(gradient: Gradient(colors: [Color.hex("ffffff"), Color.hex("ffffff")]), startPoint: .top, endPoint: .bottom))
-            
-            .cornerRadius(10)
-            .padding(.horizontal,10)
-            
-            .shadow(radius: 5)
+//            .frame(height: 130)
+//            .background(LinearGradient(gradient: Gradient(colors: [Color.hex("ffffff"), Color.hex("ffffff")]), startPoint: .top, endPoint: .bottom))
+//            
+//            .cornerRadius(10)
+//            .padding(.horizontal,10)
+//            
+//            .shadow(radius: 5)
         }
         
     }

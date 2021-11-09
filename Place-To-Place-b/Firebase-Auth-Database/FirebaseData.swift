@@ -11,7 +11,7 @@ import Firebase
 class FirebaseData: ObservableObject {
     
     static var shared = FirebaseData()
-    var ref: DatabaseReference!
+//    var ref: DatabaseReference!
     var user: Users!
     let db = Firestore.firestore()
     private var usersRef: CollectionReference {
@@ -22,6 +22,7 @@ class FirebaseData: ObservableObject {
     @Published var userAll = [Users]()
     @Published var deviseToken: String?
     @Published var arrayFavorit = [PlaceModel]()
+    @Published var ref: DatabaseReference!
     
     init() {
         fetchData()

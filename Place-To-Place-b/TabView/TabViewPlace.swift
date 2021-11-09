@@ -28,7 +28,7 @@ struct TabViewPlace: View {
                 if selected == 0 {
                     PlaceListMap(placeDetail: $placeD, goDetail: $goDetail, place: data.places)
                 } else if selected == 1 {
-                    FavoritList(deailPlace: $placeD, detailPlaceBool: $goDetail)
+                    FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
                 } else if selected == 3 {
                     UserSetings(exitBool: $exitBool)
                 }

@@ -119,7 +119,7 @@ struct PlaceDetals: View {
                                         self.favoritPlaceBool = true
                                     }) {
                                         if !favoritPlaceBool {
-                                            Text("Добавить в\nизбранное")
+                                            Text("В избранное")
                                         }
                                         
                                         
