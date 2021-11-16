@@ -24,42 +24,7 @@ struct PlaceDetals: View {
     @State var avatar = ""
     @State var favoritPlaceBool = false
     @State var categoryArray = Category()
-    let category: [CategoryModel] = [
-        CategoryModel(imageString: "bar", name: "Бары и пабы"),
-        CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
-        CategoryModel(imageString: "fasfud", name: "Фасфуд"),
-        CategoryModel(imageString: "salon", name: "Красота"),
-        CategoryModel(imageString: "marcet", name: "Магазины"),
-        CategoryModel(imageString: "tc", name: "Торговые центры"),
-        CategoryModel(imageString: "kinder", name: "Для детей"),
-        CategoryModel(imageString: "hotel", name: "Гостиницы"),
-        CategoryModel(imageString: "bisnes", name: "Бизнес"),
-        CategoryModel(imageString: "dicovery", name: "Места культуры"),
-        CategoryModel(imageString: "parc", name: "Парки и скверы"),
-        CategoryModel(imageString: "razvlechenia", name: "Развлечения"),
-        CategoryModel(imageString: "servis", name: "Сервис"),
-        CategoryModel(imageString: "servisAuto", name: "Автосервис"),
-        CategoryModel(imageString: "direct", name: "Объявления"),
-        CategoryModel(imageString: "adalt", name: "Для взрослых"),
-        CategoryModel(imageString: "tinder", name: "Для общения")
-    ]
-    @State var placeModel = PlaceModel(
-        userId: "10101010111",
-        name: "Kreml",
-        key: "100000001",
-        location: "Москва, Красная пffffffffffffffffffffffffff ffff fffff fffff ffff лощад",
-        type: "bar",
-        rating: ["10101010111": 1, "1013401010111": 5, "101010124540111": 3],
-        imageUrl: "https://avatars.mds.yandex.net/get-zen_doc/3512190/pub_600f1c978dfe7b3b2dd841cc_600f235527add74df605f5de/scale_1200",
-        latitude: "22222222",
-        deviseToken: "10101010101010101010",
-        longitude: "111111111",
-        discription: "Центр москвы и всей Руси",
-        switchPlace: "Делится",
-        gellery: ["https://www.funomania.ru/uploads/posts/2021-06/1623987922_1600745655_7-p-koreyanki-9.jpg","https://im0-tub-ru.yandex.net/i?id=0fcb4ce76e51714887776490ee0316c3&ref=rim&n=33&w=450&h=300","https://shop.salonsecret.ru/media/setka_editor/post/3-2_2.jpg","https://volosyinform.ru/wp-content/uploads/2020/10/pochemu-ryzhij-cvet-volos.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-30.jpg","https://i1.wp.com/avrorra.com/wp-content/uploads/2016/05/ryzhie_volosy_-1.png","https://i.redd.it/7hrcxl42kcwz.jpg"],
-        favorit: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1","DDQMzZ33WKQSK9CRXyzndKSPf7s2"],
-        date: "2021-08-05 11:04:58"
-    )
+
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
     
     
@@ -68,7 +33,7 @@ struct PlaceDetals: View {
     var body: some View {
         
         ZStack {
-            Color.hex("FEE086")
+            colorApp
                 .ignoresSafeArea()
             
             ScrollView {
@@ -336,15 +301,11 @@ struct PlaceDetals: View {
                         if userPlace.avatarsURL != nil {
                             self.avatar = userPlace.avatarsURL!
                         }
-                        print(userPlace)
                     case .failure(let error):
                         print(error.localizedDescription)
                         return
                     }
                 }
-            }
-            if place.userId == "" {
-                self.place = placeModel
             }
             if place.type != "" {
                 for i in categoryArray.categoryArray {

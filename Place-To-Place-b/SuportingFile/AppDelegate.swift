@@ -133,6 +133,7 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken  else {return}
         FirebaseData.shared.userData(token: fcmToken)
+        print("Token Firebase devise: \(fcmToken)")
     }
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingDelegate) {
             print("Received data message: \(remoteMessage.description)")

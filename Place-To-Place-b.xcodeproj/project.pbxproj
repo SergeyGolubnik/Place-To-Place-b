@@ -31,7 +31,6 @@
 		873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873243E226DD66D400E4F1FD /* OpenGallary.swift */; };
 		87500CB9273015D400C07818 /* FavoritCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CB8273015D400C07818 /* FavoritCell.swift */; };
 		87500CBD273148E900C07818 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87500CBC273148E900C07818 /* GoogleService-Info.plist */; };
-		87500CBF2731526500C07818 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87500CBE2731526500C07818 /* StoreKit.framework */; };
 		87500CC12731823F00C07818 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CC02731823F00C07818 /* Notifications.swift */; };
 		8771C07F270CD03300830908 /* UserSetings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8771C07E270CD03300830908 /* UserSetings.swift */; };
 		877728F92703AF5400AB244B /* StarsRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877728F82703AF5400AB244B /* StarsRatingView.swift */; };
@@ -47,6 +46,8 @@
 		87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204726FBCC3400C22D55 /* CategoryModel.swift */; };
 		87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204B26FBD3A100C22D55 /* CategoryView.swift */; };
 		87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204D26FE820100C22D55 /* UrlImageView.swift */; };
+		87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FD31C4273E43C0000C21E0 /* StaticFille.swift */; };
+		87FD31C7273EB466000C21E0 /* MapViewPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FD31C6273EB466000C21E0 /* MapViewPresent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,10 +76,9 @@
 		87251B2426CD8D0800DC22A9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		873243DF26DD5EB100E4F1FD /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		873243E226DD66D400E4F1FD /* OpenGallary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGallary.swift; sourceTree = "<group>"; };
+		873AE73B273D4CFE00358184 /* Place-To-Place-b.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Place-To-Place-b.entitlements"; sourceTree = "<group>"; };
 		87500CB8273015D400C07818 /* FavoritCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritCell.swift; sourceTree = "<group>"; };
-		87500CBB2731484B00C07818 /* Place-To-Place.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Place-To-Place.entitlements"; sourceTree = "<group>"; };
 		87500CBC273148E900C07818 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../файлфаербасе/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		87500CBE2731526500C07818 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		87500CC02731823F00C07818 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		8771C07E270CD03300830908 /* UserSetings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetings.swift; sourceTree = "<group>"; };
 		877728F82703AF5400AB244B /* StarsRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarsRatingView.swift; sourceTree = "<group>"; };
@@ -94,6 +94,8 @@
 		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		87D0204B26FBD3A100C22D55 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		87D0204D26FE820100C22D55 /* UrlImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
+		87FD31C4273E43C0000C21E0 /* StaticFille.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticFille.swift; sourceTree = "<group>"; };
+		87FD31C6273EB466000C21E0 /* MapViewPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewPresent.swift; sourceTree = "<group>"; };
 		ECCF4546A3D8544B55AAAD7F /* Pods-Place-To-Place-b.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Place-To-Place-b.debug.xcconfig"; path = "Target Support Files/Pods-Place-To-Place-b/Pods-Place-To-Place-b.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,7 +105,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				749AC752DB8CBF8ED004B9AE /* Pods_Place_To_Place_b.framework in Frameworks */,
-				87500CBF2731526500C07818 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +114,6 @@
 		072FDF6ECD356F88DC1BC555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				87500CBE2731526500C07818 /* StoreKit.framework */,
 				0B873FB08C8E022CFCBA326F /* Pods_Place_To_Place_b.framework */,
 			);
 			name = Frameworks;
@@ -169,7 +169,7 @@
 		87251AF626CD47CE00DC22A9 /* Place-To-Place-b */ = {
 			isa = PBXGroup;
 			children = (
-				87500CBB2731484B00C07818 /* Place-To-Place.entitlements */,
+				873AE73B273D4CFE00358184 /* Place-To-Place-b.entitlements */,
 				87089B5E26E1679C007AA131 /* Model */,
 				87089B5226E16517007AA131 /* Firebase-Auth-Database */,
 				873243E126DD669200E4F1FD /* Helper */,
@@ -268,6 +268,7 @@
 				87251AF726CD47CE00DC22A9 /* AppDelegate.swift */,
 				87251AF926CD47CE00DC22A9 /* SceneDelegate.swift */,
 				87500CC02731823F00C07818 /* Notifications.swift */,
+				87FD31C4273E43C0000C21E0 /* StaticFille.swift */,
 				87251B0026CD47D200DC22A9 /* Assets.xcassets */,
 				87251B0526CD47D200DC22A9 /* LaunchScreen.storyboard */,
 			);
@@ -278,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */,
+				87FD31C6273EB466000C21E0 /* MapViewPresent.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
 				8771C07E270CD03300830908 /* UserSetings.swift */,
@@ -409,6 +411,7 @@
 				87089B6026E167BC007AA131 /* PlaceModel.swift in Sources */,
 				87089B5926E1671B007AA131 /* AuthResalt.swift in Sources */,
 				877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */,
+				87FD31C7273EB466000C21E0 /* MapViewPresent.swift in Sources */,
 				87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */,
 				87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */,
 				879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */,
@@ -435,6 +438,7 @@
 				87500CB9273015D400C07818 /* FavoritCell.swift in Sources */,
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
 				87500CC12731823F00C07818 /* Notifications.swift in Sources */,
+				87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */,
 				87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */,
 				87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */,
 				87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */,
@@ -577,8 +581,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;
@@ -602,8 +607,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;

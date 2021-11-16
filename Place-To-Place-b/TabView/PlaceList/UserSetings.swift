@@ -11,23 +11,31 @@ import Firebase
 struct UserSetings: View {
     @Binding var exitBool: Bool
     var body: some View {
-        
-            Button(action: {
-                do {
-                    try Auth.auth().signOut()
-                    exitBool = true
-                } catch {
-                    print(error.localizedDescription)
-                }
+        ZStack{
+            colorApp
+                .ignoresSafeArea()
+            VStack{
+                Button(action: {
+                    do {
+                        try Auth.auth().signOut()
+                        exitBool = true
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    
+                }) {
+                    Text("Выход")
+                        .frame(width: 70, height: 30, alignment: .center)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(10)
                 
-            }) {
-                Text("Выход")
-                    .frame(width: 70, height: 30, alignment: .center)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(10)
+                }
             }
+            
+        }
+            
         
         
     }

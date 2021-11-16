@@ -49,7 +49,7 @@ struct PlaceListMap: View {
                 
             }
             
-            .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
+            .navigationBarColor(uiColorApp)
             .navigationBarItems(trailing:
                                     Button(action: {
                 tranferCategory.toggle()

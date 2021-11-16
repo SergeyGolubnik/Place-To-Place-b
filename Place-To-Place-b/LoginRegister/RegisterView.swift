@@ -29,7 +29,7 @@ struct RegisterView: View {
     var body: some View {
 
             ZStack{
-                Color.hex("FEE086")
+               colorApp
                     .ignoresSafeArea()
                 
                 ScrollView {

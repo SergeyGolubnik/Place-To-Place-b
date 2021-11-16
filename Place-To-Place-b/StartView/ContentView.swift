@@ -11,8 +11,8 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            Color.hex("FEE086")
-                        .ignoresSafeArea()
+            colorApp
+                .ignoresSafeArea()
             TabView {
                 PageViev1()
                 PageViev2()

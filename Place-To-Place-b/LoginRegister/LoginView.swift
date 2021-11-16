@@ -22,7 +22,7 @@ struct LoginView: View {
             TabViewPlace().transition(.scale)
         }else{
             ZStack{
-                Color.hex("FEE086")
+                colorApp
                     .ignoresSafeArea()
                 VStack{
                     Text("Вход").fontWeight(.heavy).font(.largeTitle).padding(.bottom, 60)

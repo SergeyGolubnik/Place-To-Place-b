@@ -25,9 +25,10 @@ struct TabViewPlace: View {
             LoaderView()
         } else {
             ZStack {
-                if selected == 0 {
+//                if selected == 0 {
                     PlaceListMap(placeDetail: $placeD, goDetail: $goDetail, place: data.places)
-                } else if selected == 1 {
+//                }
+                if selected == 1 {
                     FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
                 } else if selected == 3 {
                     UserSetings(exitBool: $exitBool)

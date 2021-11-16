@@ -17,7 +17,7 @@ struct RePasswordView: View {
     @StateObject var data = FirebaseData()
     var body: some View {
         ZStack{
-            Color.hex("FEE086")
+            colorApp
                 .ignoresSafeArea()
             VStack{
                 VStack {

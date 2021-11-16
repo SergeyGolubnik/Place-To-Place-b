@@ -33,7 +33,7 @@ struct LoaderView: View {
     @State var isSpinCircle = false
     var body: some View {
         ZStack {
-            Color.hex("FEE086")
+            colorApp
                         .ignoresSafeArea()
             Circle()
                 .frame(width: 60, height: 60, alignment: .center)
