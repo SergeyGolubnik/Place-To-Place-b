@@ -11,7 +11,7 @@ struct PageViev1: View {
     
     var body: some View {
         ZStack {
-            colorApp
+            Color.hex("FEE086")
                         .ignoresSafeArea()
             VStack{
                 
@@ -45,7 +45,7 @@ struct PageViev2: View {
     
     var body: some View {
         ZStack {
-            colorApp
+            Color.hex("FEE086")
                         .ignoresSafeArea()
             VStack{
                 
@@ -77,7 +77,7 @@ struct PageViev3: View {
     
     var body: some View {
         ZStack {
-            colorApp
+            Color.hex("FEE086")
                         .ignoresSafeArea()
             VStack{
                 
@@ -109,7 +109,7 @@ struct PageViev3_Previews: PreviewProvider {
 struct PageView4: View {
     var body: some View {
         ZStack {
-            colorApp
+            Color.hex("FEE086")
                         .ignoresSafeArea()
             VStack{
                 
@@ -147,7 +147,7 @@ struct PageView5: View {
     var body: some View {
         
         ZStack {
-            colorApp
+            Color.hex("FEE086")
                 .ignoresSafeArea()
             VStack{
                 

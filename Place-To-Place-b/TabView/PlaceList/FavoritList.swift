@@ -20,7 +20,7 @@ struct FavoritList: View {
             
             if placeArray == [PlaceModel]() {
                 Text("У вас не отмеченно любимых мест")
-                    .navigationBarColor(uiColorApp)
+                    .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
                     .navigationBarTitle("Любимые места", displayMode: .inline)
             } else {
                 List{
@@ -35,14 +35,30 @@ struct FavoritList: View {
                         }
                         
                         .onDelete { indexSet in
-                            deleteFavorit(indexSet: indexSet)
+                            var favorit = [String]()
+                            var placeKey = ""
+                            for index in indexSet {
+                                
+                                placeKey = placeArray[index].key
+                                favorit = (placeArray[index].favorit?.filter {$0 != firebaseModel.user.uid})!
+                                placeArray.remove(at: index)
+                            }
+                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: firebaseModel.ref) { resalt in
+                                switch resalt {
+                                    
+                                case .success():
+                                    break
+                                case .failure(let error):
+                                    print(error.localizedDescription)
+                                }
+                            }
                         }
                 }
                 .listSeparatorStyle(style: .none)
                 
                 .listStyle(PlainListStyle())
                 
-                .navigationBarColor(uiColorApp)
+                .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
                 .navigationBarTitle("Любимые места", displayMode: .inline)
                 
                 
@@ -62,29 +78,10 @@ struct FavoritList: View {
                     }
                 }
             }
-          
+            print(placeArray)
         }
         .environmentObject(firebaseModel)
         
-    }
-    private func deleteFavorit(indexSet: IndexSet) {
-        var favorit = [String]()
-        var placeKey = ""
-        for index in indexSet {
-            
-            placeKey = placeArray[index].key
-            favorit = (placeArray[index].favorit?.filter {$0 != firebaseModel.user.uid})!
-            placeArray.remove(at: index)
-        }
-        FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: firebaseModel.ref) { resalt in
-            switch resalt {
-                
-            case .success():
-                break
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
     }
     
 }
@@ -96,6 +93,18 @@ struct PlaceList_Previews: PreviewProvider {
 }
 
 
+struct PlaceListView: View {
+    
+    
+    var body: some View {
+        
+        VStack{
+            
+        }
+        
+    }
+    
+}
 
 
 struct ListSeparatorStyle: ViewModifier {
