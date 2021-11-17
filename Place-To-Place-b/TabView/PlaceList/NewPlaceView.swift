@@ -11,6 +11,9 @@ import MapKit
 
 
 struct NewPlaceView: View {
+    @State var annotationTitle: String
+    @State var coordinateLatitude: String
+    @State var coordinateLongitude: String
     @State var adressBool = false
     @State var region = MKCoordinateRegion()
     @State var data = MapViewModel()
@@ -33,7 +36,7 @@ struct NewPlaceView: View {
                             adressBool = true
                         } label: {
                             ZStack{
-                                MapViewPresent()
+                                MapViewPresent(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
                                 
                                 Text("Укажите адрес или точку на карте")
                                     .foregroundColor(.black)
@@ -59,7 +62,7 @@ struct NewPlaceView: View {
                     .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
                     .frame(width: 60, height: 12, alignment: .center)
                     .padding(.top)
-                MapViewPresent()
+                MapViewPresent(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
                     .ignoresSafeArea()
             
         })
@@ -71,6 +74,6 @@ struct NewPlaceView: View {
 struct NewPlaceView_Previews: PreviewProvider {
     static var previews: some View {
         
-        NewPlaceView()
+        NewPlaceView(annotationTitle: "", coordinateLatitude: "", coordinateLongitude: "")
     }
 }

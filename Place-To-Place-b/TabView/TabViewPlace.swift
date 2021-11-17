@@ -94,7 +94,7 @@ struct TabViewPlace: View {
                 PlaceDetals(place: $placeD, user: data.user)
             })
             .sheet(isPresented: $newPlace, content: {
-                    NewPlaceView()
+                NewPlaceView(annotationTitle: "", coordinateLatitude: "", coordinateLongitude: "")
             })
         }
         

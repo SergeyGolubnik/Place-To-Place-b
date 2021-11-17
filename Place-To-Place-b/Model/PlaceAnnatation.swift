@@ -12,11 +12,11 @@ import Contacts
 
 class PlaceAnatation: NSObject, MKAnnotation {
     
-    let title: String?
+    var title: String?
     let locationName: String?
     let discipLine: String?
     var coordinate: CLLocationCoordinate2D
-    let subtitle: String?
+    var subtitle: String?
     let placeId: String?
     let placeUid: String?
     let favorit: [String]?
