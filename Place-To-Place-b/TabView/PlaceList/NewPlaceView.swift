@@ -12,6 +12,8 @@ import MapKit
 
 struct NewPlaceView: View {
     @State var adressBool = false
+    @State var region = MKCoordinateRegion()
+    @State var data = MapViewModel()
     var body: some View {
         ZStack{
             VStack{
@@ -51,7 +53,16 @@ struct NewPlaceView: View {
                 Spacer()
             }
         }
-        
+        .sheet(isPresented: $adressBool, content: {
+          
+                Capsule()
+                    .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
+                    .frame(width: 60, height: 12, alignment: .center)
+                    .padding(.top)
+                MapViewPresent()
+                    .ignoresSafeArea()
+            
+        })
     }
     
 }
@@ -59,6 +70,7 @@ struct NewPlaceView: View {
 
 struct NewPlaceView_Previews: PreviewProvider {
     static var previews: some View {
+        
         NewPlaceView()
     }
 }

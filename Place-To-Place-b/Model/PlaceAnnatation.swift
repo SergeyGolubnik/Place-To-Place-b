@@ -15,7 +15,7 @@ class PlaceAnatation: NSObject, MKAnnotation {
     let title: String?
     let locationName: String?
     let discipLine: String?
-    let coordinate: CLLocationCoordinate2D
+    var coordinate: CLLocationCoordinate2D
     let subtitle: String?
     let placeId: String?
     let placeUid: String?
