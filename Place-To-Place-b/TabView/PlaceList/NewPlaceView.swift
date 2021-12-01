@@ -36,7 +36,7 @@ struct NewPlaceView: View {
                             adressBool = true
                         } label: {
                             ZStack{
-                                MapViewPresent(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
+                                MapViewPresentBetta(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
                                 
                                 Text("Укажите адрес или точку на карте")
                                     .foregroundColor(.black)
@@ -56,14 +56,10 @@ struct NewPlaceView: View {
                 Spacer()
             }
         }
-        .sheet(isPresented: $adressBool, content: {
+        .fullScreenCover(isPresented: $adressBool, content: {
           
-                Capsule()
-                    .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
-                    .frame(width: 60, height: 12, alignment: .center)
-                    .padding(.top)
-                MapViewPresent(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
-                    .ignoresSafeArea()
+                
+                HomeMapPresent()
             
         })
     }

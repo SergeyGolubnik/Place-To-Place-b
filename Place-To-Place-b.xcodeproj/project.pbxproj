@@ -51,8 +51,12 @@
 		87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204726FBCC3400C22D55 /* CategoryModel.swift */; };
 		87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204B26FBD3A100C22D55 /* CategoryView.swift */; };
 		87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204D26FE820100C22D55 /* UrlImageView.swift */; };
+		87DA93A42757B2B700451433 /* PlacePresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA93A32757B2B700451433 /* PlacePresent.swift */; };
+		87DA93A62757B2D700451433 /* MapViewModelPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA93A52757B2D700451433 /* MapViewModelPresent.swift */; };
+		87DA93A82757B2F600451433 /* HomeMapPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA93A72757B2F600451433 /* HomeMapPresent.swift */; };
+		87DA93AA2757B31400451433 /* MapViewPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA93A92757B31400451433 /* MapViewPresent.swift */; };
 		87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FD31C4273E43C0000C21E0 /* StaticFille.swift */; };
-		87FD31C7273EB466000C21E0 /* MapViewPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FD31C6273EB466000C21E0 /* MapViewPresent.swift */; };
+		87FD31C7273EB466000C21E0 /* MapViewPresentBetta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FD31C6273EB466000C21E0 /* MapViewPresentBetta.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,8 +101,12 @@
 		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		87D0204B26FBD3A100C22D55 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		87D0204D26FE820100C22D55 /* UrlImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
+		87DA93A32757B2B700451433 /* PlacePresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePresent.swift; sourceTree = "<group>"; };
+		87DA93A52757B2D700451433 /* MapViewModelPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModelPresent.swift; sourceTree = "<group>"; };
+		87DA93A72757B2F600451433 /* HomeMapPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMapPresent.swift; sourceTree = "<group>"; };
+		87DA93A92757B31400451433 /* MapViewPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewPresent.swift; sourceTree = "<group>"; };
 		87FD31C4273E43C0000C21E0 /* StaticFille.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticFille.swift; sourceTree = "<group>"; };
-		87FD31C6273EB466000C21E0 /* MapViewPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewPresent.swift; sourceTree = "<group>"; };
+		87FD31C6273EB466000C21E0 /* MapViewPresentBetta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewPresentBetta.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,8 +282,8 @@
 		87B25E0B26D051600008C719 /* PlaceList */ = {
 			isa = PBXGroup;
 			children = (
+				87DA93A22757B26B00451433 /* MapPlacePresent */,
 				87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */,
-				87FD31C6273EB466000C21E0 /* MapViewPresent.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
 				8771C07E270CD03300830908 /* UserSetings.swift */,
@@ -285,6 +293,18 @@
 				87D0204B26FBD3A100C22D55 /* CategoryView.swift */,
 			);
 			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		87DA93A22757B26B00451433 /* MapPlacePresent */ = {
+			isa = PBXGroup;
+			children = (
+				87FD31C6273EB466000C21E0 /* MapViewPresentBetta.swift */,
+				87DA93A32757B2B700451433 /* PlacePresent.swift */,
+				87DA93A52757B2D700451433 /* MapViewModelPresent.swift */,
+				87DA93A72757B2F600451433 /* HomeMapPresent.swift */,
+				87DA93A92757B31400451433 /* MapViewPresent.swift */,
+			);
+			path = MapPlacePresent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,8 +393,9 @@
 				87251B2126CD634700DC22A9 /* TabViewPlace.swift in Sources */,
 				87089B6026E167BC007AA131 /* PlaceModel.swift in Sources */,
 				87089B5926E1671B007AA131 /* AuthResalt.swift in Sources */,
+				87DA93A42757B2B700451433 /* PlacePresent.swift in Sources */,
 				877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */,
-				87FD31C7273EB466000C21E0 /* MapViewPresent.swift in Sources */,
+				87FD31C7273EB466000C21E0 /* MapViewPresentBetta.swift in Sources */,
 				87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */,
 				87251AF826CD47CE00DC22A9 /* AppDelegate.swift in Sources */,
 				879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */,
@@ -385,6 +406,7 @@
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
 				879512A826E7DF6500DFD212 /* FirebaseData.swift in Sources */,
 				873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */,
+				87DA93AA2757B31400451433 /* MapViewPresent.swift in Sources */,
 				87251AFF26CD47CE00DC22A9 /* Place_To_Place_b.xcdatamodeld in Sources */,
 				87089B4F26E10DBC007AA131 /* RePasswordView.swift in Sources */,
 				87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */,
@@ -397,8 +419,10 @@
 				87089B5726E166F3007AA131 /* AuthError.swift in Sources */,
 				87251B2526CD8D0800DC22A9 /* LoginView.swift in Sources */,
 				87089B5D26E1675D007AA131 /* Validators.swift in Sources */,
+				87DA93A82757B2F600451433 /* HomeMapPresent.swift in Sources */,
 				87251B1226CD490300DC22A9 /* PageViev.swift in Sources */,
 				87500CB9273015D400C07818 /* FavoritCell.swift in Sources */,
+				87DA93A62757B2D700451433 /* MapViewModelPresent.swift in Sources */,
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
 				87500CC12731823F00C07818 /* Notifications.swift in Sources */,
 				87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */,

@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-struct MapViewPresent: UIViewRepresentable {
+struct MapViewPresentBetta: UIViewRepresentable {
     @Binding var annotationTitle: String
     @Binding var coordinateLatitude: String
     @Binding var coordinateLongitude: String
@@ -73,14 +73,14 @@ struct MapViewPresent: UIViewRepresentable {
     
     class MapViewCoordinator: NSObject, MKMapViewDelegate {
         
-        var mapViewController: MapViewPresent
+        var mapViewController: MapViewPresentBetta
         var center: CLLocation?
         let placeAnnatationName = "Точка"
         @Binding var annotationTitle: String
         @Binding var coordinateLatitude: String
         @Binding var coordinateLongitude: String
         
-        init(_ control: MapViewPresent, annotationTitle: Binding<String>, coordinateLatitude: Binding<String>, coordinateLongitude: Binding<String>) {
+        init(_ control: MapViewPresentBetta, annotationTitle: Binding<String>, coordinateLatitude: Binding<String>, coordinateLongitude: Binding<String>) {
             self.mapViewController = control
             self._annotationTitle = annotationTitle
             self._coordinateLatitude = coordinateLatitude
