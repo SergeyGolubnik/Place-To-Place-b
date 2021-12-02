@@ -11,11 +11,11 @@ import MapKit
 
 
 struct NewPlaceView: View {
-    @State var annotationTitle: String
+    @State var placeName = ""
+    @State var annotationTitle = ""
     @State var coordinateLatitude: String
     @State var coordinateLongitude: String
     @State var adressBool = false
-    @State var region = MKCoordinateRegion()
     @State var data = MapViewModel()
     var body: some View {
         ZStack{
@@ -28,28 +28,58 @@ struct NewPlaceView: View {
                 Text("Добавте место на карте")
                     .font(.system(size: 30))
                     .fontWeight(.bold)
-                
+                TextField("Введите название", text: $placeName)
+                    .padding(10)
+                    .background(Color.gray.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    
+                    .padding(.horizontal)
+                    
             
                 HStack{
                     GeometryReader { geometry in
-                        Button {
-                            adressBool = true
-                        } label: {
-                            ZStack{
-                                MapViewPresentBetta(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude, regionManager: $region)
-                                
-                                Text("Укажите адрес или точку на карте")
-                                    .foregroundColor(.black)
+                        VStack{
+                            Button {
+                                adressBool = true
+                            } label: {
+                                ZStack{
+                                    MapViewPresentBetta()
+                                        .frame(width: geometry.size.width - 30, height: geometry.size.height / 9)
                                     
+                                    Text("Укажите адрес или точку на карте")
+                                        .frame(width: geometry.size.width - 30, height: geometry.size.height / 9)
+                                        .foregroundColor(.black)
+                                        .background(Color.gray.opacity(0.3))
+                                        
+                                }
+                                .cornerRadius(10)
+                                .padding()
+                                
                             }
-                            .frame(width: geometry.size.width - 30, height: geometry.size.height / 7)
-                            .cornerRadius(10)
-                            .padding()
+                            if annotationTitle != "" {
+                                VStack{
+                                    HStack{
+                                        Text("Адрес:")
+                                            .font(.body)
+                                            .fontWeight(.light)
+                                            .padding(.bottom)
+                                        Spacer()
+                                    }
+                                    HStack(){
+                                        Text(annotationTitle)
+                                        Spacer()
+                                    }
+                                }
+                                .padding(.horizontal)
+                                Capsule()
+                                    .padding(.horizontal)
+                                    .frame(height: 1.5)
+                                    .foregroundColor(.gray)
+                            }
                             
+                            Spacer()
                         }
-
                         
-                        Spacer()
                     }
                     
                 }
@@ -59,7 +89,7 @@ struct NewPlaceView: View {
         .fullScreenCover(isPresented: $adressBool, content: {
           
                 
-                HomeMapPresent()
+            HomeMapPresent(annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude)
             
         })
     }

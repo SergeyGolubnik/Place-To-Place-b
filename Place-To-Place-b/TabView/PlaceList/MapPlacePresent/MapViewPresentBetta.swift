@@ -9,10 +9,6 @@ import SwiftUI
 import MapKit
 
 struct MapViewPresentBetta: UIViewRepresentable {
-    @Binding var annotationTitle: String
-    @Binding var coordinateLatitude: String
-    @Binding var coordinateLongitude: String
-    @Binding var regionManager: MKCoordinateRegion
     @State var annotations = [PlaceAnatation]()
     let locationManager = CLLocationManager()
     var mapView = MKMapView()
@@ -21,9 +17,6 @@ struct MapViewPresentBetta: UIViewRepresentable {
         localKlien()
         let view = mapView
             view.delegate = context.coordinator
-            let longPressed = UILongPressGestureRecognizer(target: context.coordinator,
-                                                           action: #selector(context.coordinator.addPinBasedOnGesture(_:)))
-            view.addGestureRecognizer(longPressed)
             return view
     }
     
@@ -45,7 +38,7 @@ struct MapViewPresentBetta: UIViewRepresentable {
     
     
     func makeCoordinator() -> MapViewCoordinator {
-        MapViewCoordinator(self, annotationTitle: $annotationTitle, coordinateLatitude: $coordinateLatitude, coordinateLongitude: $coordinateLongitude)
+        MapViewCoordinator(self)
     }
     func localKlien() {
         if self.locationManager.location != nil{
@@ -63,7 +56,6 @@ struct MapViewPresentBetta: UIViewRepresentable {
                             latitude: locValue.latitude, longitude: locValue.longitude)
                         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                         let region = MKCoordinateRegion(center: coordinate, span: span)
-                        regionManager = region
                         mapView.setRegion(region, animated: true)
                     })
                 }
@@ -75,16 +67,9 @@ struct MapViewPresentBetta: UIViewRepresentable {
         
         var mapViewController: MapViewPresentBetta
         var center: CLLocation?
-        let placeAnnatationName = "Точка"
-        @Binding var annotationTitle: String
-        @Binding var coordinateLatitude: String
-        @Binding var coordinateLongitude: String
         
-        init(_ control: MapViewPresentBetta, annotationTitle: Binding<String>, coordinateLatitude: Binding<String>, coordinateLongitude: Binding<String>) {
+        init(_ control: MapViewPresentBetta) {
             self.mapViewController = control
-            self._annotationTitle = annotationTitle
-            self._coordinateLatitude = coordinateLatitude
-            self._coordinateLongitude = coordinateLongitude
         }
         
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -110,68 +95,6 @@ struct MapViewPresentBetta: UIViewRepresentable {
             
         }
         
-        @objc func addPinBasedOnGesture(_ gestureRecognizer:UIGestureRecognizer) {
-            if (gestureRecognizer.state == UITapGestureRecognizer.State.began) {
-                mapViewController.annotations.removeAll()
-            } else if (gestureRecognizer.state == UITapGestureRecognizer.State.ended) {
-                return
-            }
-            mapViewController.annotations = [PlaceAnatation]()
-            let touchPoint = gestureRecognizer.location(in: gestureRecognizer.view)
-            let newCoordinates = (gestureRecognizer.view as? MKMapView)?.convert(touchPoint, toCoordinateFrom: gestureRecognizer.view)
-            let annotation = PlaceAnatation(title: "", locationName: "", discipLine: "", subtitle: "", placeId: "", placeUid: "", favorit: [], coordinate: newCoordinates!)
-            guard let _newCoordinates = newCoordinates else { return }
-            annotation.coordinate = _newCoordinates
-            self.center = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
-            let geocoder = CLGeocoder()
-            // Опрделяем по координатам адрес
-            geocoder.reverseGeocodeLocation(self.center!) {[weak self] (placemarks, error) in
-                
-                if let error = error {
-                    print(error)
-                    return
-                }
-                
-                // если нет ошибки то определяем экземпляр адреса
-                guard let plasemarks = placemarks else { return }
-                
-                // имплементируем адреса
-                let plasemark = plasemarks.first
-                // Почтовый индекс
-    //            let postCode = plasemark?.postalCode
-                // город
-                let cityName = plasemark?.locality
-                let subMame = plasemark?.subAdministrativeArea
-                // улица
-                let streetName = plasemark?.thoroughfare
-                // номер дома
-                let buidNumber = plasemark?.subThoroughfare
-                
-                
-                // ассинхроно обновляет информацию
-                DispatchQueue.main.async {
-                    
-                    // выводит и состовляет на экран адрес
-                    if cityName != nil && streetName != nil && buidNumber != nil {
-                        self?.annotationTitle = "\(cityName!), \(streetName!), \(buidNumber!)"
-                    } else if streetName != nil && buidNumber != nil {
-                        self?.annotationTitle = "\(streetName!), \(buidNumber!)"
-                    } else if buidNumber != nil {
-                        self?.annotationTitle = "\(buidNumber!)"
-                    }  else if subMame != nil {
-                        self?.annotationTitle = "\(subMame!)"
-                    } else {
-                        self?.annotationTitle = ""
-                    }
-                    print("\(self!.coordinateLatitude), \(self!.annotationTitle), \(String(describing: streetName))")
-                    self?.coordinateLatitude = String((self?.center!.coordinate.latitude ?? 0))
-                    self?.coordinateLongitude = String((self?.center!.coordinate.longitude ?? 0))
-                }
-                annotation.title = self?.placeAnnatationName
-                annotation.subtitle = self?.annotationTitle
-            }
-            mapViewController.annotations.append(annotation)
-        }
     }
     
 }

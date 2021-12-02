@@ -17,6 +17,10 @@ struct HomeMapPresent: View {
     @State var adress = ""
     @State var adresBool = true
     
+    @Binding var annotationTitle: String
+    @Binding var coordinateLatitude: String
+    @Binding var coordinateLongitude: String
+    
     var body: some View {
         
         ZStack{
@@ -77,11 +81,15 @@ struct HomeMapPresent: View {
                 
                 VStack{
                     Button {
+                        annotationTitle = mapData.annotationTitle
+                        coordinateLatitude = mapData.coordinateLatitude
+                        coordinateLongitude = mapData.coordinateLongitude
+                        print("\(coordinateLongitude) \(coordinateLatitude) \(annotationTitle)")
                         self.adresBool = false
                         mapData.selectPlace()
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Image(systemName: "xmark")
+                        Image(systemName: mapData.adress == "" ? "xmark" : "checkmark")
                             .font(.title2)
                             .padding(10)
                             .background(Color.primary)
@@ -128,7 +136,7 @@ struct HomeMapPresent: View {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }))
         })
-        .onChange(of: [mapData.searchTxt, mapData.adress], perform: { value in
+        .onChange(of: mapData.searchTxt, perform: { value in
             
             // Searching Places...
             
@@ -137,15 +145,11 @@ struct HomeMapPresent: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 
-                if value[0] == mapData.searchTxt{
+                if value == mapData.searchTxt{
                     
                     // Search...
                     self.mapData.searchQuery()
-                    self.adress = mapData.adress
                     
-                }
-                if value[1] == mapData.adress {
-                    self.adress = mapData.adress
                 }
             }
         })
@@ -155,6 +159,6 @@ struct HomeMapPresent: View {
 
 struct Home_Previews: PreviewProvider {
     static var previews: some View {
-        HomeMapPresent()
+        HomeMapPresent(annotationTitle: .constant(""), coordinateLatitude: .constant(""), coordinateLongitude: .constant(""))
     }
 }

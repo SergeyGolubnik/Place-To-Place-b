@@ -122,7 +122,7 @@ class MapViewModelPresent: NSObject,ObservableObject,CLLocationManagerDelegate {
             } else if buidNumber != nil {
                 self.annotationTitle = "\(buidNumber!)"
             }  else if subMame != nil {
-                self.annotationTitle = "\(subMame!)"
+                self.annotationTitle = "\(subMame!), \(self.adress)"
             } else {
                 self.annotationTitle = ""
             }
@@ -138,14 +138,14 @@ class MapViewModelPresent: NSObject,ObservableObject,CLLocationManagerDelegate {
         let adres = place.placemark.thoroughfare
         adress = adres ?? "Адрес отсутсвует"
         // Removing All Old Ones...
-        print(adress)
+        
         mapView.removeAnnotations(mapView.annotations)
         
         mapView.addAnnotation(pointAnnotation)
         
         // Moving Map To That Location...
         
-        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 200, longitudinalMeters: 200)
         
         mapView.setRegion(coordinateRegion, animated: true)
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
