@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Разрешите доступ к галереи</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -41,8 +43,6 @@
 	<string>This app requires usage of camera to function property! </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>При использовании программы, будет определятся ваше местоположение</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Для сохранения фото необходимо разрешить доступ к вашим файлам  </string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

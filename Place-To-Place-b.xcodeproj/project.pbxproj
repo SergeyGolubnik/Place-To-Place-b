@@ -40,6 +40,7 @@
 		879512AE26EA84EF00DFD212 /* Extansion-NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512AD26EA84EF00DFD212 /* Extansion-NavigationView.swift */; };
 		879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512AF26EA904500DFD212 /* PlaceAnnatation.swift */; };
 		879512B226EA9E5100DFD212 /* PlaceDetals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512B126EA9E5100DFD212 /* PlaceDetals.swift */; };
+		879B2090275E512600DEEC90 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879B208F275E512600DEEC90 /* ImagePicker.swift */; };
 		87A1F7852744FB590079D7CF /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 87A1F7842744FB590079D7CF /* FirebaseAnalytics */; };
 		87A1F7872744FB590079D7CF /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 87A1F7862744FB590079D7CF /* FirebaseAuth */; };
 		87A1F7892744FB590079D7CF /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 87A1F7882744FB590079D7CF /* FirebaseDatabase */; };
@@ -96,6 +97,7 @@
 		879512AD26EA84EF00DFD212 /* Extansion-NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extansion-NavigationView.swift"; sourceTree = "<group>"; };
 		879512AF26EA904500DFD212 /* PlaceAnnatation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnatation.swift; sourceTree = "<group>"; };
 		879512B126EA9E5100DFD212 /* PlaceDetals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetals.swift; sourceTree = "<group>"; };
+		879B208F275E512600DEEC90 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
 		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
+				879B208F275E512600DEEC90 /* ImagePicker.swift */,
 				8771C07E270CD03300830908 /* UserSetings.swift */,
 				879512AB26E8028400DFD212 /* FavoritList.swift */,
 				87500CB8273015D400C07818 /* FavoritCell.swift */,
@@ -406,6 +409,7 @@
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
 				879512A826E7DF6500DFD212 /* FirebaseData.swift in Sources */,
 				873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */,
+				879B2090275E512600DEEC90 /* ImagePicker.swift in Sources */,
 				87DA93AA2757B31400451433 /* MapViewPresent.swift in Sources */,
 				87251AFF26CD47CE00DC22A9 /* Place_To_Place_b.xcdatamodeld in Sources */,
 				87089B4F26E10DBC007AA131 /* RePasswordView.swift in Sources */,

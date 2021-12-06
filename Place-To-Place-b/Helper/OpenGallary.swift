@@ -11,16 +11,19 @@ struct OpenGallary: UIViewControllerRepresentable {
 
     let isShown: Binding<Bool>
     let image: Binding<UIImage?>
+    let imageBol: Binding<Bool>
     var sourceType: UIImagePickerController.SourceType = .camera
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         
         let isShown: Binding<Bool>
         let image: Binding<UIImage?>
+        let imageBol: Binding<Bool>
 
-        init(isShown: Binding<Bool>, image: Binding<UIImage?>) {
+        init(isShown: Binding<Bool>, image: Binding<UIImage?>, imageBool: Binding<Bool>) {
             self.isShown = isShown
             self.image = image
+            self.imageBol = imageBool
         }
         
 
@@ -29,6 +32,7 @@ struct OpenGallary: UIViewControllerRepresentable {
             
             self.image.wrappedValue = uiImage
             self.isShown.wrappedValue = false
+            self.imageBol.wrappedValue = true
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -38,7 +42,7 @@ struct OpenGallary: UIViewControllerRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(isShown: isShown, image: image)
+        return Coordinator(isShown: isShown, image: image, imageBool: imageBol)
     }
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<OpenGallary>) -> UIImagePickerController {

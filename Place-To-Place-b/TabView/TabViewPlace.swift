@@ -18,6 +18,8 @@ struct TabViewPlace: View {
     @StateObject var data = FirebaseData()
     @State var place = [PlaceModel]()
     
+    @State var categoryArray = Category()
+    
     var body: some View {
         if exitBool {
             ContentView()
@@ -94,10 +96,10 @@ struct TabViewPlace: View {
                 PlaceDetals(place: $placeD, user: data.user)
             })
             .sheet(isPresented: $newPlace, content: {
-                NewPlaceView(annotationTitle: "", coordinateLatitude: "", coordinateLongitude: "")
+                NewPlaceView()
             })
         }
-        
+            
     }
 }
 

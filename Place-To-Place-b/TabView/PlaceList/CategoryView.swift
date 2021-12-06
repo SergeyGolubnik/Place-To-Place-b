@@ -11,25 +11,6 @@ struct CategoryView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var enterType: String
     @State var categoryArray = Category()
-    let category: [CategoryModel] = [
-        CategoryModel(imageString: "bar", name: "Бары и пабы"),
-        CategoryModel(imageString: "restoran", name: "Рестораны и кафе"),
-        CategoryModel(imageString: "fasfud", name: "Фасфуд"),
-        CategoryModel(imageString: "salon", name: "Красота"),
-        CategoryModel(imageString: "marcet", name: "Магазины"),
-        CategoryModel(imageString: "tc", name: "Торговые центры"),
-        CategoryModel(imageString: "kinder", name: "Для детей"),
-        CategoryModel(imageString: "hotel", name: "Гостиницы"),
-        CategoryModel(imageString: "bisnes", name: "Бизнес"),
-        CategoryModel(imageString: "dicovery", name: "Места культуры"),
-        CategoryModel(imageString: "parc", name: "Парки и скверы"),
-        CategoryModel(imageString: "razvlechenia", name: "Развлечения"),
-        CategoryModel(imageString: "servis", name: "Сервис"),
-        CategoryModel(imageString: "servisAuto", name: "Автосервис"),
-        CategoryModel(imageString: "direct", name: "Объявления"),
-        CategoryModel(imageString: "adalt", name: "Для взрослых"),
-        CategoryModel(imageString: "tinder", name: "Для общения")
-    ]
     var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     
     var body: some View {

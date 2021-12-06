@@ -24,6 +24,7 @@ struct PlaceModel: Hashable {
     var longitude: String?
     var discription: String?
     var switchPlace: String
+    var messageBool: Bool?
     var gellery: [String]?
     var favorit: [String]?
     var date: String?
@@ -58,10 +59,11 @@ struct PlaceModel: Hashable {
         gellery = snapshotVaiue["gellery"] as? [String]
         favorit = snapshotVaiue["favorit"] as? [String]
         date = snapshotVaiue["date"] as? String
+        messageBool = snapshotVaiue["messageBoll"] as? Bool
         ref = snapshot.ref
     }
 
-    init(userId: String, name: String, key: String, location: String, type: String, rating: [String: Int], imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?) {
+    init(userId: String, name: String, key: String, location: String, type: String, rating: [String: Int], imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?) {
         self.userId = userId
         self.name = name
         self.key = key
@@ -77,7 +79,25 @@ struct PlaceModel: Hashable {
         self.gellery = gellery
         self.favorit = favorit
         self.date = date
+        self.messageBool = messageBool
         self.ref = nil
     }
 }
 
+class NewPlaceModel: ObservableObject {
+    @Published var userId: String?
+    @Published var name = ""
+    @Published var key: String?
+    @Published var location = ""
+    @Published var type = ""
+    @Published var imageUrl: String?
+    @Published var latitude = ""
+    @Published var deviseToken: String?
+    @Published var longitude = ""
+    @Published var discription: String?
+    @Published var switchPlace = "Делится"
+    @Published var messageBool = true
+    @Published var gellery: [String]?
+    @Published var date: String?
+    @Published var imageURLtoUI: UIImage?
+}

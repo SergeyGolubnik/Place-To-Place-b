@@ -65,7 +65,7 @@ struct RegisterView: View {
                                         .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                     
                                 }.sheet(isPresented: $showImagePicker, content: {
-                                    OpenGallary(isShown: $showImagePicker, image: $image, sourceType: sourceType)
+                                    OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
                                 })
                                     .actionSheet(isPresented: $showSheet) {
                                         ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
