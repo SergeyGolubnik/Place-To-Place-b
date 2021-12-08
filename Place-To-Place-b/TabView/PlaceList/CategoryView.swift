@@ -13,6 +13,8 @@ struct CategoryView: View {
     @State var categoryArray = Category()
     var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     
+    @StateObject var dataNewPlace = NewPlaceModel()
+    
     var body: some View {
         ZStack {
             Color.hex("FEE086")
@@ -34,6 +36,7 @@ struct CategoryView: View {
             }
             .onChange(of: enterType) { newValue in
                 presentationMode.wrappedValue.dismiss()
+                dataNewPlace.type = enterType
             }
         }
     }

@@ -18,21 +18,11 @@ struct NewPlaceView: View {
     @State var type = ""
     @State var typeString = ""
     @State var adressBool = false
-    @State var imageBool = false
-    @State var presentMap = false
-    @State var tooglePr = false
     @State var groupBool = false
     @State var privateBool = true
     @State var messageBool = true
-    @State var imageGelleryPlaceBool = true
     @State var newPlaceGoo = false
-    @State var showImagePicker = false
-    @State var image = UIImage(named: "no_image")
     @State var imageGeleryPlaceArray = [UIImage]()
-    @State var imageGeleryPlace = UIImage(named: "no_image")
-    @State var imageBoolButton = false
-    @State var sourceType: UIImagePickerController.SourceType = .camera
-    @State var data = MapViewModel()
     var body: some View {
         ZStack{
             VStack{
@@ -188,76 +178,8 @@ struct NewPlaceView: View {
                             
                         }
                         VStack{
-                            ImagePicker()
-//                            Button {
-//                                imageBool = true
-//                                imageGeleryPlaceArray.append(image!)
-//                            } label: {
-//                                if imageGeleryPlaceArray != [] {
-//                                    Image(uiImage: imageGeleryPlaceArray[0])
-//                                        .resizable()
-//                                        .scaledToFill()
-//                                        .frame(width: 250, height: 250)
-//                                        .background(Color.gray.opacity(0.3))
-//                                        .cornerRadius(10)
-//                                        .padding(.vertical)
-//                                } else {
-//                                    Image(uiImage: image!)
-//                                        .resizable()
-//                                        .scaledToFill()
-//                                        .frame(width: 250, height: 250)
-//                                        .background(Color.gray.opacity(0.3))
-//                                        .cornerRadius(10)
-//                                        .padding(.vertical)
-//                                }
-//
-//                            }.sheet(isPresented: $showImagePicker, content: {
-//                                OpenGallary(isShown: $showImagePicker, image: $image, imageBol: $imageBoolButton, sourceType: sourceType)
-//                            })
-//                                .actionSheet(isPresented: $imageBool) {
-//                                    ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
-//                                        .default(Text("Галерея")) {
-//                                            self.showImagePicker = true
-//                                            self.sourceType = .photoLibrary
-//                                        },
-//                                        .default(Text("Камера")) {
-//                                            self.showImagePicker = true
-//                                            self.sourceType = .camera
-//                                        },
-//                                        .cancel(Text("Выход"))
-//                                    ])
-//                                }
-//
-//                            if imageBoolButton, imageGelleryPlaceBool {
-//                                Button {
-//                                    imageGelleryPlaceBool = false
-//                                } label: {
-//                                    ZStack{
-//                                        Text("Добавить фото")
-//                                            .font(.title3)
-//                                            .fontWeight(.bold)
-//                                            .foregroundColor(.white)
-//                                            .frame(width: UIScreen.main.bounds.width - 120)
-//                                            .background(Color.blue)
-//                                            .padding()
-//
-//                                    }.background(Color.blue)
-//                                        .clipShape(Capsule())
-//                                        .shadow(color: .gray, radius: 5, x: 5, y: 5)
-//                                }
-//
-//                            } else if !imageGelleryPlaceBool {
-//                                ScrollView(.horizontal){
-//
-//                                    Button {
-//                                        imageBool = true
-//                                    } label: {
-//                                        RoundedRectangle(cornerRadius: 10)
-//                                            .frame(width: 100, height: 100)
-//                                    }
-//                                }
-//
-//                            }
+                            ImagePicker(imageArray: $imageGeleryPlaceArray)
+
                         }
                         Spacer()
                     }
@@ -276,7 +198,7 @@ struct NewPlaceView: View {
         .sheet(isPresented: $groupBool) {
             CategoryView(enterType: $typeString)
         }
-        .onChange(of: typeString, perform: { newValue in
+        .onChange(of: typeString, perform: { _ in
             if typeString != "" {
                 dataNewPlace.type = typeString
                 for i in categoryArray.categoryArray {

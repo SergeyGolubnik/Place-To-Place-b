@@ -10,7 +10,7 @@ import Photos
 
 
 struct ImagePicker : View {
-    
+    @Binding var imageArray: [UIImage]
     @State var selected : [SelectedImages] = []
     @State var show = false
     
@@ -18,7 +18,6 @@ struct ImagePicker : View {
         
         ZStack{
             
-            Color.black.opacity(0.07).edgesIgnoringSafeArea(.all)
             
             VStack{
                 
@@ -32,9 +31,10 @@ struct ImagePicker : View {
                             ForEach(self.selected,id: \.self){i in
                                 
                                 Image(uiImage: i.image)
-                                .resizable()
-                                .frame(width: UIScreen.main.bounds.width - 40, height: 250)
-                                .cornerRadius(15)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 250, height: 250)
+                                    .cornerRadius(15)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -44,12 +44,12 @@ struct ImagePicker : View {
                 Button(action: {
                     
                     self.selected.removeAll()
-
+                    
                     self.show.toggle()
                     
                 }) {
                     
-                    Text("Image Picker")
+                    Text(imageArray == [] ? "Добавить фото" : "Заменить фото")
                         .foregroundColor(.white)
                         .padding(.vertical,10)
                         .frame(width: UIScreen.main.bounds.width / 2)
@@ -58,11 +58,8 @@ struct ImagePicker : View {
                 .clipShape(Capsule())
                 .padding(.top, 25)
             }
-            
-            if self.show{
-                
-                CustomPicker(selected: self.$selected, show: self.$show)
-
+            .sheet(isPresented: $show) {
+                CustomPicker(selected: self.$selected, imageArray: $imageArray)
             }
         }
     }
@@ -72,8 +69,9 @@ struct ImagePicker : View {
 struct CustomPicker : View {
     
     @Binding var selected : [SelectedImages]
+    @Binding var imageArray : [UIImage]
     @State var grid : [[Images]] = []
-    @Binding var show : Bool
+    @Environment(\.presentationMode) var presentationMode
     @State var disabled = false
     
     var body: some View{
@@ -82,53 +80,59 @@ struct CustomPicker : View {
             
             VStack{
                 
-
+                
                 if !self.grid.isEmpty{
-                    
-                    HStack{
+                    ZStack{
                         
-                        Text("Pick a Image")
-                            .fontWeight(.bold)
-                        
-                        Spacer()
-                    }
-                    .padding(.leading)
-                    .padding(.top)
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        
-                        VStack(spacing: 20){
+                        VStack{
                             
-                            ForEach(self.grid,id: \.self){i in
+                            Text("Выберете не более 10 фото")
+                                .fontWeight(.bold)
+                            
+//                            Spacer()
+                        
+                        .padding(.leading)
+                        .padding(.top)
+                        
+                        ScrollView(.vertical) {
+                            
+                            VStack(spacing: 20){
                                 
-                                HStack{
+                                ForEach(self.grid,id: \.self){i in
                                     
-                                    ForEach(i,id: \.self){j in
+                                    HStack{
                                         
-                                        Card(data: j, selected: self.$selected)
+                                        ForEach(i,id: \.self){j in
+                                            
+                                            Card(data: j, selected: self.$selected, imageArray: $imageArray)
+                                            
+                                        }
                                     }
                                 }
                             }
+//                            .padding(.bottom)
                         }
-                        .padding(.bottom)
+                        }
+                        VStack{
+                            
+                            Button(action: {
+                                
+                                self.presentationMode.wrappedValue.dismiss()
+                                print(imageArray.count)
+                            }) {
+                                
+                                Text("Добавить")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical,10)
+                                    .frame(width: UIScreen.main.bounds.width / 2)
+                            }
+                            
+                            .background(Color.red.opacity((self.selected.count != 0) ? 1 : 0.5))
+                            .clipShape(Capsule())
+                            .padding(.bottom)
+                            .disabled((self.selected.count != 0) ? false : true)
+                        }.padding(.top, 550)
                     }
-                    
-                    Button(action: {
-                        
-                        self.show.toggle()
-                        
-                    }) {
-                        
-                        Text("Select")
-                            .foregroundColor(.white)
-                            .padding(.vertical,10)
-                            .frame(width: UIScreen.main.bounds.width / 2)
-                    }
-                    .background(Color.red.opacity((self.selected.count != 0) ? 1 : 0.5))
-                    .clipShape(Capsule())
-                    .padding(.bottom)
-                    .disabled((self.selected.count != 0) ? false : true)
-                    
                 }
                 else{
                     
@@ -142,16 +146,10 @@ struct CustomPicker : View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.height / 1.5)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             .background(Color.white)
             .cornerRadius(12)
         }
-        .background(Color.black.opacity(0.1).edgesIgnoringSafeArea(.all)
-        .onTapGesture {
-        
-            self.show.toggle()
-            
-        })
         .onAppear {
             
             PHPhotoLibrary.requestAuthorization { (status) in
@@ -178,30 +176,33 @@ struct CustomPicker : View {
         let req = PHAsset.fetchAssets(with: .image, options: .none)
         
         DispatchQueue.global(qos: .background).async {
-
-           let options = PHImageRequestOptions()
-           options.isSynchronous = true
-                
-        // New Method For Generating Grid Without Refreshing....
             
-          for i in stride(from: 0, to: req.count, by: 3){
-                    
+            let options = PHImageRequestOptions()
+            options.isSynchronous = true
+            
+            // New Method For Generating Grid Without Refreshing....
+            
+            for i in stride(from: 0, to: req.count, by: 3){
+                
                 var iteration : [Images] = []
-                    
+                
                 for j in i..<i+3{
                     
                     if j < req.count{
                         
-                        PHCachingImageManager.default().requestImage(for: req[j], targetSize: CGSize(width: 150, height: 150), contentMode: .default, options: options) { (image, _) in
+                        PHCachingImageManager.default().requestImage(for: req[j], targetSize: CGSize(width: 150, height: 150), contentMode: .aspectFit, options: options) { (image, _) in
+                            guard let image = image else {
+                                return
+                            }
                             
-                            let data1 = Images(image: image!, selected: false, asset: req[j])
+                            let data1 = Images(image: image, selected: false, asset: req[j])
                             
                             iteration.append(data1)
-
+                            
                         }
                     }
                 }
-                    
+                
                 self.grid.append(iteration)
             }
             
@@ -213,13 +214,16 @@ struct Card : View {
     
     @State var data : Images
     @Binding var selected : [SelectedImages]
+    @Binding var imageArray : [UIImage]
     
     var body: some View{
         
         ZStack{
             
+            
             Image(uiImage: self.data.image)
-            .resizable()
+                .resizable()
+                
             
             if self.data.selected{
                 
@@ -235,44 +239,53 @@ struct Card : View {
             }
             
         }
+        .aspectRatio(contentMode: .fill)
         .frame(width: (UIScreen.main.bounds.width - 80) / 3, height: 90)
+        .clipped()
         .onTapGesture {
-            
-            
-            if !self.data.selected{
-
-                
-                self.data.selected = true
-                
-                // Extracting Orginal Size of Image from Asset
-                
-                DispatchQueue.global(qos: .background).async {
+            if selected.count <= 9 {
+                if !self.data.selected{
                     
-                    let options = PHImageRequestOptions()
-                    options.isSynchronous = true
                     
-                    // You can give your own Image size by replacing .init() to CGSize....
+                    self.data.selected = true
                     
-                    PHCachingImageManager.default().requestImage(for: self.data.asset, targetSize: .init(), contentMode: .default, options: options) { (image, _) in
-
-                        self.selected.append(SelectedImages(asset: self.data.asset, image: image!))
-                    }
-                }
-
-            }
-            else{
-                
-                for i in 0..<self.selected.count{
+                    // Extracting Orginal Size of Image from Asset
                     
-                    if self.selected[i].asset == self.data.asset{
+                    DispatchQueue.global(qos: .background).async {
                         
-                        self.selected.remove(at: i)
-                        self.data.selected = false
-                        return
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        
+                        // You can give your own Image size by replacing .init() to CGSize....
+                        
+                        PHCachingImageManager.default().requestImage(for: self.data.asset, targetSize: .init(), contentMode: .aspectFill, options: options) { (image, _) in
+                            
+                            guard let image = image else {
+                                return
+                            }
+                            
+                            self.selected.append(SelectedImages(asset: self.data.asset, image: image))
+                            self.imageArray.append(image)
+                        }
                     }
                     
                 }
+                else{
+                    
+                    for i in 0..<self.selected.count{
+                        
+                        if self.selected[i].asset == self.data.asset{
+                            
+                            self.selected.remove(at: i)
+                            self.data.selected = false
+                            return
+                        }
+                        
+                    }
+                }
             }
+            
+            
         }
         
     }
