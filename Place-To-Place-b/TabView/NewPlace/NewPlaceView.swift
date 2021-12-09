@@ -7,22 +7,33 @@
 
 import SwiftUI
 import MapKit
+import Firebase
 
 
 
 struct NewPlaceView: View {
     @State var categoryArray = Category()
-    @StateObject var dataNewPlace = NewPlaceModel()
+    @State var place: PlaceModel?
+    @StateObject var data = FirebaseData()
     
+    @State var namePlace = ""
+    @State var locationPlace = ""
+    @State var typeString = ""
+    @State var switchPlace = ""
+    @State var messageBool = true
+    @State var imageGeleryPlaceArray = [UIImage]()
+    @State var discription = ""
+    @State var latitude = ""
+    @State var longitude = ""
     
     @State var type = ""
-    @State var typeString = ""
+    
     @State var adressBool = false
     @State var groupBool = false
     @State var privateBool = true
-    @State var messageBool = true
+   
     @State var newPlaceGoo = false
-    @State var imageGeleryPlaceArray = [UIImage]()
+    
     var body: some View {
         ZStack{
             VStack{
@@ -35,11 +46,11 @@ struct NewPlaceView: View {
                     .font(.system(size: 30))
                     .fontWeight(.bold)
                 HStack {
-                    TextField("Введите название", text: $dataNewPlace.name)
+                    TextField("Введите название", text: $namePlace)
                         .padding(10)
                         .background(Color.gray.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 5))
-                    if dataNewPlace.name != "", dataNewPlace.location != "", dataNewPlace.type != "" {
+                    if namePlace != "", locationPlace != "", typeString != "" {
                         Button {
                             newPlaceGoo.toggle()
                         } label: {
@@ -67,12 +78,12 @@ struct NewPlaceView: View {
                 
                 ScrollView {
                     VStack{
-                        if dataNewPlace.location == "" {
+                        if locationPlace == "" {
                             Button {
                                 adressBool = true
                             } label: {
                                 ZStack{
-                                    MapViewPresentBetta(latitude: dataNewPlace.latitude, longitude: dataNewPlace.longitude)
+                                    MapViewPresentBetta(latitude: latitude, longitude: longitude)
                                     Color.gray.opacity(0.3)
                                     Text("Укажите адрес или точку на карте")
                                         .foregroundColor(.black)
@@ -85,7 +96,7 @@ struct NewPlaceView: View {
                             }
                         }
                         
-                        if dataNewPlace.location != "" {
+                        if locationPlace != "" {
                             VStack{
                                 HStack{
                                     Text("Адрес:")
@@ -93,9 +104,9 @@ struct NewPlaceView: View {
                                         .fontWeight(.light)
                                         .padding(.bottom)
                                     Spacer()
-                                    if dataNewPlace.location != "" {
+                                    if locationPlace != "" {
                                         Button {
-                                            dataNewPlace.location = ""
+                                            locationPlace = ""
                                         } label: {
                                             Text("Изменить")
                                         }.padding(.bottom)
@@ -104,7 +115,7 @@ struct NewPlaceView: View {
                                     
                                 }
                                 HStack(){
-                                    Text(dataNewPlace.location)
+                                    Text(locationPlace)
                                     Spacer()
                                 }
                             }
@@ -142,9 +153,9 @@ struct NewPlaceView: View {
                             Button {
                                 privateBool.toggle()
                                 if privateBool {
-                                    dataNewPlace.switchPlace = "Делится"
+                                    switchPlace = "Делится"
                                 } else {
-                                    dataNewPlace.switchPlace = "Приватно"
+                                    switchPlace = "Приватно"
                                 }
                             } label: {
                                 ZStack{
@@ -163,7 +174,7 @@ struct NewPlaceView: View {
                             Spacer()
                             Button {
                                 messageBool.toggle()
-                                dataNewPlace.messageBool = messageBool
+                                
                             } label: {
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
@@ -179,28 +190,59 @@ struct NewPlaceView: View {
                         }
                         VStack{
                             ImagePicker(imageArray: $imageGeleryPlaceArray)
-
+                                .padding(.bottom)
+                            Text("Напишите пару слов о вашем месте:")
+                            TextEditor(text: $discription)
+                                .cornerRadius(5)
+                                .padding()
+                                .frame(height: 200)
+                                .shadow(radius: 3)
+                        }
+                        VStack{
+                            
                         }
                         Spacer()
                     }
                     .padding(.horizontal)
                     
                 }
+               
                 Spacer()
-            }
+            }.ignoresSafeArea()
         }
+        .onAppear(perform: {
+            if place != nil {
+                namePlace = place?.name ?? ""
+                locationPlace = place?.location ?? ""
+                typeString = place?.type ?? ""
+                switchPlace = place?.switchPlace ?? ""
+                messageBool = place?.messageBool ?? true
+                discription = place?.discription ?? ""
+                latitude = place?.latitude ?? ""
+                longitude = place?.longitude ?? ""
+                imageGeleryPlaceArray.append(data.getImageUIImage(url: (place?.imageUrl)!))
+                if place?.gellery != nil, place?.gellery != [] {
+                    for imageGellery in (place?.gellery)! {
+                        
+                        imageGeleryPlaceArray.append(data.getImageUIImage(url: imageGellery))
+                    }
+                }
+                
+                
+            }
+        })
         .fullScreenCover(isPresented: $adressBool, content: {
             
             
-            HomeMapPresent(annotationTitle: $dataNewPlace.location, coordinateLatitude: $dataNewPlace.latitude, coordinateLongitude: $dataNewPlace.longitude)
+            HomeMapPresent(annotationTitle: $locationPlace, coordinateLatitude: $latitude, coordinateLongitude: $longitude)
             
         })
+        
         .sheet(isPresented: $groupBool) {
             CategoryView(enterType: $typeString)
         }
         .onChange(of: typeString, perform: { _ in
             if typeString != "" {
-                dataNewPlace.type = typeString
                 for i in categoryArray.categoryArray {
                     if i.name == typeString {
                         self.type = i.imageString!

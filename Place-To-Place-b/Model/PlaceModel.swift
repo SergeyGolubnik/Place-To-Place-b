@@ -94,7 +94,7 @@ class NewPlaceModel: ObservableObject {
     @Published var latitude = ""
     @Published var deviseToken: String?
     @Published var longitude = ""
-    @Published var discription: String?
+    @Published var discription = ""
     @Published var switchPlace = "Делится"
     @Published var messageBool = true
     @Published var gellery: [String]?

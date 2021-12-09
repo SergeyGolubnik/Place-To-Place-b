@@ -222,13 +222,11 @@ class FirebaseAuthDatabase {
                             latitude: String?,
                             Longitude: String?,
                             type: String?,
-                            rating: [String: Int],
                             image: UIImage?,
                             switchPlace: String,
                             deviseToken: String,
                             discription: String,
                             gellery: [String],
-                            favorit: [String],
                             ref: DatabaseReference,
                             completion: @escaping (AuthResult) -> Void) {
         
@@ -246,12 +244,10 @@ class FirebaseAuthDatabase {
                     "latitude": latitude! as String,
                     "Longitude": Longitude! as String,
                     "type": type! as String,
-                    "rating": rating as [String: Int],
                     "deviseToken": deviseToken as String,
                     "switchPlace": switchPlace as String,
                     "discription": discription as String,
                     "gellery": gellery as [String],
-                    "favorit": favorit as [String],
                     "image": url.absoluteString
                 ])
                 

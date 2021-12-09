@@ -327,6 +327,9 @@ struct PlaceDetals: View {
         .sheet(isPresented: $starsBool) {
             StarsRatingView(placeModel: place, userPlace: userPlace, starsBoolView: $starsBool)
         }
+        .sheet(isPresented: $redactPlace) {
+            NewPlaceView(place: place)
+        }
     }
     
     

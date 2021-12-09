@@ -22,15 +22,15 @@ struct ImagePicker : View {
             VStack{
                 
                 
-                if !self.selected.isEmpty{
+                if !self.imageArray.isEmpty{
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         
                         HStack(spacing: 20){
                             
-                            ForEach(self.selected,id: \.self){i in
+                            ForEach(self.imageArray,id: \.self){i in
                                 
-                                Image(uiImage: i.image)
+                                Image(uiImage: i)
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 250, height: 250)
@@ -44,6 +44,7 @@ struct ImagePicker : View {
                 Button(action: {
                     
                     self.selected.removeAll()
+                    self.imageArray.removeAll()
                     
                     self.show.toggle()
                     
@@ -88,8 +89,6 @@ struct CustomPicker : View {
                             
                             Text("Выберете не более 10 фото")
                                 .fontWeight(.bold)
-                            
-//                            Spacer()
                         
                         .padding(.leading)
                         .padding(.top)
@@ -110,7 +109,6 @@ struct CustomPicker : View {
                                     }
                                 }
                             }
-//                            .padding(.bottom)
                         }
                         }
                         VStack{
