@@ -15,6 +15,7 @@ struct NewPlaceView: View {
     @State var categoryArray = Category()
     @State var place: PlaceModel?
     @StateObject var data = FirebaseData()
+    @Environment(\.presentationMode) var presentationMode
     
     @State var namePlace = ""
     @State var locationPlace = ""
@@ -25,13 +26,17 @@ struct NewPlaceView: View {
     @State var discription = ""
     @State var latitude = ""
     @State var longitude = ""
+    @State var gelleryStringArray = [String]()
     
     @State var type = ""
     
+    @State var isLoading = false
+    @State var messageAlert = ""
+    @State var titleAlert = ""
     @State var adressBool = false
     @State var groupBool = false
     @State var privateBool = true
-   
+    
     @State var newPlaceGoo = false
     
     var body: some View {
@@ -42,7 +47,12 @@ struct NewPlaceView: View {
                     .frame(width: 60, height: 12, alignment: .center)
                     .padding(.top)
                 Spacer()
-                Text("Добавте место на карте")
+                if namePlace == "" || locationPlace == "" || typeString == "" || imageGeleryPlaceArray.count < 0 || discription == "" {
+                    Text("Заполните все поля")
+                        .foregroundColor(.red)
+                }
+                
+                Text("Добавьте место на карте")
                     .font(.system(size: 30))
                     .fontWeight(.bold)
                 HStack {
@@ -50,9 +60,47 @@ struct NewPlaceView: View {
                         .padding(10)
                         .background(Color.gray.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 5))
-                    if namePlace != "", locationPlace != "", typeString != "" {
+                    if namePlace != "", locationPlace != "", typeString != "",  imageGeleryPlaceArray.count > 0, discription != "" {
                         Button {
-                            newPlaceGoo.toggle()
+                            isLoading = true
+                            print(gelleryStringArray)
+                            var geleryArray = [String]()
+                            if gelleryStringArray.count > 1 {
+                                for i in gelleryStringArray {
+                                    geleryArray.append(i)
+                                }
+                            }
+                        
+                            if place == nil {
+                                FirebaseAuthDatabase.newPlace(name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: imageGeleryPlaceArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { (result) in
+                                    switch result {
+                                    case .success:
+                                            isLoading = false
+                                            newPlaceGoo.toggle()
+                                            titleAlert = "Поздравляем"
+                                            messageAlert = "Ваша точка сохранилась"
+                                    case .failure(let error):
+                                        newPlaceGoo.toggle()
+                                        titleAlert = "Ошибка"
+                                        messageAlert = error.localizedDescription
+                                    }
+                                }
+                            } else {
+                                FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: imageGeleryPlaceArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { result in
+                                    switch result {
+                                    case .success:
+                                        isLoading = false
+                                        newPlaceGoo.toggle()
+                                        titleAlert = "Поздравляем"
+                                        messageAlert = "Ваша точка сохранилась"
+                                    case .failure(let error):
+                                        newPlaceGoo.toggle()
+                                        titleAlert = "Ошибка"
+                                        messageAlert = error.localizedDescription
+                                    }
+                                }
+                            }
+                            
                         } label: {
                             Text("Сохранить")
                                 .foregroundColor(.white)
@@ -60,7 +108,18 @@ struct NewPlaceView: View {
                                 .padding(10)
                                 .background(Color.green)
                                 .clipShape(RoundedRectangle(cornerRadius: 5))
-                        }
+                        }.overlay (
+                            ZStack {
+                                if isLoading {
+                                    Color.black
+                                        .opacity(0.25)
+                                    
+                                    ProgressView()
+                                        .font(.title2)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .cornerRadius(12)
+                                }
+                            })
                     } else {
                         Text("Сохранить")
                             .foregroundColor(.white)
@@ -70,11 +129,11 @@ struct NewPlaceView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                     }
                     
-
+                    
                 }
                 
                 
-                    .padding(.horizontal)
+                .padding(.horizontal)
                 
                 ScrollView {
                     VStack{
@@ -189,7 +248,7 @@ struct NewPlaceView: View {
                             
                         }
                         VStack{
-                            ImagePicker(imageArray: $imageGeleryPlaceArray)
+                            ImagePicker(imageArray: $imageGeleryPlaceArray, gelleryStringArray: $gelleryStringArray)
                                 .padding(.bottom)
                             Text("Напишите пару слов о вашем месте:")
                             TextEditor(text: $discription)
@@ -206,7 +265,7 @@ struct NewPlaceView: View {
                     .padding(.horizontal)
                     
                 }
-               
+                
                 Spacer()
             }.ignoresSafeArea()
         }
@@ -223,7 +282,7 @@ struct NewPlaceView: View {
                 imageGeleryPlaceArray.append(data.getImageUIImage(url: (place?.imageUrl)!))
                 if place?.gellery != nil, place?.gellery != [] {
                     for imageGellery in (place?.gellery)! {
-                        
+                        gelleryStringArray.append(imageGellery)
                         imageGeleryPlaceArray.append(data.getImageUIImage(url: imageGellery))
                     }
                 }
@@ -251,6 +310,19 @@ struct NewPlaceView: View {
                 print(typeString)
             }
         })
+        .alert(isPresented: $newPlaceGoo) {
+            Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
+                if titleAlert == "Ошибка" {
+                    
+                } else {
+                    self.data.places.removeAll()
+                    self.data.fetchData()
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+                
+            }))
+            
+        }
     }
     
 }

@@ -24,6 +24,7 @@ class FirebaseData: ObservableObject {
     @Published var deviseToken: String?
     @Published var arrayFavorit = [PlaceModel]()
     @Published var ref: DatabaseReference!
+    @Published var stringArray = [String]()
     
     init() {
         fetchData()
@@ -128,9 +129,10 @@ class FirebaseData: ObservableObject {
         guard let token = token else {return}
         UserDefaults.standard.set(token, forKey: "tokenUser")
     }
-    func downUserData() {
-        guard let token = UserDefaults.standard.string(forKey: "tokenUser") else {return}
+    func downUserData() -> String {
+        guard let token = UserDefaults.standard.string(forKey: "tokenUser") else {return ""}
         self.deviseToken = token
+        return token
     }
     
     func getImageUIImage(url: String) -> UIImage {
@@ -145,24 +147,5 @@ class FirebaseData: ObservableObject {
         let image = UIImage(data: imageData) ?? defaultImage
         return image ?? defaultImage!
     }
-    func getGeleryURLArray(imageArray: [UIImage]) -> [String]? {
-        var stringArray = [String]()
-        
-        if imageArray.count > 1 {
-            for i in imageArray[1...imageArray.count] {
-                
-                let imageName = [UUID().uuidString, String(Date().timeIntervalSince1970)].joined()
-                FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: i, dataUrl: "gellery") { result in
-                    switch result {
-                        
-                    case .success(let url):
-                        stringArray.append(url.absoluteString)
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-        }
-        return stringArray
-    }
+
 }

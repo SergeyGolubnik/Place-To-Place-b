@@ -16,12 +16,13 @@ struct FavoritCell: View {
     @State var typeString = "bar"
     @State var categoryArray = Category()
     @State var placeRating: [String: Int]?
+    @State var defaultImage = UIImage(named: "fon-1")
    
     var body: some View {
         ZStack{
             HStack(spacing: 0){
                 VStack{
-                    UrlImageView(urlString: imageURL, wight: 110, height: 110)
+                    UrlImageView(urlString: imageURL, wight: 110, height: 110, defaultImage: defaultImage!)
                         .cornerRadius(4)
                         .shadow(radius: 5)
 //                        .padding()

@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var enterType: String
+    
     @State var categoryArray = Category()
     var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     

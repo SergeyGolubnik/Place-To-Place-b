@@ -38,6 +38,9 @@ class FirebaseAuthDatabase {
                 return
             }
             ref.downloadURL { (url, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
                 guard let url = url else {
                     completion(.failure(error!))
                     return
@@ -170,13 +173,11 @@ class FirebaseAuthDatabase {
                          latitude: String?,
                          Longitude: String?,
                          type: String?,
-                         rating: [String: Int],
                          image: UIImage?,
                          switchPlace: String,
                          deviseToken: String,
                          discription: String,
                          gellery: [String],
-                         favorit: [String],
                          ref: DatabaseReference,
                          completion: @escaping (AuthResult) -> Void) {
         
@@ -198,13 +199,11 @@ class FirebaseAuthDatabase {
                     "location": location! as String,
                     "latitude": latitude! as String,
                     "Longitude": Longitude! as String,
-                    "rating": rating as [String: Int],
                     "type": type! as String,
                     "deviseToken": deviseToken as String,
                     "switchPlace": switchPlace as String,
                     "discription": discription as String,
                     "gellery": gellery as [String],
-                    "favorit": favorit as [String],
                     "image": url.absoluteString,
                     "date": now as String
                 ])
@@ -304,4 +303,47 @@ class FirebaseAuthDatabase {
             "coments": coments as [String: String]
         ])
     }
+    
+    
+    
+    
+    static func newPlace1(name: String,
+                         userId: String,
+                         location: String?,
+                         latitude: String?,
+                         Longitude: String?,
+                         type: String?,
+                         image: String?,
+                         switchPlace: String,
+                         deviseToken: String,
+                         discription: String,
+                         gellery: [String],
+                         ref: DatabaseReference,
+                         completion: @escaping (AuthResult) -> Void) {
+        
+        guard let key = ref.child("name").childByAutoId().key else {return}
+
+                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+                let now = df.string(from: Date())
+                let placeRef = ref.child(newPlace.key)
+                placeRef.setValue([
+                    "userId": userId as String,
+                    "name": name as String,
+                    "key": key as String,
+                    "location": location! as String,
+                    "latitude": latitude! as String,
+                    "Longitude": Longitude! as String,
+                    "type": type! as String,
+                    "deviseToken": deviseToken as String,
+                    "switchPlace": switchPlace as String,
+                    "discription": discription as String,
+                    "gellery": gellery as [String],
+                    "image": image! as String,
+                    "date": now as String
+                ])
+             
+        }
+    
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PlaceDetals: View {
+    @StateObject var data = FirebaseData()
     @Binding var place: PlaceModel
     @State var updateView = false
     @State var redactPlace = false
@@ -22,8 +23,12 @@ struct PlaceDetals: View {
     @State var userPlaceBool = false
     @State var type = ""
     @State var avatar = ""
+    @State var userNik = ""
     @State var favoritPlaceBool = false
     @State var categoryArray = Category()
+    @State var defaultImage = UIImage(named: "place-to-place-banner")
+    @State var shareBool = false
+    @State var imagePresent = UIImage(named: "no_image")
 
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
     
@@ -102,11 +107,19 @@ struct PlaceDetals: View {
                         ScrollView(.horizontal) {
                             HStack {
                                 if place.imageUrl != "",place.imageUrl != nil {
-                                    HStack {
-                                        UrlImageView(urlString: place.imageUrl, wight: 210, height: 210)
-                                        
+                                    Button {
+                                        shareBool.toggle()
+                                        imagePresent = data.getImageUIImage(url: place.imageUrl!)
+                                    } label: {
+                                        HStack {
+                                            UrlImageView(urlString: place.imageUrl, wight: 210, height: 210, defaultImage: defaultImage!)
+                                                .cornerRadius(15)
+                                            
+                                        }
+                                        .padding(.leading, 30)
                                     }
-                                    .padding(.leading, 30)
+
+                                    
                                 }
                                 if place.gellery != nil, place.gellery != [] {
                                     HStack{
@@ -114,7 +127,15 @@ struct PlaceDetals: View {
                                         
                                         LazyHGrid(rows: columns) {
                                             ForEach(place.gellery!, id: \.self) { image in
-                                                UrlImageView(urlString: image, wight: 100, height: 100)
+                                                Button {
+                                                    shareBool.toggle()
+                                                    imagePresent = data.getImageUIImage(url: image)
+                                                } label: {
+                                                    UrlImageView(urlString: image, wight: 100, height: 100, defaultImage: defaultImage!)
+                                                        .cornerRadius(15)
+                                                }
+
+                                                
                                                 
                                             }
                                         }
@@ -147,9 +168,14 @@ struct PlaceDetals: View {
                                 Button(action: {
                                     userPlaceBool.toggle()
                                 }) {
-                                    UrlImageView(urlString: avatar, wight: 40, height: 40)
+                                    UrlImageView(urlString: avatar, wight: 40, height: 40, defaultImage: defaultImage!)
                                         .clipShape(Circle())
                                         .padding(.leading)
+                                    Text(userNik)
+                                        .foregroundColor(.black)
+                                        .font(.callout)
+                                        .frame(width: 50)
+                                        .lineLimit(1)
                                 }
                             }
                             
@@ -300,6 +326,7 @@ struct PlaceDetals: View {
                         self.userPlace = userPlace
                         if userPlace.avatarsURL != nil {
                             self.avatar = userPlace.avatarsURL!
+                            self.userNik = userPlace.lastName!
                         }
                     case .failure(let error):
                         print(error.localizedDescription)
@@ -329,6 +356,9 @@ struct PlaceDetals: View {
         }
         .sheet(isPresented: $redactPlace) {
             NewPlaceView(place: place)
+        }
+        .sheet(isPresented: $shareBool) {
+            PresentImage(image: imagePresent)
         }
     }
     
@@ -365,6 +395,8 @@ struct PlaceDetals: View {
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        TabViewPlace()
+        let place = PlaceModel(userId: "", name: "Тест", key: "", location: "Мсква  ул Правды 27с7", type: "Бары и пабы", rating: ["dnnjnjj": 4], coments: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1":"Дополнительный аргумент комментарии в вызове"], imageUrl: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/PlacePhoto%2F-MqoHaLiofZLQ9R9cWV4?alt=media&token=8410a88a-5e95-45fc-9c65-54fdabdafafd", latitude: "55.7522", deviseToken: "", longitude: "37.6156", discription: "Координаты (широта и долгота) определяют положение точки на поверхности Земли. Координаты являются угловыми величинами. Каноническая форма представления координат – градусы (°), минуты (′) и секунды (″). В системах GPS широко используется представление координат в градусах и десятичных минутах либо в десятичных градусах.", switchPlace: "Делится", gellery:[ "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace20EE74AE-8579-434E-A0F1-B8ABFBCC15151639477897.611114?alt=media&token=aa3b734f-fa79-4d16-9c81-50fa75476206", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-laceF5E410C8-E2EE-41BC-8F1E-6626B7391A431639477902.93265?alt=media&token=ed19284c-00e3-42f0-abb4-499d9585f54c", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace6A31128D-02DC-41C4-92AE-24300C65849E1639477909.47857?alt=media&token=a1505f77-d6db-4a25-a56e-29040e799dde"], favorit: nil, date: nil, messageBool: true)
+        let user = Users(lastName: "Sergey", email: "sergey@mail.ru", avatarsURL: "https://firebasestorage.googleapis.com/v0/b/sergeygolubnik-place-to-place.appspot.com/o/avatars%2F00Klxwlx47aU7DgQN5ppKzTunkV2?alt=media&token=9b8de98e-4862-4a88-9711-3b69346b8faa", uid: "", deviseToken: "")
+        PlaceDetals(place: .constant(place), user: user, avatar: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/PlacePhoto%2F-MqoHaLiofZLQ9R9cWV4?alt=media&token=8410a88a-5e95-45fc-9c65-54fdabdafafd", userNik: "sergeeeey")
     }
 }

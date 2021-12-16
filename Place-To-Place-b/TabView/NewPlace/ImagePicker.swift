@@ -11,8 +11,13 @@ import Photos
 
 struct ImagePicker : View {
     @Binding var imageArray: [UIImage]
-    @State var selected : [SelectedImages] = []
+    @State var image = UIImage(named: "avatar-1")
+    @Binding var gelleryStringArray: [String]
     @State var show = false
+    @State var showImagePicker = false
+    @State var showSheet = false
+    @State var defaultImage = UIImage(named: "fon-1")
+    @State var sourceType: UIImagePickerController.SourceType = .camera
     
     var body: some View{
         
@@ -29,291 +34,111 @@ struct ImagePicker : View {
                         HStack(spacing: 20){
                             
                             ForEach(self.imageArray,id: \.self){i in
+                                ZStack{
+                                    Image(uiImage: i)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 250, height: 250)
+                                        .cornerRadius(15)
+                                        
+                                    HStack{
+                                        Spacer()
+                                        VStack{
+                                            Image(systemName: "trash.circle.fill")
+                                                .background(Color.white)
+                                                .font(Font.system(size: 30))
+                                                .cornerRadius(25)
+                                                .padding()
+                                            
+                                            Spacer()
+                                        }
+                                        
+                                    }.onTapGesture {
+                                        let index = imageArray.firstIndex(of: i)
+                                        print("Tap gesture\(String(describing: imageArray.firstIndex(of: i)))")
+                                        imageArray.remove(at: index!)
+                                        if gelleryStringArray.count > 0, index! >= 1 {
+                                            gelleryStringArray.remove(at: index! - 1)
+                                        }
+                                        
+                                    }
+                                }
                                 
-                                Image(uiImage: i)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 250, height: 250)
-                                    .cornerRadius(15)
                             }
+                            
+                            
+                            
+                            
                         }
                         .padding(.horizontal, 20)
                     }
                 }
                 
                 Button(action: {
-                    
-                    self.selected.removeAll()
-                    self.imageArray.removeAll()
-                    
-                    self.show.toggle()
-                    
+                    self.showSheet.toggle()
+                    print(gelleryStringArray)
                 }) {
+                    if gelleryStringArray.count <= 9 {
+                        Text(imageArray == [] ? "Добавить фото" : "Добавьте еще фото")
+                            .foregroundColor(.white)
+                            .padding(.vertical,10)
+                            .frame(width: UIScreen.main.bounds.width / 2)
+                        
+                    }
                     
-                    Text(imageArray == [] ? "Добавить фото" : "Заменить фото")
-                        .foregroundColor(.white)
-                        .padding(.vertical,10)
-                        .frame(width: UIScreen.main.bounds.width / 2)
                 }
                 .background(Color.red)
                 .clipShape(Capsule())
                 .padding(.top, 25)
-            }
-            .sheet(isPresented: $show) {
-                CustomPicker(selected: self.$selected, imageArray: $imageArray)
-            }
-        }
-    }
-}
-
-
-struct CustomPicker : View {
-    
-    @Binding var selected : [SelectedImages]
-    @Binding var imageArray : [UIImage]
-    @State var grid : [[Images]] = []
-    @Environment(\.presentationMode) var presentationMode
-    @State var disabled = false
-    
-    var body: some View{
-        
-        GeometryReader{_ in
-            
-            VStack{
-                
-                
-                if !self.grid.isEmpty{
-                    ZStack{
-                        
-                        VStack{
-                            
-                            Text("Выберете не более 10 фото")
-                                .fontWeight(.bold)
-                        
-                        .padding(.leading)
-                        .padding(.top)
-                        
-                        ScrollView(.vertical) {
-                            
-                            VStack(spacing: 20){
-                                
-                                ForEach(self.grid,id: \.self){i in
-                                    
-                                    HStack{
-                                        
-                                        ForEach(i,id: \.self){j in
-                                            
-                                            Card(data: j, selected: self.$selected, imageArray: $imageArray)
-                                            
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        }
-                        VStack{
-                            
-                            Button(action: {
-                                
-                                self.presentationMode.wrappedValue.dismiss()
-                                print(imageArray.count)
-                            }) {
-                                
-                                Text("Добавить")
-                                    .foregroundColor(.white)
-                                    .padding(.vertical,10)
-                                    .frame(width: UIScreen.main.bounds.width / 2)
-                            }
-                            
-                            .background(Color.red.opacity((self.selected.count != 0) ? 1 : 0.5))
-                            .clipShape(Capsule())
-                            .padding(.bottom)
-                            .disabled((self.selected.count != 0) ? false : true)
-                        }.padding(.top, 550)
-                    }
-                }
-                else{
-                    
-                    if self.disabled{
-                        
-                        Text("Enable Storage Access In Settings !!!")
-                    }
-                    if self.grid.count == 0{
-                        
-                        Indicator()
-                    }
+                .sheet(isPresented: $showImagePicker, content: {
+                    OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
+                })
+                .actionSheet(isPresented: $showSheet) {
+                    ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
+                        .default(Text("Галерея")) {
+                            self.showImagePicker = true
+                            self.sourceType = .photoLibrary
+                        },
+                        .default(Text("Камера")) {
+                            self.showImagePicker = true
+                            self.sourceType = .camera
+                        },
+                        .cancel(Text("Выход"))
+                    ])
                 }
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(Color.white)
-            .cornerRadius(12)
-        }
-        .onAppear {
             
-            PHPhotoLibrary.requestAuthorization { (status) in
-                
-                if status == .authorized{
-                    
-                    self.getAllImages()
-                    self.disabled = false
-                }
-                else{
-                    
-                    print("not authorized")
-                    self.disabled = true
-                }
+        }.onChange(of: image) { _ in
+            
+           if imageArray.count > 0 {
+                getGeleryURLArray(image: image!)
             }
-        }
-    }
-    
-    func getAllImages(){
-        
-        let opt = PHFetchOptions()
-        opt.includeHiddenAssets = false
-        
-        let req = PHAsset.fetchAssets(with: .image, options: .none)
-        
-        DispatchQueue.global(qos: .background).async {
             
-            let options = PHImageRequestOptions()
-            options.isSynchronous = true
             
-            // New Method For Generating Grid Without Refreshing....
-            
-            for i in stride(from: 0, to: req.count, by: 3){
-                
-                var iteration : [Images] = []
-                
-                for j in i..<i+3{
-                    
-                    if j < req.count{
-                        
-                        PHCachingImageManager.default().requestImage(for: req[j], targetSize: CGSize(width: 150, height: 150), contentMode: .aspectFit, options: options) { (image, _) in
-                            guard let image = image else {
-                                return
-                            }
-                            
-                            let data1 = Images(image: image, selected: false, asset: req[j])
-                            
-                            iteration.append(data1)
-                            
-                        }
-                    }
-                }
-                
-                self.grid.append(iteration)
-            }
+            imageArray.append(image!)
             
         }
     }
-}
-
-struct Card : View {
-    
-    @State var data : Images
-    @Binding var selected : [SelectedImages]
-    @Binding var imageArray : [UIImage]
-    
-    var body: some View{
-        
-        ZStack{
-            
-            
-            Image(uiImage: self.data.image)
-                .resizable()
+    func getGeleryURLArray(image: UIImage) {
+        let imageName = "place-to-lace\(UUID().uuidString)\(String(Date().timeIntervalSince1970))"
+        FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: image, dataUrl: "gellery") { (result) in
+            switch result {
                 
-            
-            if self.data.selected{
-                
-                ZStack{
-                    
-                    Color.black.opacity(0.5)
-                    
-                    Image(systemName: "checkmark")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.white)
-                }
+            case .success(let url):
+                self.gelleryStringArray.append(url.absoluteString)
+                print(gelleryStringArray)
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-            
         }
-        .aspectRatio(contentMode: .fill)
-        .frame(width: (UIScreen.main.bounds.width - 80) / 3, height: 90)
-        .clipped()
-        .onTapGesture {
-            if selected.count <= 9 {
-                if !self.data.selected{
-                    
-                    
-                    self.data.selected = true
-                    
-                    // Extracting Orginal Size of Image from Asset
-                    
-                    DispatchQueue.global(qos: .background).async {
-                        
-                        let options = PHImageRequestOptions()
-                        options.isSynchronous = true
-                        
-                        // You can give your own Image size by replacing .init() to CGSize....
-                        
-                        PHCachingImageManager.default().requestImage(for: self.data.asset, targetSize: .init(), contentMode: .aspectFill, options: options) { (image, _) in
-                            
-                            guard let image = image else {
-                                return
-                            }
-                            
-                            self.selected.append(SelectedImages(asset: self.data.asset, image: image))
-                            self.imageArray.append(image)
-                        }
-                    }
-                    
-                }
-                else{
-                    
-                    for i in 0..<self.selected.count{
-                        
-                        if self.selected[i].asset == self.data.asset{
-                            
-                            self.selected.remove(at: i)
-                            self.data.selected = false
-                            return
-                        }
-                        
-                    }
-                }
-            }
-            
-            
-        }
-        
-    }
-}
-
-struct Indicator : UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> UIActivityIndicatorView  {
-        
-        let view = UIActivityIndicatorView(style: .large)
-        view.startAnimating()
-        return view
-    }
-    
-    func updateUIView(_ uiView:  UIActivityIndicatorView, context: Context) {
         
         
     }
 }
 
-struct Images: Hashable {
-    
-    var image : UIImage
-    var selected : Bool
-    var asset : PHAsset
+struct ImagePicker_Previews: PreviewProvider {
+    static var previews: some View {
+        let imge = UIImage(named: "fon-1")
+        ImagePicker(imageArray: .constant([imge!]), gelleryStringArray: .constant([""]))
+    }
 }
-
-struct SelectedImages: Hashable{
-    
-    var asset : PHAsset
-    var image : UIImage
-}
-

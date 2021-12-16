@@ -11,15 +11,17 @@ struct UrlImageView: View {
     @ObservedObject var urlImageModel: UrlImageModel
     @State var wight: CGFloat
     @State var height: CGFloat
+    @State var defaultImage: UIImage
     
-    init(urlString: String?, wight: CGFloat, height: CGFloat) {
+    init(urlString: String?, wight: CGFloat, height: CGFloat, defaultImage: UIImage) {
         urlImageModel = UrlImageModel(urlString: urlString)
         self.wight = wight
         self.height = height
+        self.defaultImage = defaultImage
     }
     
     var body: some View {
-        Image(uiImage: urlImageModel.image ?? UrlImageView.defaultImage!)
+        Image(uiImage: (urlImageModel.image ?? defaultImage)!)
             .resizable()
             .scaledToFill()
             .frame(width: wight, height: height)
