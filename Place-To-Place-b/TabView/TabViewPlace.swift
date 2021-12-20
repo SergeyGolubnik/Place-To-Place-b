@@ -91,9 +91,12 @@ struct TabViewPlace: View {
                 }
                 
             }
+            .onAppear(perform: {
+                data.getUserAll()
+            })
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {
-                PlaceDetals(place: $placeD, user: data.user)
+                PlaceDetals(place: $placeD, user: data.user, userAll: data.userAll)
             })
             .sheet(isPresented: $newPlace, content: {
                 NewPlaceView()

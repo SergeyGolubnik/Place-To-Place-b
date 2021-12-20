@@ -12,37 +12,39 @@ struct PresentImage: View {
     @State var shareBool = false
     @State var item = [Any]()
     var body: some View {
-        
-        ZStack{
-            Color.black.ignoresSafeArea()
-            VStack{
-                Capsule()
-                    .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
-                    .frame(width: 60, height: 12, alignment: .center)
-                    .padding(.top)
-                Image(uiImage: image!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: .infinity, height: 500)
-                    .clipped()
-                    .padding(.top, 30)
-                Spacer()
-                Button {
-                    item.removeAll()
-                    item.append(image as Any)
-                    shareBool.toggle()
-                } label: {
-                    HStack{
-                        Text("Поделится")
-                            
-                        Image(systemName: "square.and.arrow.up")
+        GeometryReader { geometry in
+            ZStack{
+                Color.black.ignoresSafeArea()
+                VStack{
+                    Capsule()
+                        .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
+                        .frame(width: 60, height: 12, alignment: .center)
+                        .padding(.top)
+                    Image(uiImage: image!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: 500)
+                        .clipped()
+                        .padding(.top, 30)
+                    Spacer()
+                    Button {
+                        item.removeAll()
+                        item.append(image as Any)
+                        shareBool.toggle()
+                    } label: {
+                        HStack{
+                            Text("Поделится")
+                                
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .font(.title)
+                        .foregroundColor(.white)
                     }
-                    .font(.title)
-                    .foregroundColor(.white)
                 }
+                
             }
-            
-        }.sheet(isPresented: $shareBool) {
+        }
+        .sheet(isPresented: $shareBool) {
             ShareSheet(item: item)
         }
         

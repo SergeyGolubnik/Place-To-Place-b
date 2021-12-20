@@ -139,6 +139,7 @@ struct RegisterView: View {
                             Button(action: {
                                 if email != "", Validators.isSimpleEmail(email) {
                                     if pass != "", pass2 != "", pass == pass2 {
+                                        print("RegisterView_______\(data.userAll)")
                                         for i in data.userAll {
                                             if name == i.lastName {
                                                 titleAlert = "Ошибка"
@@ -216,7 +217,7 @@ struct RegisterView: View {
             }
             .onAppear {
                 data.getUserAll()
-                print(data.userAll)
+                
                 
             }
         

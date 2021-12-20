@@ -98,7 +98,7 @@ class FirebaseData: ObservableObject {
     }
     func getUserAll() {
         
-        db.collection("users").getDocuments() { [weak self] (resalt, error) in
+        db.collection("users").getDocuments() { (resalt, error) in
             
             if let error = error {
                 print("____________________________________________________________\(error.localizedDescription)")
@@ -106,13 +106,14 @@ class FirebaseData: ObservableObject {
             var array = [Users]()
             for item in resalt!.documents {
                 let user = Users(document: item)
-                print("____________________________________\(item.documentID) => \(item.data())")
+                
+                print("getUserAll____________________________________\(item.documentID) => \(item.data())")
                 array.append(user!)
             }
-            //                print(array)
-            self?.userAll = array
+            self.userAll = array
+            print("getUserAlluser____________________________________\(self.userAll)")
         }
-//        print(self.userAll)
+        
     }
     func favoritFilter() {
         for item in self.places {
@@ -140,7 +141,7 @@ class FirebaseData: ObservableObject {
         
         let imageUrlString = url
 
-        let imageUrl = URL(string: imageUrlString)!
+        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
 
         let imageData = try! Data(contentsOf: imageUrl)
 

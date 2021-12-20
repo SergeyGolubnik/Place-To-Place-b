@@ -102,3 +102,10 @@ class NewPlaceModel: ObservableObject {
     @Published var date: String?
     @Published var imageURLtoUI: UIImage?
 }
+struct Comment: Hashable {
+    var userName: String
+    var userUid: String
+    var avatarImage: UIImage
+    var comment: String
+    var stars: Int
+}

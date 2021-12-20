@@ -38,6 +38,7 @@
 		875AE832276BC018005CFE6B /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 875AE831276BC018005CFE6B /* FirebaseMessaging */; };
 		875AE834276BC020005CFE6B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 875AE833276BC020005CFE6B /* FirebaseStorage */; };
 		875AE836276BC592005CFE6B /* PresentImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875AE835276BC592005CFE6B /* PresentImage.swift */; };
+		875AE838276D2A53005CFE6B /* ComentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875AE837276D2A53005CFE6B /* ComentsView.swift */; };
 		8771C07F270CD03300830908 /* UserSetings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8771C07E270CD03300830908 /* UserSetings.swift */; };
 		877728F92703AF5400AB244B /* StarsRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877728F82703AF5400AB244B /* StarsRatingView.swift */; };
 		877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877C910E26F4E72700452FD1 /* NewPlaceView.swift */; };
@@ -90,6 +91,7 @@
 		87500CBC273148E900C07818 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../файлфаербасе/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		87500CC02731823F00C07818 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		875AE835276BC592005CFE6B /* PresentImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentImage.swift; sourceTree = "<group>"; };
+		875AE837276D2A53005CFE6B /* ComentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComentsView.swift; sourceTree = "<group>"; };
 		8771C07E270CD03300830908 /* UserSetings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetings.swift; sourceTree = "<group>"; };
 		877728F82703AF5400AB244B /* StarsRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarsRatingView.swift; sourceTree = "<group>"; };
 		877C910E26F4E72700452FD1 /* NewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceView.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				879512B126EA9E5100DFD212 /* PlaceDetals.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				875AE835276BC592005CFE6B /* PresentImage.swift */,
+				875AE837276D2A53005CFE6B /* ComentsView.swift */,
 			);
 			path = PlaceList;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				87089B5B26E16739007AA131 /* UserError.swift in Sources */,
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
 				879512A826E7DF6500DFD212 /* FirebaseData.swift in Sources */,
+				875AE838276D2A53005CFE6B /* ComentsView.swift in Sources */,
 				873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */,
 				879B2090275E512600DEEC90 /* ImagePicker.swift in Sources */,
 				87DA93AA2757B31400451433 /* MapViewPresent.swift in Sources */,
