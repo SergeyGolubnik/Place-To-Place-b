@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PresentImage: View {
-    @State var image = UIImage(named: "7GWF-m3VG1I 2")
+    @Binding var image: UIImage
     @State var shareBool = false
-    @State var item = [Any]()
+    @Binding var item: [Any]
     var body: some View {
         GeometryReader { geometry in
             ZStack{
@@ -20,7 +20,7 @@ struct PresentImage: View {
                         .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
                         .frame(width: 60, height: 12, alignment: .center)
                         .padding(.top)
-                    Image(uiImage: image!)
+                    Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
                         .frame(width: geometry.size.width, height: 500)
@@ -45,7 +45,7 @@ struct PresentImage: View {
             }
         }
         .sheet(isPresented: $shareBool) {
-            ShareSheet(item: item)
+            ShareSheet(item: $item)
         }
         
     }
@@ -53,11 +53,13 @@ struct PresentImage: View {
 
 struct PresentImage_Previews: PreviewProvider {
     static var previews: some View {
-        PresentImage()
+        let image = UIImage(named: "no_image")!
+        let item = [Any]()
+        PresentImage(image: .constant(image), item: .constant(item))
     }
 }
 struct ShareSheet: UIViewControllerRepresentable {
-    var item = [Any]()
+    @Binding var item: [Any]
     func makeUIViewController(context: Context) -> UIActivityViewController {
         let contriller = UIActivityViewController(activityItems: item, applicationActivities: nil)
         return contriller

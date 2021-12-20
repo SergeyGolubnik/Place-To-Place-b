@@ -142,11 +142,13 @@ class FirebaseData: ObservableObject {
         let imageUrlString = url
 
         guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
-
-        let imageData = try! Data(contentsOf: imageUrl)
-
-        let image = UIImage(data: imageData) ?? defaultImage
-        return image ?? defaultImage!
+        do {
+            let imageData = try Data(contentsOf: imageUrl)
+            return UIImage(data: imageData)!
+        } catch {
+            print(error.localizedDescription)
+            return defaultImage!
+        }
     }
 
 }

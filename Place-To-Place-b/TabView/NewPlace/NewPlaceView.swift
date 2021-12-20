@@ -313,11 +313,13 @@ struct NewPlaceView: View {
         .alert(isPresented: $newPlaceGoo) {
             Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
                 if titleAlert == "Ошибка" {
-                    
+                    messageAlert = "Попробуйте позже"
                 } else {
                     self.data.places.removeAll()
                     self.data.fetchData()
+                    
                     self.presentationMode.wrappedValue.dismiss()
+                    
                 }
                 
             }))

@@ -29,10 +29,11 @@ struct PlaceDetals: View {
     @State var categoryArray = Category()
     @State var defaultImage = UIImage(named: "place-to-place-banner")
     @State var shareBool = false
-    @State var shareBoolGeneral = false
-    @State var imagePresent = UIImage(named: "no_image")
-    @State var imageGeneral = UIImage(named: "no_image")
+    @State var imagePresent = UIImage()
+    @State var imageGeneral = UIImage()
     @State var imageGellery = [UIImage]()
+    @State var isLoading = true
+    @State var item = [Any]()
 
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
     
@@ -45,7 +46,7 @@ struct PlaceDetals: View {
             colorApp
                 .ignoresSafeArea()
             
-            ScrollView {
+            
                 VStack {
                     VStack {
                         Capsule()
@@ -106,31 +107,37 @@ struct PlaceDetals: View {
                         }
                         Divider().foregroundColor(.black)
                     }
-                    
+                    ScrollView {
                     VStack {
                         ScrollView(.horizontal) {
                             HStack {
-                                if imageGeneral != nil {
                                     Button {
-                                        
-                                            shareBoolGeneral.toggle()
-                                        
-                                        
-                                        
+                                        imagePresent = imageGeneral
+                                            shareBool.toggle()
                                     } label: {
                                         HStack {
-                                            Image(uiImage: imageGeneral!)
+                                            Image(uiImage: imageGeneral)
                                                 .resizable()
                                                 .scaledToFill()
                                                 .frame(width: 210, height: 210)
                                                 .clipped()
                                                 .cornerRadius(15)
+                                                .overlay (
+                                                    ZStack {
+                                                        if isLoading {
+                                                            Color.black
+                                                                .opacity(0.25)
+                                                            
+                                                            ProgressView()
+                                                                .font(.title2)
+                                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                                .cornerRadius(12)
+                                                        }
+                                                    })
                                         }
                                         .padding(.leading, 30)
+                                        
                                     }
-
-                                    
-                                }
                                 if imageGellery != [] {
                                     HStack{
                                         
@@ -359,12 +366,10 @@ struct PlaceDetals: View {
             }
             DispatchQueue.main.async {
                 imagePhoto()
+                comentPlace()
+                starsRating()
             }
             
-                comentPlace()
-            
-            
-            starsRating()
         }
         .sheet(isPresented: $starsBool) {
             StarsRatingView(placeModel: place, userPlace: userPlace, starsBoolView: $starsBool)
@@ -373,14 +378,13 @@ struct PlaceDetals: View {
             NewPlaceView(place: place)
         }
         .sheet(isPresented: $shareBool) {
-            PresentImage(image: imagePresent)
-        }
-        .sheet(isPresented: $shareBoolGeneral) {
-            PresentImage(image: imageGeneral)
+            PresentImage(image: $imagePresent, item: $item)
         }
     }
     private func imagePhoto() {
-            guard let imageUrl = place.imageUrl else {return}
+            guard let imageUrl = place.imageUrl else {return
+                imageGeneral = UIImage(named: "no_image")!
+            }
             imageGeneral = data.getImageUIImage(url: imageUrl)
         
         if place.gellery != nil, place.gellery != [] {
@@ -388,6 +392,7 @@ struct PlaceDetals: View {
                 imageGellery.append(data.getImageUIImage(url: imageStringUrl))
             }
         }
+        isLoading = false
     }
     
     
