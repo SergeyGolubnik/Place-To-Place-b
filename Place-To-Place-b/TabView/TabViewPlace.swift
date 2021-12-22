@@ -27,9 +27,9 @@ struct TabViewPlace: View {
             LoaderView()
         } else {
             ZStack {
-                if selected == 0 {
-                    PlaceListMap(placeDetail: $placeD, goDetail: $goDetail, place: data.places)
-                }
+//                if selected == 0 {
+                    PlaceListMap(placeDetail: $placeD, goDetail: $goDetail)
+//                }
                 if selected == 1 {
                     FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
                 } else if selected == 3 {
@@ -92,7 +92,7 @@ struct TabViewPlace: View {
                 
             }
             .onAppear(perform: {
-                data.getUserAll()
+                data.fetchData()
             })
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {

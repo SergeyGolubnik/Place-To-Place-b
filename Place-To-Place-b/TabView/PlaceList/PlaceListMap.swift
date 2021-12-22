@@ -13,7 +13,7 @@ struct PlaceListMap: View {
     @Binding var placeDetail: PlaceModel
     @StateObject var mapData = MapViewModel()
     @Binding var goDetail: Bool
-    @State var place = [PlaceModel]()
+    @StateObject var data = FirebaseData()
     @State var filter = ""
     @State var tranferCategory = false
     var body: some View {
@@ -62,20 +62,28 @@ struct PlaceListMap: View {
             .navigationBarTitle("Карта", displayMode: .inline)
             
         }.onAppear(perform: {
+            
             locationManager.delegate = mapData
             locationManager.requestWhenInUseAuthorization()
-            mapData.rmovePlace(place: place)
+            DispatchQueue.main.async {
+                mapData.rmovePlace(place: data.places)
+            }
+            data.fetchData()
             
         })
+        
             .onChange(of: filter) { value in
                 
                 if value == filter, filter != "" {
-                    let placeF = place.filter {$0.type == filter}
+                    let placeF = data.places.filter {$0.type == filter}
                     mapData.rmovePlace(place: placeF)
                 } else {
-                    mapData.rmovePlace(place: place)
+                    mapData.rmovePlace(place: data.places)
                 }
             }
+            .onChange(of: data.places, perform: { newValue in
+                mapData.rmovePlace(place: data.places)
+            })
             .sheet(isPresented: $tranferCategory) {
                 CategoryView(enterType: $filter)
             }
