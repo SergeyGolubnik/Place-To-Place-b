@@ -63,16 +63,16 @@ struct NewPlaceView: View {
                     if namePlace != "", locationPlace != "", typeString != "",  imageGeleryPlaceArray.count > 0, discription != "" {
                         Button {
                             isLoading = true
-                            print(gelleryStringArray)
                             var geleryArray = [String]()
                             if gelleryStringArray.count > 1 {
-                                for i in gelleryStringArray {
+                                for i in gelleryStringArray[1...] {
                                     geleryArray.append(i)
                                 }
                             }
                         
                             if place == nil {
-                                FirebaseAuthDatabase.newPlace(name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: imageGeleryPlaceArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { (result) in
+                                FirebaseAuthDatabase.newPlace(name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, ref: data.ref) { result in
+                                    
                                     switch result {
                                     case .success:
                                             isLoading = false
@@ -86,7 +86,7 @@ struct NewPlaceView: View {
                                     }
                                 }
                             } else {
-                                FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: imageGeleryPlaceArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { result in
+                                FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: data.user.uid, location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { result in
                                     switch result {
                                     case .success:
                                         isLoading = false
@@ -280,6 +280,7 @@ struct NewPlaceView: View {
                 latitude = place?.latitude ?? ""
                 longitude = place?.longitude ?? ""
                 imageGeleryPlaceArray.append(data.getImageUIImage(url: (place?.imageUrl)!))
+                gelleryStringArray.append((place?.imageUrl)!)
                 if place?.gellery != nil, place?.gellery != [] {
                     for imageGellery in (place?.gellery)! {
                         gelleryStringArray.append(imageGellery)

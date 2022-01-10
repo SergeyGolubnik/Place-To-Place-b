@@ -59,7 +59,7 @@ struct PlaceModel: Hashable {
         gellery = snapshotVaiue["gellery"] as? [String]
         favorit = snapshotVaiue["favorit"] as? [String]
         date = snapshotVaiue["date"] as? String
-        messageBool = snapshotVaiue["messageBoll"] as? Bool
+        messageBool = snapshotVaiue["messageBool"] as? Bool
         ref = snapshot.ref
     }
 

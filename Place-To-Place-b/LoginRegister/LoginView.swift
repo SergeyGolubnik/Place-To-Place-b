@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct LoginView: View {
     @State private var goToViewRegister = false
@@ -16,6 +17,9 @@ struct LoginView: View {
     @State private var message = ""
     @State var email = "test1@mail.ru"
     @State var pass = "123456"
+    @State var devaseToken = UserDefaults.standard.string(forKey: "tokenUser")
+    var db = Firestore.firestore()
+    
     
     var body: some View {
         if goToViewTabViev || goTabViewPlace {

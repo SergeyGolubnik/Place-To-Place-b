@@ -81,7 +81,8 @@ struct FavoritList: View {
             print(placeArray)
         }
         .environmentObject(firebaseModel)
-        
+        .navigationViewStyle(StackNavigationViewStyle())
+
     }
     
 }

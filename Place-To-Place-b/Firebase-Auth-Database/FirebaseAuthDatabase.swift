@@ -167,96 +167,7 @@ class FirebaseAuthDatabase {
         }
     }
     
-    static func newPlace(name: String,
-                         userId: String,
-                         location: String?,
-                         latitude: String?,
-                         Longitude: String?,
-                         type: String?,
-                         image: UIImage?,
-                         switchPlace: String,
-                         deviseToken: String,
-                         discription: String,
-                         gellery: [String],
-                         ref: DatabaseReference,
-                         completion: @escaping (AuthResult) -> Void) {
-        
-        guard let key = ref.child("name").childByAutoId().key else {return}
-
-        aploadImage(photoName: key, photo: image!, dataUrl: "PlacePhoto") {(resalt) in
-            switch resalt {
-            
-            case .success(let url):
-                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
-                let df = DateFormatter()
-                df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-                let now = df.string(from: Date())
-                let placeRef = ref.child(newPlace.key)
-                placeRef.setValue([
-                    "userId": userId as String,
-                    "name": name as String,
-                    "key": key as String,
-                    "location": location! as String,
-                    "latitude": latitude! as String,
-                    "Longitude": Longitude! as String,
-                    "type": type! as String,
-                    "deviseToken": deviseToken as String,
-                    "switchPlace": switchPlace as String,
-                    "discription": discription as String,
-                    "gellery": gellery as [String],
-                    "image": url.absoluteString,
-                    "date": now as String
-                ])
-                completion(.success)
-                
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    static func updatePlace(key: String,
-                            name: String,
-                            userId: String,
-                            location: String?,
-                            latitude: String?,
-                            Longitude: String?,
-                            type: String?,
-                            image: UIImage?,
-                            switchPlace: String,
-                            deviseToken: String,
-                            discription: String,
-                            gellery: [String],
-                            ref: DatabaseReference,
-                            completion: @escaping (AuthResult) -> Void) {
-        
-        aploadImage(photoName: key, photo: image!, dataUrl: "PlacePhoto") {(resalt) in
-            
-            switch resalt {
-            
-            case .success(let url):
-                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
-                let placeRef = ref.child(newPlace.key)
-                placeRef.updateChildValues([
-                    "name": name as String,
-                    "key": key as String,
-                    "location": location! as String,
-                    "latitude": latitude! as String,
-                    "Longitude": Longitude! as String,
-                    "type": type! as String,
-                    "deviseToken": deviseToken as String,
-                    "switchPlace": switchPlace as String,
-                    "discription": discription as String,
-                    "gellery": gellery as [String],
-                    "image": url.absoluteString
-                ])
-                
-                completion(.success)
-                
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
+   
     static func updateToken(key: String,
                             switchPlace: String,
                             userId: String,
@@ -307,7 +218,7 @@ class FirebaseAuthDatabase {
     
     
     
-    static func newPlace1(name: String,
+    static func newPlace(name: String,
                          userId: String,
                          location: String?,
                          latitude: String?,
@@ -318,6 +229,7 @@ class FirebaseAuthDatabase {
                          deviseToken: String,
                          discription: String,
                          gellery: [String],
+                         messageBool: Bool,
                          ref: DatabaseReference,
                          completion: @escaping (AuthResult) -> Void) {
         
@@ -341,9 +253,55 @@ class FirebaseAuthDatabase {
                     "discription": discription as String,
                     "gellery": gellery as [String],
                     "image": image! as String,
+                    "messageBool": messageBool as Bool,
                     "date": now as String
-                ])
-             
+                ]){
+                    (error: Error?, ref: DatabaseReference) in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success)
+                    }
+                  }
         }
-    
+    static func updatePlace(key: String,
+                            name: String,
+                            userId: String,
+                            location: String?,
+                            latitude: String?,
+                            Longitude: String?,
+                            type: String?,
+                            image: String?,
+                            switchPlace: String,
+                            deviseToken: String,
+                            discription: String,
+                            gellery: [String],
+                            ref: DatabaseReference,
+                            completion: @escaping (AuthResult) -> Void) {
+                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
+                let placeRef = ref.child(newPlace.key)
+                placeRef.updateChildValues([
+                    "name": name as String,
+                    "key": key as String,
+                    "location": location! as String,
+                    "latitude": latitude! as String,
+                    "Longitude": Longitude! as String,
+                    "type": type! as String,
+                    "deviseToken": deviseToken as String,
+                    "switchPlace": switchPlace as String,
+                    "discription": discription as String,
+                    "gellery": gellery as [String],
+                    "image": image! as String
+                ]){
+                    (error: Error?, ref: DatabaseReference) in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success)
+                    }
+                  }
+            }
+        
 }
+
+

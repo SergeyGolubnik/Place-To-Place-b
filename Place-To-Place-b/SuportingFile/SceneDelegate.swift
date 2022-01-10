@@ -41,10 +41,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             if let users = Auth.auth().currentUser {
                 let user = Users(user: users)
-                FirebaseData.shared.fetchData()
-                
-                window.rootViewController = UIHostingController(rootView: TabViewPlace(user: user, place: FirebaseData.shared.places).environment(\.managedObjectContext, context))
-                
+                window.rootViewController = UIHostingController(rootView: TabViewPlace(user: user).environment(\.managedObjectContext, context))
+
             } else {
                 FirebaseData.shared.getUserAll()
                 window.rootViewController = UIHostingController(rootView: contentView)

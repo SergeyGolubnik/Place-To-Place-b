@@ -16,7 +16,6 @@ struct TabViewPlace: View {
     @State var goDetail = false
     @State var exitBool = false
     @StateObject var data = FirebaseData()
-    @State var place = [PlaceModel]()
     
     @State var categoryArray = Category()
     
@@ -92,7 +91,7 @@ struct TabViewPlace: View {
                 
             }
             .onAppear(perform: {
-                data.fetchData()
+                data.examenationDeviseTocen()
             })
             .environmentObject(data)
             .sheet(isPresented: $goDetail, content: {

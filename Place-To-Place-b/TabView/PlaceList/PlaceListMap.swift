@@ -15,6 +15,7 @@ struct PlaceListMap: View {
     @Binding var goDetail: Bool
     @StateObject var data = FirebaseData()
     @State var filter = ""
+    @State var filterMy = false
     @State var tranferCategory = false
     var body: some View {
         
@@ -22,12 +23,13 @@ struct PlaceListMap: View {
             ZStack {
                 MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
                     .environmentObject(mapData)
-                if filter != "" {
+                if filter != "", filter != data.user.uid {
                     VStack{
                         HStack{
                             Spacer()
                             Button(action: {
                                 filter = ""
+                                filterMy = false
                             }) {
                                 Text("Сброс фильтра")
                                     .font(.caption)
@@ -50,7 +52,15 @@ struct PlaceListMap: View {
             }
             
             .navigationBarColor(uiColorApp)
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading:
+                                    Button(action: {
+                filterMy.toggle()
+                filter = filterMy ? data.users.uid : ""
+            }) {
+                Text(filterMy ? "Все" : "Мои")
+                    .foregroundColor(Color(.label))
+            }
+                                    ,trailing:
                                     Button(action: {
                 tranferCategory.toggle()
             }) {
@@ -59,6 +69,7 @@ struct PlaceListMap: View {
                     .frame(width: 18, height: 18)
                     .padding(.trailing, 5)
             })
+            
             .navigationBarTitle("Карта", displayMode: .inline)
             
         }.onAppear(perform: {
@@ -73,20 +84,27 @@ struct PlaceListMap: View {
         })
         
             .onChange(of: filter) { value in
-                
-                if value == filter, filter != "" {
-                    let placeF = data.places.filter {$0.type == filter}
+                var placeF = data.places
+                if value == filter, value != data.users.uid, filter != "" {
+                    placeF = data.places.filter {$0.type == filter}
+                    mapData.rmovePlace(place: placeF)
+                } else if value == data.users.uid, filter != "" {
+                    placeF = data.places.filter {$0.userId == filter}
                     mapData.rmovePlace(place: placeF)
                 } else {
                     mapData.rmovePlace(place: data.places)
                 }
             }
             .onChange(of: data.places, perform: { newValue in
-                mapData.rmovePlace(place: data.places)
+                if data.places == newValue, filter == "" {
+                    mapData.rmovePlace(place: data.places)
+                }
+
             })
             .sheet(isPresented: $tranferCategory) {
                 CategoryView(enterType: $filter)
             }
+            .navigationViewStyle(StackNavigationViewStyle())
     }
     
     
@@ -182,7 +200,6 @@ struct MapView: UIViewRepresentable {
                     if item.key == idAnatation {
                         placeDetail = item
                         goDetalsBool = true
-                        
                     }
                     
                 }

@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import UIKit
+import SwiftUI
 
 class FirebaseData: ObservableObject {
     
@@ -28,6 +29,7 @@ class FirebaseData: ObservableObject {
     
     init() {
         fetchData()
+        deviseToken = downUserData()
     }
     
     func fetchData() {
@@ -35,36 +37,42 @@ class FirebaseData: ObservableObject {
         guard let currentUser = Auth.auth().currentUser else {return}
         user = Users(user: currentUser)
         
-        
+        getUserData(user: user) { [weak self] resalt in
+            switch resalt {
+                
+            case .success(let myUser):
+                self?.users = myUser
+                self?.favoritFilter()
+                self?.getDocument()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
         ref.observe(.value) { [weak self] (snapshot) in
             var array = [PlaceModel]()
             for item in snapshot.children {
                 let placeModel = PlaceModel(snapshot: item as! DataSnapshot)
                 if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {} else {
-                    //                    if placeModel.userId == self?.user.uid {
-                    //                        if self?.userToken != "", placeModel.deviseToken != self?.userToken, self?.userToken != nil {
-                    //                            guard let userUid = self?.user.uid else {return}
-                    //                            UserLoginRegister.updateToken(key: placeModel.key, switchPlace: placeModel.switchPlace, userId: userUid, newToken: (self?.userToken)!, ref: (self?.ref)!)
-                    //                            array.append(placeModel)
-                    //                        }
-                    //                    }
+                                       
                     array.append(placeModel)
                 }
             }
-            
             self?.places = array
         }
         
-        getUserData(user: user) { resalt in
-            switch resalt {
-                
-            case .success(let myUser):
-                self.users = myUser
-            case .failure(let error):
-                print(error.localizedDescription)
+       
+        
+    }
+    func examenationDeviseTocen() {
+        for place in places {
+            if place.userId == user.uid {
+                if place.deviseToken != deviseToken {
+                    guard let newToken = deviseToken, let ref = ref else {return}
+                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, newToken: newToken, ref: ref)
+                }
             }
-        }
-        favoritFilter()
+            
+        } 
     }
     func getUserData(user: Users, completion: @escaping (Result<Users, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
@@ -98,7 +106,7 @@ class FirebaseData: ObservableObject {
     }
     func getUserAll() {
         
-        db.collection("users").getDocuments() { (resalt, error) in
+        db.collection("users").getDocuments() {[weak self] (resalt, error) in
             
             if let error = error {
                 print("____________________________________________________________\(error.localizedDescription)")
@@ -106,16 +114,14 @@ class FirebaseData: ObservableObject {
             var array = [Users]()
             for item in resalt!.documents {
                 let user = Users(document: item)
-                
-                print("getUserAll____________________________________\(item.documentID) => \(item.data())")
                 array.append(user!)
             }
-            self.userAll = array
-            print("getUserAlluser____________________________________\(self.userAll)")
+            self?.userAll = array
         }
         
     }
     func favoritFilter() {
+        
         for item in self.places {
             if item.favorit != nil {
                 for i in item.favorit! {
@@ -151,4 +157,31 @@ class FirebaseData: ObservableObject {
         }
     }
 
+    func getDocument(){
+        db.collection("users").getDocuments() { [weak self] (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let userData = Users(snapshot: document.data() as NSDictionary)
+                    if self?.user.uid == userData.uid {
+                        print(document.documentID)
+                        if self?.deviseToken != userData.deviseToken {
+                            self?.db.collection("users").document(document.documentID).updateData([
+                                "deviseToken": (self?.deviseToken)! as String
+                            ]) { (error) in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                }
+                
+                
+            }
+        }
+    }
 }

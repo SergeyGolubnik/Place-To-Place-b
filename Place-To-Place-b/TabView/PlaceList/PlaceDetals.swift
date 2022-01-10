@@ -173,17 +173,34 @@ struct PlaceDetals: View {
                         
                         
                         HStack {
-                            Button(action: {
-                                messageBool.toggle()
-                            }) {
-                                Text("Написать")
-                            }.padding(10)
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .background(Color.blue)
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
-                                .padding(.leading, 20)
+                            if place.messageBool != nil {
+                                if place.messageBool! {
+                                    Button(action: {
+                                        messageBool.toggle()
+                                    }) {
+                                        Text("Написать")
+                                    }.padding(10)
+                                        .font(.title3)
+                                        .foregroundColor(.white)
+                                        .background(Color.blue)
+                                        .cornerRadius(10)
+                                        .shadow(radius: 5)
+                                        .padding(.leading, 20)
+                                }
+                            } else {
+                                Button(action: {
+                                    messageBool.toggle()
+                                }) {
+                                    Text("Написать")
+                                }.padding(10)
+                                    .font(.title3)
+                                    .foregroundColor(.white)
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                                    .padding(.leading, 20)
+                            }
+                            
                             
                             if avatar != nil {
                                 Button(action: {
@@ -329,7 +346,11 @@ struct PlaceDetals: View {
             
         }
         .onAppear {
-
+            DispatchQueue.main.async {
+                imagePhoto()
+                comentPlace()
+                starsRating()
+            } 
             if place.userId != "" {
                 FirebaseData.shared.getFrendUserData(userId: place.userId) { resalt in
                     
@@ -364,11 +385,7 @@ struct PlaceDetals: View {
                     }
                 }
             }
-            DispatchQueue.main.async {
-                imagePhoto()
-                comentPlace()
-                starsRating()
-            }
+            
             
         }
         .sheet(isPresented: $starsBool) {
@@ -443,7 +460,7 @@ struct PlaceDetals: View {
 
 struct PlaceDetals_Previews: PreviewProvider {
     static var previews: some View {
-        let place = PlaceModel(userId: "", name: "Тест", key: "", location: "Мсква  ул Правды 27с7", type: "Бары и пабы", rating: ["dnnjnjj": 4], coments: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1":"Дополнительный аргумент комментарии в вызове"], imageUrl: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/PlacePhoto%2F-MqoHaLiofZLQ9R9cWV4?alt=media&token=8410a88a-5e95-45fc-9c65-54fdabdafafd", latitude: "55.7522", deviseToken: "", longitude: "37.6156", discription: "Координаты (широта и долгота) определяют положение точки на поверхности Земли.", switchPlace: "Делится", gellery:[ "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace20EE74AE-8579-434E-A0F1-B8ABFBCC15151639477897.611114?alt=media&token=aa3b734f-fa79-4d16-9c81-50fa75476206", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-laceF5E410C8-E2EE-41BC-8F1E-6626B7391A431639477902.93265?alt=media&token=ed19284c-00e3-42f0-abb4-499d9585f54c", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace6A31128D-02DC-41C4-92AE-24300C65849E1639477909.47857?alt=media&token=a1505f77-d6db-4a25-a56e-29040e799dde"], favorit: nil, date: nil, messageBool: true)
+        let place = PlaceModel(userId: "", name: "Тест", key: "", location: "Мсква  ул Правды 27с7", type: "Бары и пабы", rating: ["dnnjnjj": 4], coments: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1":"Дополнительный аргумент комментарии в вызове"], imageUrl: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/PlacePhoto%2F-MqoHaLiofZLQ9R9cWV4?alt=media&token=8410a88a-5e95-45fc-9c65-54fdabdafafd", latitude: "55.7522", deviseToken: "", longitude: "37.6156", discription: "Координаты (широта и долгота) определяют положение точки на поверхности Земли.", switchPlace: "Делится", gellery:[ "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace20EE74AE-8579-434E-A0F1-B8ABFBCC15151639477897.611114?alt=media&token=aa3b734f-fa79-4d16-9c81-50fa75476206", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-laceF5E410C8-E2EE-41BC-8F1E-6626B7391A431639477902.93265?alt=media&token=ed19284c-00e3-42f0-abb4-499d9585f54c", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace6A31128D-02DC-41C4-92AE-24300C65849E1639477909.47857?alt=media&token=a1505f77-d6db-4a25-a56e-29040e799dde"], favorit: nil, date: nil, messageBool: false)
         let user = Users(lastName: "Sergey", email: "sergey@mail.ru", avatarsURL: "https://firebasestorage.googleapis.com/v0/b/sergeygolubnik-place-to-place.appspot.com/o/avatars%2F00Klxwlx47aU7DgQN5ppKzTunkV2?alt=media&token=9b8de98e-4862-4a88-9711-3b69346b8faa", uid: "", deviseToken: "")
         let avatar = UIImage(named: "place-to-place-banner")
         PlaceDetals(place: .constant(place), user: user, avatar: avatar, userNik: "sergeeeey")

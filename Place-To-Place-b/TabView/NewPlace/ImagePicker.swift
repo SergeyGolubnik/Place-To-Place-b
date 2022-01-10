@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Photos
+import Firebase
 
 
 struct ImagePicker : View {
@@ -16,6 +17,7 @@ struct ImagePicker : View {
     @State var show = false
     @State var showImagePicker = false
     @State var showSheet = false
+    @State var isLoading = false
     @State var defaultImage = UIImage(named: "fon-1")
     @State var sourceType: UIImagePickerController.SourceType = .camera
     
@@ -35,33 +37,50 @@ struct ImagePicker : View {
                             
                             ForEach(self.imageArray,id: \.self){i in
                                 ZStack{
+                                    VStack{
+                                        
+                                    
                                     Image(uiImage: i)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 250, height: 250)
                                         .cornerRadius(15)
-                                        
-                                    HStack{
-                                        Spacer()
-                                        VStack{
-                                            Image(systemName: "trash.circle.fill")
-                                                .background(Color.white)
-                                                .font(Font.system(size: 30))
-                                                .cornerRadius(25)
-                                                .padding()
-                                            
-                                            Spacer()
-                                        }
-                                        
-                                    }.onTapGesture {
-                                        let index = imageArray.firstIndex(of: i)
-                                        print("Tap gesture\(String(describing: imageArray.firstIndex(of: i)))")
-                                        imageArray.remove(at: index!)
-                                        if gelleryStringArray.count > 0, index! >= 1 {
-                                            gelleryStringArray.remove(at: index! - 1)
-                                        }
-                                        
                                     }
+                                       
+                                    if gelleryStringArray.count > 1 {
+                                        HStack{
+                                            Spacer()
+                                            VStack{
+                                                Image(systemName: "trash.circle.fill")
+                                                    .background(Color.white)
+                                                    .font(Font.system(size: 30))
+                                                    .cornerRadius(25)
+                                                    .padding()
+                                                
+                                                Spacer()
+                                            }
+                                            
+                                        }.onTapGesture {
+                                            let index = imageArray.firstIndex(of: i)
+                                            let desertRef = Storage.storage().reference().child(gelleryStringArray[index!])
+
+                                            // Delete the file
+                                            desertRef.delete { error in
+                                              if let error = error {
+                                                  print("Tap gesture delete\(error.localizedDescription)")
+                                              }
+                                            }
+                                            
+                                            if gelleryStringArray.count > 0 {
+                                            print("Tap gesture\(String(describing: imageArray.firstIndex(of: i)))")
+                                            imageArray.remove(at: index!)
+                                            
+                                                gelleryStringArray.remove(at: index!)
+                                            }
+                                            
+                                        }
+                                    }
+                                    
                                 }
                                 
                             }
@@ -77,6 +96,7 @@ struct ImagePicker : View {
                 Button(action: {
                     self.showSheet.toggle()
                     print(gelleryStringArray)
+                    isLoading = true
                 }) {
                     if gelleryStringArray.count <= 9 {
                         Text(imageArray == [] ? "Добавить фото" : "Добавьте еще фото")
@@ -86,7 +106,18 @@ struct ImagePicker : View {
                         
                     }
                     
-                }
+                }.overlay (
+                    ZStack {
+                        if isLoading {
+                            Color.black
+                                .opacity(0.25)
+                            
+                            ProgressView()
+                                .font(.title2)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .cornerRadius(12)
+                        }
+                    })
                 .background(Color.red)
                 .clipShape(Capsule())
                 .padding(.top, 25)
@@ -109,30 +140,19 @@ struct ImagePicker : View {
             }
             
         }.onChange(of: image) { _ in
-            
-           if imageArray.count > 0 {
-                getGeleryURLArray(image: image!)
-            }
-            
-            
-            imageArray.append(image!)
-            
-        }
-    }
-    func getGeleryURLArray(image: UIImage) {
-        let imageName = "place-to-lace\(UUID().uuidString)\(String(Date().timeIntervalSince1970))"
-        FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: image, dataUrl: "gellery") { (result) in
-            switch result {
-                
-            case .success(let url):
-                self.gelleryStringArray.append(url.absoluteString)
-                print(gelleryStringArray)
-            case .failure(let error):
-                print(error.localizedDescription)
+            let imageName = "place-to-lace\(UUID().uuidString)\(String(Date().timeIntervalSince1970))"
+            FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: image!, dataUrl: "gellery") { (result) in
+                switch result {
+                    
+                case .success(let url):
+                    gelleryStringArray.append(url.absoluteString)
+                    imageArray.append(image!)
+                    isLoading = false
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
             }
         }
-        
-        
     }
 }
 

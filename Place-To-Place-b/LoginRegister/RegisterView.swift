@@ -15,8 +15,10 @@ struct RegisterView: View {
     @State var pass = ""
     @State var pass2 = ""
     @State var titleAlert = ""
+    @State var isLoading = false
     @State var messageAlert = ""
     @State var alert = false
+    @State var deviseToken = ""
     @Binding var goTabViewPlace: Bool
     @State var userArray = [Users]()
     @State var showSheet: Bool = false
@@ -137,6 +139,7 @@ struct RegisterView: View {
                         }.padding()
                         VStack{
                             Button(action: {
+                                isLoading = true
                                 if email != "", Validators.isSimpleEmail(email) {
                                     if pass != "", pass2 != "", pass == pass2 {
                                         print("RegisterView_______\(data.userAll)")
@@ -149,13 +152,15 @@ struct RegisterView: View {
                                             }
                                         }
                                         if name != "" {
-                                            FirebaseAuthDatabase.register(photo: image, lastName: name, email: email, password: pass, deviseToken: "временно пока не подключу нотисфакшен") { resalt in
+                                            FirebaseAuthDatabase.register(photo: image, lastName: name, email: email, password: pass, deviseToken: deviseToken) { resalt in
                                                 switch resalt {
                                                 case .success:
+                                                    isLoading = false
                                                     alert.toggle()
                                                     titleAlert = "Успешно"
                                                     messageAlert = "Поздравляем!\nВы зарегестрировал."
                                                 case .failure(let error):
+                                                    isLoading = false
                                                     alert.toggle()
                                                     titleAlert = "Ошибка"
                                                     messageAlert = "\(error.localizedDescription)"
@@ -189,7 +194,19 @@ struct RegisterView: View {
                                     .padding()
                                 
                                 
-                            }.background(Color.blue)
+                            }.overlay (
+                                ZStack {
+                                    if isLoading {
+                                        Color.black
+                                            .opacity(0.25)
+                                        
+                                        ProgressView()
+                                            .font(.title2)
+                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                            .cornerRadius(12)
+                                    }
+                                })
+                            .background(Color.blue)
                                 .clipShape(Capsule())
                                 .padding([.top, .bottom], 20)
                                 .shadow(color: .gray, radius: 5, x: 5, y: 5)
@@ -217,8 +234,8 @@ struct RegisterView: View {
             }
             .onAppear {
                 data.getUserAll()
-                
-                
+                deviseToken = data.downUserData()
+                print(data.downUserData())
             }
         
         
