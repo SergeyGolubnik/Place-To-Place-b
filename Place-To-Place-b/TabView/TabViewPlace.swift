@@ -33,6 +33,8 @@ struct TabViewPlace: View {
                     FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
                 } else if selected == 3 {
                     UserSetings(exitBool: $exitBool)
+                } else if selected == 2 {
+                    MainMessagesView()
                 }
                 VStack{
                     

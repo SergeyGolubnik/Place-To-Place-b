@@ -10,13 +10,19 @@ import MapKit
 
 struct PlaceListMap: View {
     @State var locationManager = CLLocationManager()
+//    PlaceDetail
     @Binding var placeDetail: PlaceModel
-    @StateObject var mapData = MapViewModel()
     @Binding var goDetail: Bool
+    
+    @StateObject var mapData = MapViewModel()
     @StateObject var data = FirebaseData()
+    
     @State var filter = ""
     @State var filterMy = false
+    
     @State var tranferCategory = false
+    
+    
     var body: some View {
         
         NavigationView {

@@ -9,9 +9,12 @@ import Foundation
 import Firebase
 import UIKit
 import SwiftUI
+import FirebaseFirestore
 
-class FirebaseData: ObservableObject {
-    
+class FirebaseData: NSObject, ObservableObject {
+    let auth: Auth
+    let storage: Storage
+    let firestore: Firestore
     static var shared = FirebaseData()
 //    var ref: DatabaseReference!
     var user: Users!
@@ -27,11 +30,18 @@ class FirebaseData: ObservableObject {
     @Published var ref: DatabaseReference!
     @Published var stringArray = [String]()
     
-    init() {
-        fetchData()
-        deviseToken = downUserData()
+    override init() {
+        self.auth = Auth.auth()
+        self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
+        super .init()
+        self.getUserAll()
+        self.fetchData()
+        self.deviseToken = self.downUserData()
     }
     
+  
+   
     func fetchData() {
         ref = Database.database().reference(withPath: "user")
         guard let currentUser = Auth.auth().currentUser else {return}
