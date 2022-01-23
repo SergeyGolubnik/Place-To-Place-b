@@ -6,14 +6,12 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct RegisterView: View {
-    @Environment(\.presentationMode) var presentationMode
     
-    @State var email = ""
+   
     @State var name = ""
-    @State var pass = ""
-    @State var pass2 = ""
     @State var titleAlert = ""
     @State var isLoading = false
     @State var messageAlert = ""
@@ -29,217 +27,189 @@ struct RegisterView: View {
     @State var image = UIImage(named: "avatar-1")
     
     var body: some View {
-
-            ZStack{
-               colorApp
-                    .ignoresSafeArea()
-                
-                ScrollView {
+        
+        ZStack{
+            colorApp
+                .ignoresSafeArea()
+            
+            ScrollView {
+                VStack{
+                    VStack {
+                        Text("Регистрация")
+                            .fontWeight(.heavy)
+                            .font(.largeTitle)
+                            .foregroundColor(Color.black)
+                        
+                            .padding()
+                    }
                     VStack{
-                        VStack{
-                            Capsule()
-                                .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
-                                .frame(width: 60, height: 12, alignment: .center)
-                                .padding(.top)
-                            Spacer()
-                        }
                         VStack {
-                            Text("Регистрация")
-                                .fontWeight(.heavy)
-                                .font(.largeTitle)
-                                .foregroundColor(Color.black)
-                                
-                                .padding()
-                        }
-                        VStack{
-                            VStack {
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        self.showSheet.toggle()
-                                        
-                                    }
-                                }) {
-                                    Image(uiImage: image!)
-                                        .resizable()
-                                        .frame(width: 100, height: 100)
-                                        .cornerRadius(50)
-                                        .shadow(color: .gray, radius: 5, x: 0, y: 0)
-                                    
-                                }.sheet(isPresented: $showImagePicker, content: {
-                                    OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
-                                })
-                                    .actionSheet(isPresented: $showSheet) {
-                                        ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
-                                            .default(Text("Галерея")) {
-                                                self.showImagePicker = true
-                                                self.sourceType = .photoLibrary
-                                            },
-                                            .default(Text("Камера")) {
-                                                self.showImagePicker = true
-                                                self.sourceType = .camera
-                                            },
-                                            .cancel(Text("Выход"))
-                                        ])
-                                    }
-                                Text("Аватар")
-                                
-                            }.padding(.bottom, 30)
                             
-                            VStack(alignment: .leading){
-                                
-                                VStack(alignment: .leading){
-                                    
-                                    Text("E-mail").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
-                                    
-                                    HStack{
-                                        
-                                        TextField("Введите e-mail", text: $email).foregroundColor(.black).multilineTextAlignment(.leading)
-                                    
-                                        
-                                    }
-                                    
-                                    Divider()
-                                    
-                                }.padding(.bottom, 15)
-                                VStack(alignment: .leading){
-                                    
-                                    Text("Имя").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
-                                    
-                                    HStack{
-                                        
-                                        TextField("Введите свое имя", text: $name).foregroundColor(.black).multilineTextAlignment(.leading)
-
-                                        
-                                    }
-                                    
-                                    Divider()
-                                    
-                                }.padding(.bottom, 15)
-                                
-                                VStack(alignment: .leading){
-                                    
-                                    Text("Пароль").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
-                                    
-                                    SecureField("Введите пароль", text: $pass).foregroundColor(.black).multilineTextAlignment(.leading)
-                                    
-                                    Divider()
-                                }
-                                VStack(alignment: .leading){
-                                    
-                                    Text("Пароль еще раз").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
-                                    
-                                    SecureField("Введите пароль еще раз", text: $pass2).foregroundColor(.black).multilineTextAlignment(.leading)
-                                    
-                                    Divider()
-                                }
-                                
-                            }.padding(.horizontal, 6)
-                            
-                        }.padding()
-                        VStack{
                             Button(action: {
-                                isLoading = true
-                                if email != "", Validators.isSimpleEmail(email) {
-                                    if pass != "", pass2 != "", pass == pass2 {
-                                        print("RegisterView_______\(data.userAll)")
-                                        for i in data.userAll {
-                                            if name == i.lastName {
-                                                titleAlert = "Ошибка"
-                                                messageAlert = "Такое имя уже существует"
-                                                alert.toggle()
-                                                return
-                                            }
-                                        }
-                                        if name != "" {
-                                            FirebaseAuthDatabase.register(photo: image, lastName: name, email: email, password: pass, deviseToken: deviseToken) { resalt in
-                                                switch resalt {
-                                                case .success:
-                                                    isLoading = false
-                                                    alert.toggle()
-                                                    titleAlert = "Успешно"
-                                                    messageAlert = "Поздравляем!\nВы зарегестрировал."
-                                                case .failure(let error):
-                                                    isLoading = false
-                                                    alert.toggle()
-                                                    titleAlert = "Ошибка"
-                                                    messageAlert = "\(error.localizedDescription)"
-                                                }
-                                            }
-                                        } else {
-                                            titleAlert = "Ошибка"
-                                            messageAlert = "Некоректно веден пароль"
-                                            alert.toggle()
-                                            return
-                                        }
-                                    } else {
-                                        titleAlert = "Ошибка"
-                                        messageAlert = "Некоректно ведено имя"
-                                        alert.toggle()
-                                        return
-                                    }
-                                } else {
-                                    titleAlert = "Ошибка"
-                                    messageAlert = "Некоректно веден Email"
-                                    alert.toggle()
-                                    return
+                                withAnimation {
+                                    self.showSheet.toggle()
+                                    
                                 }
                             }) {
+                                Image(uiImage: image!)
+                                    .resizable()
+                                    .frame(width: 100, height: 100)
+                                    .cornerRadius(50)
+                                    .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                 
-                                Text("Зарегестрироватся")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(width: UIScreen.main.bounds.width - 120)
-                                    .padding()
-                                
-                                
-                            }.overlay (
-                                ZStack {
-                                    if isLoading {
-                                        Color.black
-                                            .opacity(0.25)
-                                        
-                                        ProgressView()
-                                            .font(.title2)
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                            .cornerRadius(12)
-                                    }
-                                })
-                            .background(Color.blue)
-                                .clipShape(Capsule())
-                                .padding([.top, .bottom], 20)
-                                .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                            }.sheet(isPresented: $showImagePicker, content: {
+                                OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
+                            })
+                                .actionSheet(isPresented: $showSheet) {
+                                    ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
+                                        .default(Text("Галерея")) {
+                                            self.showImagePicker = true
+                                            self.sourceType = .photoLibrary
+                                        },
+                                        .default(Text("Камера")) {
+                                            self.showImagePicker = true
+                                            self.sourceType = .camera
+                                        },
+                                        .cancel(Text("Выход"))
+                                    ])
+                                }
+                            Text("Аватар")
                             
+                        }.padding(.bottom, 30)
+                        
+                        VStack(alignment: .leading){
+                            VStack(alignment: .leading){
+                                
+                                Text("Имя").font(.headline).fontWeight(.light).foregroundColor(Color.init(.label).opacity(0.75))
+                                
+                                HStack{
+                                    
+                                    TextField("Введите свое имя", text: $name).foregroundColor(.black).multilineTextAlignment(.leading)
+                                    
+                                    
+                                }
+                                
+                                Divider()
+                                
+                            }.padding(.bottom, 15)
                             
+                        }.padding(.horizontal, 6)
+                        HStack{
+                            Text("Не допускается пробелы и \n(@,#,$,%,&,*,(,),^,<,>,!,±)").multilineTextAlignment(.center).font(.subheadline)
                         }
+                    }.padding()
+                    VStack{
+                        Button(action: {
+                            isLoading = true
+                            for nik in data.userAll {
+                                if nik.lastName == name {
+                                    titleAlert = "Ошибка"
+                                    messageAlert = "Такое имя уже существует"
+                                    alert.toggle()
+                                    isLoading = false
+                                    return
+                                }
+                            }
+                            if image == UIImage(named: "avatar-1"){
+                                titleAlert = "Ошибка"
+                                messageAlert = "Утановите аватар"
+                                alert.toggle()
+                                isLoading = false
+                                return
+                            }
+                            if name == ""{
+                                titleAlert = "Ошибка"
+                                messageAlert = "Придумайте уникальный ник"
+                                alert.toggle()
+                                isLoading = false
+                                return
+                            }
+                            if !isValidInput(Input: name) {
+                                titleAlert = "Ошибка"
+                                messageAlert = "Не допускается пробелы и \n(@,#,$,%,&,*,(,),^,<,>,!,±)"
+                                alert.toggle()
+                                name = ""
+                                isLoading = false
+                                return
+                            }
+                            if name != "", image != UIImage(named: "avatar-1") {
+                                guard let currentUser = Auth.auth().currentUser else {return}
+                                let user = Users(user: currentUser)
+                                let nameString = name.trimmingCharacters(in: .whitespaces)
+                                FirebaseAuthDatabase.registerPhone(photo: image, lastName: nameString, uid: user.uid, phoneNumber: user.phoneNumber ?? "1111111111", deviseToken: deviseToken) { resalt in
+                                    switch resalt {
+                                    case .success:
+                                        isLoading = false
+                                        alert.toggle()
+                                        titleAlert = "Успешно"
+                                        messageAlert = "Поздравляем!\nВы вошли под ником \(name)."
+                                    case .failure(let error):
+                                        isLoading = false
+                                        alert.toggle()
+                                        titleAlert = "Ошибка"
+                                        messageAlert = "\(error.localizedDescription)"
+                                    }
+                                }
+                            }
+                        }) {
+                            
+                            Text("Зарегестрироватся")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(width: UIScreen.main.bounds.width - 100)
+                                .padding()
+                            
+                            
+                        }.overlay (
+                            ZStack {
+                                if isLoading {
+                                    Color.black
+                                        .opacity(0.25)
+                                    
+                                    ProgressView()
+                                        .font(.title2)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .cornerRadius(12)
+                                }
+                            })
+                            .background(Color.blue)
+                            .clipShape(Capsule())
+                            .padding([.top, .bottom], 20)
+                            .shadow(color: .gray, radius: 5, x: 5, y: 5)
+                        
+                        
                     }
                 }
+            }
+            
+        }
+        .alert(isPresented: $alert) {
+            Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
+                if messageAlert == "Такое имя уже существует" {
+                    self.goTabViewPlace = false
+                    name = ""
+                }
+                if titleAlert != "Ошибка" {
+                    self.goTabViewPlace = true
+                }
                 
-            }
-            .alert(isPresented: $alert) {
-                Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
-                    if titleAlert == "Ошибка" {
-                        self.goTabViewPlace = false
-                    } else if messageAlert == "Такое имя уже существует" {
-                        self.goTabViewPlace = false
-                        name = ""
-                    } else {
-                        self.goTabViewPlace = true
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                    
-                }))
-                
-            }
-            .onAppear {
-                data.getUserAll()
-                deviseToken = data.downUserData()
-                print(data.downUserData())
-            }
+            }))
+            
+        }
+        .onAppear {
+            print(data.userAll)
+            deviseToken = data.downUserData()
+            print(data.downUserData())
+        }
         
         
         
+    }
+    func isValidInput(Input:String) -> Bool {
+        let RegEx = "\\w{4,18}"
+        let Test = NSPredicate(format:"SELF MATCHES %@", RegEx)
+        return Test.evaluate(with: Input)
     }
 }
 

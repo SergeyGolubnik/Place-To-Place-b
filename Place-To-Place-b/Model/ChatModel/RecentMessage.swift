@@ -13,7 +13,7 @@ struct RecentMessage: Identifiable {
     var id: String {documentId}
     
     let documentId: String
-    let text, name, email: String
+    let text, name, phoneNumber: String
     let fromId, toId: String
     let profileImageUrl: String
     let timestamp: Date
@@ -22,7 +22,7 @@ struct RecentMessage: Identifiable {
         self.documentId = documentId
         self.text = data[FirebaseStatic.text] as? String ?? ""
         self.name = data[FirebaseStatic.name] as? String ?? ""
-        self.email = data[FirebaseStatic.email] as? String ?? ""
+        self.phoneNumber = data[FirebaseStatic.phoneNumber] as? String ?? ""
         self.fromId = data[FirebaseStatic.fromId] as? String ?? ""
         self.toId = data[FirebaseStatic.toId] as? String ?? ""
         self.profileImageUrl = data[FirebaseStatic.profileImageUrl] as? String ?? ""

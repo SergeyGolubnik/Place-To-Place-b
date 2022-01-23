@@ -7,12 +7,20 @@
 
 import UIKit
 import Firebase
+import MapKit
+import Contacts
 
-struct PlaceModel: Hashable {
+class PlaceModel: NSObject, Identifiable, MKAnnotation {
+    
+//    static func == (lhs: PlaceModel, rhs: PlaceModel) -> Bool {
+//        return lhs.userId == rhs.userId
+//    }
+    
 
     var id = UUID()
     var userId: String
     var name: String?
+    var phoneNumber: String
     var key: String
     var location: String?
     var type: String?
@@ -31,9 +39,10 @@ struct PlaceModel: Hashable {
     let ref: DatabaseReference?
     
     
-    init(key: String, userId: String, switchPlace: String, deviseToken: String) {
+    init(key: String, userId: String, phoneNumber: String, switchPlace: String, deviseToken: String) {
         self.userId = userId
         self.key = key
+        self.phoneNumber = phoneNumber
         self.switchPlace = switchPlace
         self.ref = nil
         self.deviseToken = deviseToken
@@ -46,6 +55,7 @@ struct PlaceModel: Hashable {
         userId = snapshotVaiue["userId"] as! String
         name = snapshotVaiue["name"] as? String
         key = snapshotVaiue["key"] as! String
+        phoneNumber = snapshotVaiue["phoneNumber"] as! String
         location = snapshotVaiue["location"] as? String
         latitude = snapshotVaiue["latitude"] as? String
         longitude = snapshotVaiue["Longitude"] as? String
@@ -63,10 +73,11 @@ struct PlaceModel: Hashable {
         ref = snapshot.ref
     }
 
-    init(userId: String, name: String, key: String, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?) {
+    init(userId: String, name: String, key: String, phoneNumber: String, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?) {
         self.userId = userId
         self.name = name
         self.key = key
+        self.phoneNumber = phoneNumber
         self.location = location
         self.type = type
         self.rating = rating
@@ -82,7 +93,31 @@ struct PlaceModel: Hashable {
         self.date = date
         self.messageBool = messageBool
         self.ref = nil
+        
     }
+    var title: String? { return name ?? ""}
+    var locationName: String {return name ?? ""}
+    var discipLine: String {return name ?? ""}
+    var subtitle: String? {return type}
+    var placeId: String? {return key}
+    var placeUid: String? {return userId}
+    var coordinate: CLLocationCoordinate2D {
+        let latitude = Double(latitude ?? "") ?? 0.0
+        let longitude = Double(longitude ?? "") ?? 0.0
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    var mapItem: MKMapItem? {
+        guard let location = name else {
+            return nil
+        }
+        let adresDict = [CNPostalAddressStateKey: location]
+        let placemarc = MKPlacemark(coordinate: coordinate, addressDictionary: adresDict)
+        
+        let mapItem = MKMapItem(placemark: placemarc)
+        mapItem.name = locationName
+        return mapItem
+    }
+    
 }
 
 class NewPlaceModel: ObservableObject {

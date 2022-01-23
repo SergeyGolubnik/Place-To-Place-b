@@ -96,7 +96,7 @@ struct MainMessagesView: View {
                     Button {
                         print("recientMessage nil image \(recientMessage.profileImageUrl)")
                         let uid = FirebaseData.shared.auth.currentUser?.uid == recientMessage.fromId ? recientMessage.toId : recientMessage.fromId
-                        self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, email: recientMessage.email, profileImage: recientMessage.profileImageUrl, token: "")
+                        self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: "")
                         self.chatLogViewModel.chatUser = self.chatUser
                         self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
                         self.chatLogViewModel.fetchMessage()

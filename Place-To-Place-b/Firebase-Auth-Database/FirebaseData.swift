@@ -12,10 +12,10 @@ import SwiftUI
 import FirebaseFirestore
 
 class FirebaseData: NSObject, ObservableObject {
+    static var shared = FirebaseData()
     let auth: Auth
     let storage: Storage
     let firestore: Firestore
-    static var shared = FirebaseData()
 //    var ref: DatabaseReference!
     var user: Users!
     let db = Firestore.firestore()
@@ -78,7 +78,7 @@ class FirebaseData: NSObject, ObservableObject {
             if place.userId == user.uid {
                 if place.deviseToken != deviseToken {
                     guard let newToken = deviseToken, let ref = ref else {return}
-                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, newToken: newToken, ref: ref)
+                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, phoneNumber: user.phoneNumber ?? "", newToken: newToken, ref: ref)
                 }
             }
             

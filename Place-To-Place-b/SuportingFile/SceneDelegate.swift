@@ -39,12 +39,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
+            window.rootViewController = UIHostingController(rootView: LaunchScrinView().environment(\.managedObjectContext, context))
             if let users = Auth.auth().currentUser {
+                
                 let user = Users(user: users)
-                window.rootViewController = UIHostingController(rootView: TabViewPlace(user: user).environment(\.managedObjectContext, context))
+                FirebaseData.shared.getUserData(user: user) { resalt in
+                    switch resalt {
+                        
+                    case .success(_):
+                        window.rootViewController = UIHostingController(rootView: TabViewPlace().environment(\.managedObjectContext, context))
+                    case .failure(_):
+                        window.rootViewController = UIHostingController(rootView: ScndPage(show: .constant(false), ID: .constant(""), goRegisterUser: true).environment(\.managedObjectContext, context))
+                    }
+                }
+                
 
             } else {
-                FirebaseData.shared.getUserAll()
                 window.rootViewController = UIHostingController(rootView: contentView)
             }
             

@@ -14,19 +14,19 @@ struct ChatUsers: Identifiable {
         uid
     }
     
-    let name, uid, email, profileImage, token :String
+    let name, uid, phoneNumber, profileImage, token :String
     
     init(data: [String: Any]) {
         self.name = data["lastname"] as? String ?? ""
         self.uid = data["uid"] as? String ?? ""
-        self.email = data["email"] as? String ?? ""
+        self.phoneNumber = data["phoneNumber"] as? String ?? ""
         self.profileImage = data["avatarsURL"] as? String ?? ""
         self.token = data["deviseToken"] as? String ?? ""
     }
-    init(name: String, uid: String, email: String, profileImage: String, token :String){
+    init(name: String, uid: String, phoneNumber: String, profileImage: String, token :String){
         self.name = name
         self.uid = uid
-        self.email = email
+        self.phoneNumber = phoneNumber
         self.profileImage = profileImage
         self.token = token
     }

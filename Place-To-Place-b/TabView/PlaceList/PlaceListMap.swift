@@ -180,7 +180,7 @@ struct MapView: UIViewRepresentable {
             self.firebaseModel = firebaseData
         }
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            guard let annotation = annotation as? PlaceAnatation else {return nil}
+            guard let annotation = annotation as? PlaceModel else {return nil}
             
             let identifer = "placeAnatanion"
             let view: MKPinAnnotationView
@@ -199,19 +199,9 @@ struct MapView: UIViewRepresentable {
             return view
         }
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-            guard let place = view.annotation as? PlaceAnatation else {return}
-            let idAnatation = place.placeId!
-            if idAnatation != "" {
-                for item in firebaseModel.places {
-                    if item.key == idAnatation {
-                        placeDetail = item
-                        goDetalsBool = true
-                    }
-                    
-                }
-                
-            }
-            
+            guard let place = view.annotation as? PlaceModel else {return}
+            placeDetail = place
+            goDetalsBool = true
         }
     }
     
@@ -226,20 +216,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     func rmovePlace(place: [PlaceModel]) {
         
         mapView.removeAnnotations(mapView.annotations)
-        var array = [PlaceAnatation]()
-        for anatacionPL in place {
-            guard let latitude = Double(anatacionPL.latitude!), let longitude = Double(anatacionPL.longitude!) else {continue}
-            let placeAnatation = PlaceAnatation(title: anatacionPL.name,
-                                                locationName: anatacionPL.name,
-                                                discipLine: anatacionPL.name,
-                                                subtitle: anatacionPL.type,
-                                                placeId: anatacionPL.key,
-                                                placeUid: anatacionPL.userId,
-                                                favorit: anatacionPL.favorit,
-                                                coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-            array.append(placeAnatation)
-        }
-        mapView.addAnnotations(array)
+        mapView.addAnnotations(place)
     }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {

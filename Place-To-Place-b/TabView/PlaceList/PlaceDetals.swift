@@ -7,7 +7,23 @@
 
 import SwiftUI
 
+
+class PlaceDetalsViewModel: ObservableObject {
+    var places: PlaceModel?
+    var user: Users?
+    var userAll: [Users]?
+     
+    init(places: PlaceModel?, user: Users?, userAll: [Users]?) {
+        self.user = user
+        self.places = places
+        self.userAll = userAll
+        print("PlaceDetalsViewModel  \(user) \n\(places)\n \(userAll)" )
+    }
+}
+
+
 struct PlaceDetals: View {
+    @ObservedObject var vm: PlaceDetalsViewModel
     @StateObject var data = FirebaseData()
     @Binding var place: PlaceModel
     @State var redactPlace = false
@@ -182,7 +198,7 @@ struct PlaceDetals: View {
                                 if place.messageBool ?? true, userPlace.uid != user.uid {
                                     Button(action: {
                                         let uid = FirebaseData.shared.auth.currentUser?.uid == user.uid ? userPlace.uid : user.uid
-                                        self.chatUser = ChatUsers(name: userPlace.lastName ?? "", uid: uid, email: userPlace.email, profileImage: userPlace.avatarsURL ?? "", token: userPlace.deviseToken ?? "")
+                                        self.chatUser = ChatUsers(name: userPlace.lastName ?? "", uid: uid, phoneNumber: userPlace.phoneNumber ?? "", profileImage: userPlace.avatarsURL ?? "", token: userPlace.deviseToken ?? "")
                                         self.chatLogViewModel.chatUser = self.chatUser
                                         self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
                                         self.chatLogViewModel.fetchMessage()
@@ -201,7 +217,7 @@ struct PlaceDetals: View {
                             } else {
                                 Button(action: {
                                     let uid = FirebaseData.shared.auth.currentUser?.uid == user.uid ? userPlace.uid : user.uid
-                                    self.chatUser = ChatUsers(name: userPlace.lastName ?? "", uid: uid, email: userPlace.email, profileImage: userPlace.avatarsURL ?? "", token: userPlace.deviseToken ?? "")
+                                    self.chatUser = ChatUsers(name: userPlace.lastName ?? "", uid: uid, phoneNumber: userPlace.phoneNumber ?? "", profileImage: userPlace.avatarsURL ?? "", token: userPlace.deviseToken ?? "")
                                     self.chatLogViewModel.chatUser = self.chatUser
                                     self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
                                     self.chatLogViewModel.fetchMessage()

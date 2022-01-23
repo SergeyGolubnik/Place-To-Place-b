@@ -12,7 +12,6 @@ struct PolicyView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var isActive1 = false
     @State var isActive2 = false
-    @ObservedObject var webModel = WebModel()
     @State var isLoaderVisible = false
     
     
@@ -20,7 +19,7 @@ struct PolicyView: View {
         
         ZStack {
             if isActive2 {
-                LoginView().transition(.scale(scale: 2))
+                FirstPage().transition(.scale(scale: 2))
             } else {
                 VStack(spacing: 0) {
                     Text("Политика конфиденциальности")

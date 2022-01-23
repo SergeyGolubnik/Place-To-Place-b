@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct MapViewPresentBetta: UIViewRepresentable {
-    @State var annotations = [PlaceAnatation]()
+    @State var annotations = [PlaceModel]()
     let locationManager = CLLocationManager()
     var mapView = MKMapView()
     @State var latitude = ""

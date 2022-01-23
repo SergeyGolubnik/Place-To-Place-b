@@ -10,67 +10,66 @@ import Firebase
 
 struct Users: Hashable, Decodable {
     let uid: String
-    let email: String
+    let phoneNumber: String?
     var lastName: String?
     var avatarsURL: String?
     var deviseToken: String?
     
     init(user: User) {
         self.uid = user.uid
-        self.email = user.email!
+        self.phoneNumber = user.phoneNumber
     }
    
     
     init(snapshot: NSDictionary) {
         let snapshotVaiue = snapshot as! [String: Any]
         uid = snapshotVaiue["uid"] as! String
-        email = snapshotVaiue["email"] as! String
         avatarsURL = snapshotVaiue["avatarsURL"] as? String
         lastName = snapshotVaiue["lastname"] as? String
         deviseToken = snapshotVaiue["deviseToken"] as? String
+        phoneNumber = snapshotVaiue["phoneNumber"] as? String
     }
     init?(document: DocumentSnapshot) {
         guard let data = document.data() else { return nil}
         guard let lastName = data["lastname"] as? String,
-              let email = data["email"] as? String,
               let avatarsURL = data["avatarsURL"] as? String,
               let deviseToken = data["deviseToken"] as? String,
+              let phoneNumber = data["phoneNumber"] as? String,
               let uid = data["uid"] as? String else { return nil }
         
         self.lastName = lastName
-        self.email = email
         self.avatarsURL = avatarsURL
         self.uid = uid
         self.deviseToken = deviseToken
+        self.phoneNumber = phoneNumber
     }
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
         guard let lastName = data["lastname"] as? String,
-              let email = data["email"] as? String,
               let avatarsURL = data["avatarsURL"] as? String,
               let deviseToken = data["deviseToken"] as? String,
+              let phoneNumber = data["phoneNumber"] as? String,
               let uid = data["uid"] as? String else { return nil }
         
         self.lastName = lastName
-        self.email = email
         self.avatarsURL = avatarsURL
         self.uid = uid
         self.deviseToken = deviseToken
+        self.phoneNumber = phoneNumber
     }
     var representation: [String: Any] {
         var rep = ["lastname": lastName]
-        rep["email"] = email
         rep["avatarsURL"] = avatarsURL
         rep["uid"] = uid
         rep["deviseToken"] = deviseToken
         return rep as [String : Any]
     }
-    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String) {
+    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String, phoneNumber: String) {
         self.lastName = lastName
-        self.email = email
         self.avatarsURL = avatarsURL
         self.uid = uid
         self.deviseToken = deviseToken
+        self.phoneNumber = phoneNumber
     }
     
     func hash(into hasher: inout Hasher) {

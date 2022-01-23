@@ -14,7 +14,7 @@ struct FirebaseStatic {
     static let text = "text"
     static let profileImageUrl = "deviseToken"
     static let name = "lastname"
-    static let email = "email"
+    static let phoneNumber = "phoneNumber"
     static let uid = "uid"
     
 }

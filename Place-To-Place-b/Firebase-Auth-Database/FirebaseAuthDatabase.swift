@@ -166,15 +166,38 @@ class FirebaseAuthDatabase {
             
         }
     }
-    
+    static func registerPhone(photo: UIImage?, lastName: String, uid: String, phoneNumber: String, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
+        self.aploadImage(photoName: uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
+            switch myresalt {
+            
+            case .success(let url):
+                let db = Firestore.firestore()
+                db.collection("users").document(uid).setData([
+                    "lastname": lastName as String,
+                    "phoneNumber": phoneNumber as String,
+                    "avatarsURL": url.absoluteString,
+                    "uid": uid,
+                    "deviseToken": deviseToken! as String
+                ]) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                    }
+                    completion(.success)
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
    
     static func updateToken(key: String,
                             switchPlace: String,
                             userId: String,
+                            phoneNumber: String,
                             newToken: String,
                             ref: DatabaseReference) {
      
-        let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: newToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: newToken)
         let placeRef = ref.child(newPlace.key)
         placeRef.updateChildValues([
             "deviseToken": newToken as String
@@ -220,6 +243,7 @@ class FirebaseAuthDatabase {
     
     static func newPlace(name: String,
                          userId: String,
+                         phoneNumber: String,
                          location: String?,
                          latitude: String?,
                          Longitude: String?,
@@ -235,7 +259,7 @@ class FirebaseAuthDatabase {
         
         guard let key = ref.child("name").childByAutoId().key else {return}
 
-                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: deviseToken)
                 let df = DateFormatter()
                 df.dateFormat = "yyyy-MM-dd hh:mm:ss"
                 let now = df.string(from: Date())
@@ -244,6 +268,7 @@ class FirebaseAuthDatabase {
                     "userId": userId as String,
                     "name": name as String,
                     "key": key as String,
+                    "phoneNumber": phoneNumber as String,
                     "location": location! as String,
                     "latitude": latitude! as String,
                     "Longitude": Longitude! as String,
@@ -267,6 +292,7 @@ class FirebaseAuthDatabase {
     static func updatePlace(key: String,
                             name: String,
                             userId: String,
+                            phoneNumber: String,
                             location: String?,
                             latitude: String?,
                             Longitude: String?,
@@ -278,11 +304,12 @@ class FirebaseAuthDatabase {
                             gellery: [String],
                             ref: DatabaseReference,
                             completion: @escaping (AuthResult) -> Void) {
-                let newPlace = PlaceModel(key: key, userId: userId, switchPlace: switchPlace, deviseToken: deviseToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: deviseToken)
                 let placeRef = ref.child(newPlace.key)
                 placeRef.updateChildValues([
                     "name": name as String,
                     "key": key as String,
+                    "phoneNumber": phoneNumber as String,
                     "location": location! as String,
                     "latitude": latitude! as String,
                     "Longitude": Longitude! as String,
