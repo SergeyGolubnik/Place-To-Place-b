@@ -20,6 +20,8 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
     var id = UUID()
     var userId: String
     var name: String?
+    var nikNamePlace: String
+    var avatarNikPlace: String
     var phoneNumber: String
     var key: String
     var location: String?
@@ -36,12 +38,15 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
     var gellery: [String]?
     var favorit: [String]?
     var date: String?
+    var moderation: Bool?
     let ref: DatabaseReference?
     
     
-    init(key: String, userId: String, phoneNumber: String, switchPlace: String, deviseToken: String) {
+    init(key: String, userId: String, phoneNumber: String, nikNamePlace: String, avatarNikPlace: String, switchPlace: String, deviseToken: String) {
         self.userId = userId
         self.key = key
+        self.nikNamePlace = nikNamePlace
+        self.avatarNikPlace = avatarNikPlace
         self.phoneNumber = phoneNumber
         self.switchPlace = switchPlace
         self.ref = nil
@@ -55,6 +60,8 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         userId = snapshotVaiue["userId"] as! String
         name = snapshotVaiue["name"] as? String
         key = snapshotVaiue["key"] as! String
+        nikNamePlace = snapshotVaiue["nikNamePlace"] as! String
+        avatarNikPlace = snapshotVaiue["avatarNikPlace"] as! String
         phoneNumber = snapshotVaiue["phoneNumber"] as! String
         location = snapshotVaiue["location"] as? String
         latitude = snapshotVaiue["latitude"] as? String
@@ -70,13 +77,16 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         favorit = snapshotVaiue["favorit"] as? [String]
         date = snapshotVaiue["date"] as? String
         messageBool = snapshotVaiue["messageBool"] as? Bool
+        moderation = snapshotVaiue["moderation"] as? Bool
         ref = snapshot.ref
     }
 
-    init(userId: String, name: String, key: String, phoneNumber: String, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?) {
+    init(userId: String, name: String, key: String, nikNamePlace: String, avatarNikPlace: String, phoneNumber: String, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?, moderation: Bool?) {
         self.userId = userId
         self.name = name
         self.key = key
+        self.nikNamePlace = nikNamePlace
+        self.avatarNikPlace = avatarNikPlace
         self.phoneNumber = phoneNumber
         self.location = location
         self.type = type
@@ -92,6 +102,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         self.favorit = favorit
         self.date = date
         self.messageBool = messageBool
+        self.moderation = moderation
         self.ref = nil
         
     }

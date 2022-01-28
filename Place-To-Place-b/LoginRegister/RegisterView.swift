@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 struct RegisterView: View {
     
@@ -31,7 +32,6 @@ struct RegisterView: View {
         ZStack{
             colorApp
                 .ignoresSafeArea()
-            
             ScrollView {
                 VStack{
                     VStack {

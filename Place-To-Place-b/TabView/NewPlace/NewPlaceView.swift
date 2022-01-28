@@ -40,6 +40,9 @@ struct NewPlaceView: View {
     @State var newPlaceGoo = false
     
     var body: some View {
+        ScrollView{
+            
+        
         ZStack{
             VStack{
                 Capsule()
@@ -71,7 +74,7 @@ struct NewPlaceView: View {
                             }
                         
                             if place == nil {
-                                FirebaseAuthDatabase.newPlace(name: namePlace, userId: data.user.uid, phoneNumber: data.user.phoneNumber ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, ref: data.ref) { result in
+                                FirebaseAuthDatabase.newPlace(name: namePlace, userId: data.user.uid, phoneNumber: data.user.phoneNumber ?? "", nikNamePlace: data.myUser.lastName ?? "", avatarNikPlace: data.myUser.avatarsURL ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, moderation: false, ref: data.ref) { result in
                                     
                                     switch result {
                                     case .success:
@@ -86,7 +89,7 @@ struct NewPlaceView: View {
                                     }
                                 }
                             } else {
-                                FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: data.user.uid, phoneNumber: data.user.phoneNumber ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, ref: data.ref) { result in
+                                FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: data.user.uid, nikNamePlace: data.myUser.lastName ?? "", avatarNikPlace: data.myUser.avatarsURL ?? "", phoneNumber: data.user.phoneNumber ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: data.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, moderation: false, ref: data.ref) { result in
                                     switch result {
                                     case .success:
                                         isLoading = false
@@ -269,6 +272,7 @@ struct NewPlaceView: View {
                 Spacer()
             }.ignoresSafeArea()
         }
+    }
         .onAppear(perform: {
             if place != nil {
                 namePlace = place?.name ?? ""

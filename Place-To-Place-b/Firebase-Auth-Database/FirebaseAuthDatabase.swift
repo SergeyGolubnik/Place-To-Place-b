@@ -27,7 +27,7 @@ class FirebaseAuthDatabase {
     static func aploadImage(photoName: String, photo: UIImage, dataUrl: String, completion: @escaping(Result <URL, Error>) -> Void) {
         
         let ref = Storage.storage().reference().child(dataUrl).child(photoName)
-        guard let imageData = photo.jpegData(compressionQuality: 0.2) else {return}
+        guard let imageData = photo.jpegData(compressionQuality: 0.1) else {return}
         
         let metodata = StorageMetadata()
         metodata.contentType = "image/jpeg"
@@ -193,11 +193,13 @@ class FirebaseAuthDatabase {
     static func updateToken(key: String,
                             switchPlace: String,
                             userId: String,
+                            nikNamePlace: String,
+                            avatarNikPlace: String,
                             phoneNumber: String,
                             newToken: String,
                             ref: DatabaseReference) {
      
-        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: newToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, nikNamePlace: nikNamePlace, avatarNikPlace: avatarNikPlace, switchPlace: switchPlace, deviseToken: newToken)
         let placeRef = ref.child(newPlace.key)
         placeRef.updateChildValues([
             "deviseToken": newToken as String
@@ -244,6 +246,8 @@ class FirebaseAuthDatabase {
     static func newPlace(name: String,
                          userId: String,
                          phoneNumber: String,
+                         nikNamePlace: String,
+                         avatarNikPlace: String,
                          location: String?,
                          latitude: String?,
                          Longitude: String?,
@@ -254,20 +258,23 @@ class FirebaseAuthDatabase {
                          discription: String,
                          gellery: [String],
                          messageBool: Bool,
+                         moderation: Bool,
                          ref: DatabaseReference,
                          completion: @escaping (AuthResult) -> Void) {
         
         guard let key = ref.child("name").childByAutoId().key else {return}
 
-        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: deviseToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, nikNamePlace: nikNamePlace, avatarNikPlace: avatarNikPlace, switchPlace: switchPlace, deviseToken: deviseToken)
                 let df = DateFormatter()
-                df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+                df.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 let now = df.string(from: Date())
                 let placeRef = ref.child(newPlace.key)
                 placeRef.setValue([
                     "userId": userId as String,
                     "name": name as String,
                     "key": key as String,
+                    "nikNamePlace": nikNamePlace as String,
+                    "avatarNikPlace" : avatarNikPlace as String,
                     "phoneNumber": phoneNumber as String,
                     "location": location! as String,
                     "latitude": latitude! as String,
@@ -279,6 +286,7 @@ class FirebaseAuthDatabase {
                     "gellery": gellery as [String],
                     "image": image! as String,
                     "messageBool": messageBool as Bool,
+                    "moderation" : moderation as Bool,
                     "date": now as String
                 ]){
                     (error: Error?, ref: DatabaseReference) in
@@ -292,6 +300,8 @@ class FirebaseAuthDatabase {
     static func updatePlace(key: String,
                             name: String,
                             userId: String,
+                            nikNamePlace: String,
+                            avatarNikPlace: String,
                             phoneNumber: String,
                             location: String?,
                             latitude: String?,
@@ -302,13 +312,17 @@ class FirebaseAuthDatabase {
                             deviseToken: String,
                             discription: String,
                             gellery: [String],
+                            messageBool: Bool,
+                            moderation: Bool,
                             ref: DatabaseReference,
                             completion: @escaping (AuthResult) -> Void) {
-        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, switchPlace: switchPlace, deviseToken: deviseToken)
+        let newPlace = PlaceModel(key: key, userId: userId, phoneNumber: phoneNumber, nikNamePlace: nikNamePlace, avatarNikPlace: avatarNikPlace, switchPlace: switchPlace, deviseToken: deviseToken)
                 let placeRef = ref.child(newPlace.key)
                 placeRef.updateChildValues([
                     "name": name as String,
                     "key": key as String,
+                    "nikNamePlace": nikNamePlace as String,
+                    "avatarNikPlace" : avatarNikPlace as String,
                     "phoneNumber": phoneNumber as String,
                     "location": location! as String,
                     "latitude": latitude! as String,
@@ -318,7 +332,9 @@ class FirebaseAuthDatabase {
                     "switchPlace": switchPlace as String,
                     "discription": discription as String,
                     "gellery": gellery as [String],
-                    "image": image! as String
+                    "image": image! as String,
+                    "messageBool": messageBool as Bool,
+                    "moderation" : moderation as Bool
                 ]){
                     (error: Error?, ref: DatabaseReference) in
                     if let error = error {

@@ -9,14 +9,14 @@
 import SwiftUI
 
 struct TabViewPlace: View {
+
     @State var newPlace = false
     @State var user: Users?
     @State var selected = 0
-    @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", switchPlace: "", deviseToken: "")
+    @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", nikNamePlace: "", avatarNikPlace: "", switchPlace: "", deviseToken: "")
     @State var goDetail = false
     @State var exitBool = false
     @StateObject var data = FirebaseData()
-    var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     
     @State var categoryArray = Category()
     
@@ -97,8 +97,12 @@ struct TabViewPlace: View {
                 data.examenationDeviseTocen()
             })
             .environmentObject(data)
+            
             .sheet(isPresented: $goDetail, content: {
-                PlaceDetals(vm: PlaceDetalsViewModel(places: placeD, user: data.user, userAll: data.userAll), place: $placeD, user: data.user, userAll: data.userAll)
+                    PlaceDetals(vm: PlaceDetalsViewModel(places: placeD, user: data.user, userAll: data.userAll), user: data.user, userAll: data.userAll)
+                        .onAppear {
+                            print("_______________________\(placeD.imageUrl)")
+                        }
             })
             .sheet(isPresented: $newPlace, content: {
                 NewPlaceView()

@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct PlaceListMap: View {
+    @State var listBool = false
     @State var locationManager = CLLocationManager()
 //    PlaceDetail
     @Binding var placeDetail: PlaceModel
@@ -21,14 +22,35 @@ struct PlaceListMap: View {
     @State var filterMy = false
     
     @State var tranferCategory = false
-    
+    @State var placeF = [PlaceModel]()
     
     var body: some View {
         
         NavigationView {
             ZStack {
-                MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
-                    .environmentObject(mapData)
+                if !listBool {
+//                Map(coordinateRegion: $mapData.region, showsUserLocation: true, annotationItems: data.places){ place in
+//                    MapAnnotation(coordinate: place.coordinate) {
+//                        Rectangle().stroke(Color.blue)
+//                                        .frame(width: 40, height: 40)
+//                                        .onTapGesture {
+//                                            goDetail = true
+//                                            placeDetail = place
+//                                        }
+//                    }
+//                }
+                
+                    MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
+                        .environmentObject(mapData)
+                } else {
+                    
+                    ListPlace(place: filter != "" ? $placeF : $data.places, detailBool: $goDetail, detailPlace: $placeDetail)
+                        .environmentObject(mapData)
+                            .padding(.bottom, 55)
+                    
+                    
+                }
+                
                 if filter != "", filter != data.user.uid {
                     VStack{
                         HStack{
@@ -53,7 +75,25 @@ struct PlaceListMap: View {
                         Spacer()
                     }
                 }
-                
+                VStack{
+                    Spacer()
+                    HStack{
+                        Spacer()
+                        Button {
+                            listBool.toggle()
+                            filter = ""
+                        } label: {
+                            Image(systemName: listBool ? "map" : "filemenu.and.cursorarrow")
+                                .font(.title2)
+                                .padding(10)
+                                .background(Color.primary)
+                                .clipShape(Circle())
+                                .padding()
+                        }
+                        
+                    }.padding(.bottom,70)
+                }
+
                 
             }
             
@@ -90,7 +130,7 @@ struct PlaceListMap: View {
         })
         
             .onChange(of: filter) { value in
-                var placeF = data.places
+                placeF = data.places
                 if value == filter, value != data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.type == filter}
                     mapData.rmovePlace(place: placeF)
@@ -116,16 +156,6 @@ struct PlaceListMap: View {
     
 }
 
-struct DiamondBackground: View {
-    var body: some View {
-        VStack {
-            Rectangle()
-                .fill(Color.gray)
-                .frame(width: 250, height: 250, alignment: .center)
-                .rotationEffect(.degrees(45.0))
-        }
-    }
-}
 struct PlaceListMap_Previews: PreviewProvider {
     static var previews: some View {
         TabViewPlace()

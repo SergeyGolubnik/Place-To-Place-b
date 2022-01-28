@@ -18,6 +18,7 @@ class FirebaseData: NSObject, ObservableObject {
     let firestore: Firestore
 //    var ref: DatabaseReference!
     var user: Users!
+    var myUser: Users!
     let db = Firestore.firestore()
     private var usersRef: CollectionReference {
         return db.collection("users")
@@ -52,6 +53,7 @@ class FirebaseData: NSObject, ObservableObject {
                 
             case .success(let myUser):
                 self?.users = myUser
+                self?.myUser = myUser
                 self?.favoritFilter()
                 self?.getDocument()
             case .failure(let error):
@@ -67,7 +69,7 @@ class FirebaseData: NSObject, ObservableObject {
                     array.append(placeModel)
                 }
             }
-            self?.places = array
+            self?.places = array.sorted(by: {$0.date! > $1.date!})
         }
         
        
@@ -78,7 +80,8 @@ class FirebaseData: NSObject, ObservableObject {
             if place.userId == user.uid {
                 if place.deviseToken != deviseToken {
                     guard let newToken = deviseToken, let ref = ref else {return}
-                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, phoneNumber: user.phoneNumber ?? "", newToken: newToken, ref: ref)
+                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, nikNamePlace: myUser.lastName ?? "", avatarNikPlace: myUser.avatarsURL!
+                                                     , phoneNumber: user.phoneNumber ?? "", newToken: newToken, ref: ref)
                 }
             }
             

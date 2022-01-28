@@ -10,8 +10,8 @@ import Firebase
 
 struct FirstPage : View {
     
-    @State var ccode = "+"
-    @State var no = ""
+    @State var ccode = "+1"
+    @State var no = "1111111111"
     @State var show = false
     @State var msg = ""
     @State var alert = false
@@ -57,7 +57,7 @@ struct FirstPage : View {
                     
                     // remove this when testing with real Phone Number
                     
-//                    Auth.auth().settings?.isAppVerificationDisabledForTesting = false
+                    Auth.auth().settings?.isAppVerificationDisabledForTesting = true
                     PhoneAuthProvider.provider().verifyPhoneNumber("+" + self.ccode + self.no, uiDelegate: nil) { (ID, err) in
                         
                         if err != nil{

@@ -24,6 +24,7 @@
 		87251B1526CD530A00DC22A9 /* ColorExtansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B1426CD530900DC22A9 /* ColorExtansion.swift */; };
 		87251B2126CD634700DC22A9 /* TabViewPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2026CD634700DC22A9 /* TabViewPlace.swift */; };
 		87251B2326CD8B8200DC22A9 /* PlaceListMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */; };
+		8725858727A3341E0037BA4C /* ListPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8725858627A3341E0037BA4C /* ListPlace.swift */; };
 		873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873243DF26DD5EB100E4F1FD /* RegisterView.swift */; };
 		873243E326DD66D400E4F1FD /* OpenGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873243E226DD66D400E4F1FD /* OpenGallary.swift */; };
 		87393D6A27987DA3007E4A3B /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87393D6927987DA3007E4A3B /* FirstPage.swift */; };
@@ -94,6 +95,7 @@
 		87251B1426CD530900DC22A9 /* ColorExtansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtansion.swift; sourceTree = "<group>"; };
 		87251B2026CD634700DC22A9 /* TabViewPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewPlace.swift; sourceTree = "<group>"; };
 		87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListMap.swift; sourceTree = "<group>"; };
+		8725858627A3341E0037BA4C /* ListPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPlace.swift; sourceTree = "<group>"; };
 		873243DF26DD5EB100E4F1FD /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		873243E226DD66D400E4F1FD /* OpenGallary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGallary.swift; sourceTree = "<group>"; };
 		87393D6927987DA3007E4A3B /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */,
+				8725858627A3341E0037BA4C /* ListPlace.swift */,
 				879512B126EA9E5100DFD212 /* PlaceDetals.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				875AE835276BC592005CFE6B /* PresentImage.swift */,
@@ -516,6 +519,7 @@
 				879512B026EA904500DFD212 /* PlaceAnnatation.swift in Sources */,
 				87251B2326CD8B8200DC22A9 /* PlaceListMap.swift in Sources */,
 				87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */,
+				8725858727A3341E0037BA4C /* ListPlace.swift in Sources */,
 				879512AC26E8028400DFD212 /* FavoritList.swift in Sources */,
 				87089B5B26E16739007AA131 /* UserError.swift in Sources */,
 				87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */,
@@ -692,7 +696,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;
@@ -717,7 +721,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;

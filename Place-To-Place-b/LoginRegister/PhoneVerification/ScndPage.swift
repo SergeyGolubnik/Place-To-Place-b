@@ -12,7 +12,7 @@ import Firebase
 
 struct ScndPage : View {
     
-    @State var code = ""
+    @State var code = "000000"
     @Binding var show : Bool
     @Binding var ID : String
     @State var msg = ""
