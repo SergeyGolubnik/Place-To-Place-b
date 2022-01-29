@@ -12,8 +12,10 @@ struct PlaceListMap: View {
     @State var listBool = false
     @State var locationManager = CLLocationManager()
 //    PlaceDetail
+    @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @Binding var placeDetail: PlaceModel
     @Binding var goDetail: Bool
+    @Binding var message: String
     
     @StateObject var mapData = MapViewModel()
     @StateObject var data = FirebaseData()
@@ -40,7 +42,7 @@ struct PlaceListMap: View {
 //                    }
 //                }
                 
-                    MapView(placeDetail: $placeDetail, goDetalsBool: $goDetail)
+                    MapView(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeDetail, goDetalsBool: $goDetail, message: $message)
                         .environmentObject(mapData)
                 } else {
                     
@@ -164,8 +166,10 @@ struct PlaceListMap_Previews: PreviewProvider {
 struct MapView: UIViewRepresentable {
     let locationManager = CLLocationManager()
     @EnvironmentObject var mapDAta: MapViewModel
+    @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @Binding var placeDetail: PlaceModel
     @Binding var goDetalsBool: Bool
+    @Binding var message: String
     @EnvironmentObject var firebaseModel: FirebaseData
     
     
@@ -193,21 +197,24 @@ struct MapView: UIViewRepresentable {
     
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, placeDetail: $placeDetail, goDetalsBool: $goDetalsBool, firebaseData: firebaseModel)
+        Coordinator(self, placeDetail: $placeDetail, goDetalsBool: $goDetalsBool, firebaseData: firebaseModel, placeDetailViewModel: $placeDetailViewModel, message: $message)
     }
     
     
     class Coordinator: NSObject, MKMapViewDelegate {
         var firebaseModel: FirebaseData
-        
+        @Binding private var placeDetailViewModel: PlaceDetalsViewModel
         @Binding private var placeDetail: PlaceModel
         @Binding private var goDetalsBool: Bool
+        @Binding private var message: String
         var parent: MapView
-        init(_ parent: MapView, placeDetail: Binding<PlaceModel>, goDetalsBool: Binding<Bool>, firebaseData: FirebaseData) {
+        init(_ parent: MapView, placeDetail: Binding<PlaceModel>, goDetalsBool: Binding<Bool>, firebaseData: FirebaseData, placeDetailViewModel: Binding<PlaceDetalsViewModel>, message: Binding<String>) {
             self.parent = parent
             self._placeDetail = placeDetail
             self._goDetalsBool = goDetalsBool
             self.firebaseModel = firebaseData
+            self._placeDetailViewModel = placeDetailViewModel
+            self._message = message
         }
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard let annotation = annotation as? PlaceModel else {return nil}
@@ -232,6 +239,8 @@ struct MapView: UIViewRepresentable {
             guard let place = view.annotation as? PlaceModel else {return}
             placeDetail = place
             goDetalsBool = true
+            message = "Прошла транзакция"
+            placeDetailViewModel = PlaceDetalsViewModel(places: place, user: firebaseModel.myUser, userAll: firebaseModel.userAll)
         }
     }
     

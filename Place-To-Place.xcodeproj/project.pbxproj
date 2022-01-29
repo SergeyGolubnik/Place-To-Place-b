@@ -64,6 +64,7 @@
 		87A9FCDB2799C56900BC90FA /* LaunchScrinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A9FCDA2799C56900BC90FA /* LaunchScrinView.swift */; };
 		87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0326D03BBF0008C719 /* PolicyView.swift */; };
 		87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */; };
+		87C1FB4A27A5779800F9BB26 /* PlaceDetalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C1FB4927A5779800F9BB26 /* PlaceDetalsViewModel.swift */; };
 		87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204726FBCC3400C22D55 /* CategoryModel.swift */; };
 		87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204B26FBD3A100C22D55 /* CategoryView.swift */; };
 		87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204D26FE820100C22D55 /* UrlImageView.swift */; };
@@ -129,6 +130,7 @@
 		87A9FCDA2799C56900BC90FA /* LaunchScrinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScrinView.swift; sourceTree = "<group>"; };
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
+		87C1FB4927A5779800F9BB26 /* PlaceDetalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetalsViewModel.swift; sourceTree = "<group>"; };
 		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		87D0204B26FBD3A100C22D55 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		87D0204D26FE820100C22D55 /* UrlImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				8761F84F27920228005695BD /* ChatModel */,
 				87089B5F26E167BC007AA131 /* PlaceModel.swift */,
+				87C1FB4927A5779800F9BB26 /* PlaceDetalsViewModel.swift */,
 				879512A926E7E1E600DFD212 /* UserModel.swift */,
 				879512AF26EA904500DFD212 /* PlaceAnnatation.swift */,
 				87D0204726FBCC3400C22D55 /* CategoryModel.swift */,
@@ -531,6 +534,7 @@
 				87251AFF26CD47CE00DC22A9 /* Place_To_Place_b.xcdatamodeld in Sources */,
 				87251AFA26CD47CE00DC22A9 /* SceneDelegate.swift in Sources */,
 				8771C07F270CD03300830908 /* UserSetings.swift in Sources */,
+				87C1FB4A27A5779800F9BB26 /* PlaceDetalsViewModel.swift in Sources */,
 				87251B1526CD530A00DC22A9 /* ColorExtansion.swift in Sources */,
 				8761F86627920526005695BD /* CreateNewMessageViewModel.swift in Sources */,
 				8761F86427920509005695BD /* ChatLogViewModel.swift in Sources */,

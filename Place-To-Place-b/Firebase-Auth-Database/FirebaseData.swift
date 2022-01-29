@@ -178,7 +178,6 @@ class FirebaseData: NSObject, ObservableObject {
                 for document in querySnapshot!.documents {
                     let userData = Users(snapshot: document.data() as NSDictionary)
                     if self?.user.uid == userData.uid {
-                        print(document.documentID)
                         if self?.deviseToken != userData.deviseToken {
                             self?.db.collection("users").document(document.documentID).updateData([
                                 "deviseToken": (self?.deviseToken)! as String

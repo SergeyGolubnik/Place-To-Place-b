@@ -13,9 +13,11 @@ struct TabViewPlace: View {
     @State var newPlace = false
     @State var user: Users?
     @State var selected = 0
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", nikNamePlace: "", avatarNikPlace: "", switchPlace: "", deviseToken: "")
     @State var goDetail = false
     @State var exitBool = false
+    @State var message = ""
     @StateObject var data = FirebaseData()
     
     @State var categoryArray = Category()
@@ -27,8 +29,9 @@ struct TabViewPlace: View {
 //            LoaderView()
         } else {
             ZStack {
+                Text(message)
 //                if selected == 0 {
-                    PlaceListMap(placeDetail: $placeD, goDetail: $goDetail)
+                PlaceListMap(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeD, goDetail: $goDetail, message: $message)
 //                }
                 if selected == 1 {
                     FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
@@ -99,10 +102,7 @@ struct TabViewPlace: View {
             .environmentObject(data)
             
             .sheet(isPresented: $goDetail, content: {
-                    PlaceDetals(vm: PlaceDetalsViewModel(places: placeD, user: data.user, userAll: data.userAll), user: data.user, userAll: data.userAll)
-                        .onAppear {
-                            print("_______________________\(placeD.imageUrl)")
-                        }
+                    PlaceDetals(vm: placeDetailViewModel)
             })
             .sheet(isPresented: $newPlace, content: {
                 NewPlaceView()
