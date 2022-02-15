@@ -33,6 +33,7 @@
 		87500CB9273015D400C07818 /* FavoritCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CB8273015D400C07818 /* FavoritCell.swift */; };
 		87500CBD273148E900C07818 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87500CBC273148E900C07818 /* GoogleService-Info.plist */; };
 		87500CC12731823F00C07818 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CC02731823F00C07818 /* Notifications.swift */; };
+		87534CB327AC00F0007A096C /* PhoneContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87534CB227AC00F0007A096C /* PhoneContactView.swift */; };
 		875AE82C276BC002005CFE6B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 875AE82B276BC002005CFE6B /* FirebaseAuth */; };
 		875AE82E276BC008005CFE6B /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 875AE82D276BC008005CFE6B /* FirebaseDatabase */; };
 		875AE830276BC00F005CFE6B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 875AE82F276BC00F005CFE6B /* FirebaseFirestore */; };
@@ -53,6 +54,7 @@
 		8771C07F270CD03300830908 /* UserSetings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8771C07E270CD03300830908 /* UserSetings.swift */; };
 		877728F92703AF5400AB244B /* StarsRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877728F82703AF5400AB244B /* StarsRatingView.swift */; };
 		877C910F26F4E72700452FD1 /* NewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877C910E26F4E72700452FD1 /* NewPlaceView.swift */; };
+		877D8F2027AC1ABC00415272 /* ToggleContacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877D8F1F27AC1ABC00415272 /* ToggleContacts.swift */; };
 		879512A826E7DF6500DFD212 /* FirebaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512A726E7DF6500DFD212 /* FirebaseData.swift */; };
 		879512AA26E7E1E600DFD212 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512A926E7E1E600DFD212 /* UserModel.swift */; };
 		879512AC26E8028400DFD212 /* FavoritList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879512AB26E8028400DFD212 /* FavoritList.swift */; };
@@ -105,6 +107,7 @@
 		87500CB8273015D400C07818 /* FavoritCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritCell.swift; sourceTree = "<group>"; };
 		87500CBC273148E900C07818 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../файлфаербасе/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		87500CC02731823F00C07818 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		87534CB227AC00F0007A096C /* PhoneContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContactView.swift; sourceTree = "<group>"; };
 		875AE835276BC592005CFE6B /* PresentImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentImage.swift; sourceTree = "<group>"; };
 		875AE837276D2A53005CFE6B /* ComentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComentsView.swift; sourceTree = "<group>"; };
 		8761F855279203C8005695BD /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
@@ -120,6 +123,7 @@
 		8771C07E270CD03300830908 /* UserSetings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetings.swift; sourceTree = "<group>"; };
 		877728F82703AF5400AB244B /* StarsRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarsRatingView.swift; sourceTree = "<group>"; };
 		877C910E26F4E72700452FD1 /* NewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceView.swift; sourceTree = "<group>"; };
+		877D8F1F27AC1ABC00415272 /* ToggleContacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleContacts.swift; sourceTree = "<group>"; };
 		879512A726E7DF6500DFD212 /* FirebaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseData.swift; sourceTree = "<group>"; };
 		879512A926E7E1E600DFD212 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		879512AB26E8028400DFD212 /* FavoritList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritList.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 				879512A926E7E1E600DFD212 /* UserModel.swift */,
 				879512AF26EA904500DFD212 /* PlaceAnnatation.swift */,
 				87D0204726FBCC3400C22D55 /* CategoryModel.swift */,
+				87D0204D26FE820100C22D55 /* UrlImageView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -185,6 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				879B208F275E512600DEEC90 /* ImagePicker.swift */,
+				877D8F1F27AC1ABC00415272 /* ToggleContacts.swift */,
+				87534CB227AC00F0007A096C /* PhoneContactView.swift */,
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
 				87DA93A22757B26B00451433 /* MapPlacePresent */,
 			);
@@ -292,7 +299,6 @@
 				87089B5826E1671B007AA131 /* AuthResalt.swift */,
 				87089B5A26E16739007AA131 /* UserError.swift */,
 				87089B5C26E1675D007AA131 /* Validators.swift */,
-				87D0204D26FE820100C22D55 /* UrlImageView.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -553,10 +559,12 @@
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
 				87500CC12731823F00C07818 /* Notifications.swift in Sources */,
 				87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */,
+				87534CB327AC00F0007A096C /* PhoneContactView.swift in Sources */,
 				87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */,
 				8761F85C2792045A005695BD /* CreateNewMessageView.swift in Sources */,
 				8761F85E279204C4005695BD /* ChatUsers.swift in Sources */,
 				87251AFC26CD47CE00DC22A9 /* ContentView.swift in Sources */,
+				877D8F2027AC1ABC00415272 /* ToggleContacts.swift in Sources */,
 				8761F860279204DB005695BD /* FirebaseStatic.swift in Sources */,
 				87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */,
 				875AE836276BC592005CFE6B /* PresentImage.swift in Sources */,

@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct PresentImage: View {
-    @Binding var image: UIImage
+    @Binding var imageUrl: String
+    @State var image = UIImage(named: "place-to-place-banner")
     @State var shareBool = false
-    @Binding var item: [Any]
+    @State var item = [Any]()
+    @State var isLoading = true
     var body: some View {
         GeometryReader { geometry in
             ZStack{
@@ -20,16 +22,28 @@ struct PresentImage: View {
                         .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
                         .frame(width: 60, height: 12, alignment: .center)
                         .padding(.top)
-                    Image(uiImage: image)
+                    Image(uiImage: image!)
                         .resizable()
                         .scaledToFill()
                         .frame(width: geometry.size.width, height: 500)
                         .clipped()
                         .padding(.top, 30)
+                        .overlay (
+                            ZStack {
+                                if isLoading {
+                                    Color.black
+                                        .opacity(0.25)
+                                    
+                                    ProgressView()
+                                        .font(.title2)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .cornerRadius(12)
+                                }
+                            })
                     Spacer()
                     Button {
                         item.removeAll()
-                        item.append(image as Any)
+                        item.append(image! as Any)
                         shareBool.toggle()
                     } label: {
                         HStack{
@@ -44,18 +58,33 @@ struct PresentImage: View {
                 
             }
         }
+        .onAppear(perform: {
+            
+            DispatchQueue.main.async {
+                downImage()
+            }
+            
+        })
         .sheet(isPresented: $shareBool) {
             ShareSheet(item: $item)
         }
         
     }
+    private func downImage(){
+        guard let imageUrl = URL(string: imageUrl) else {return}
+        do {
+            let imageData = try Data(contentsOf: imageUrl)
+            image = UIImage(data: imageData)
+        } catch {
+            print(error.localizedDescription)
+        }
+        isLoading = false
+    }
 }
 
 struct PresentImage_Previews: PreviewProvider {
     static var previews: some View {
-        let image = UIImage(named: "no_image")!
-        let item = [Any]()
-        PresentImage(image: .constant(image), item: .constant(item))
+        PresentImage(imageUrl: .constant("image"))
     }
 }
 struct ShareSheet: UIViewControllerRepresentable {

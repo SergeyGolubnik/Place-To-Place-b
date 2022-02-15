@@ -94,12 +94,12 @@ struct PlaceDetals: View {
                             ScrollView(.horizontal) {
                                 HStack {
                                     Button {
-                                        vm.imagePresent = vm.imageGeneral
-                                        vm.shareBool.toggle()
+                                        vm.imagePresent = plase.imageUrl ?? ""
+                                        vm.shareBool = true
                                     } label: {
                                         HStack {
                                             WebImage(url: URL(string: plase.imageUrl ?? ""))
-                                            //                                        Image(uiImage: vm.imageGeneral)
+//                                            Image(uiImage: vm.imageGeneral)
                                                 .resizable()
                                                 .scaledToFill()
                                                 .frame(width: 210, height: 210)
@@ -121,26 +121,26 @@ struct PlaceDetals: View {
                                         .padding(.leading, 30)
                                         
                                     }
+                                    
                                     if vm.imageGellery != [] {
                                         HStack{
                                             
                                             
                                             LazyHGrid(rows: columns) {
+                                                
                                                 ForEach(vm.imageGellery, id: \.self) { image in
-                                                    
-                                                    Image(uiImage: image)
-                                                        .resizable()
-                                                        .scaledToFill()
-                                                        .frame(width: 100, height: 100)
-                                                        .clipped()
-                                                        .cornerRadius(15)
-                                                        .onTapGesture {
-                                                            vm.imagePresent = image
-                                                            if vm.imagePresent == image {
-                                                                vm.shareBool = true
-                                                            }
-                                                            
-                                                        }
+                                                    Button{
+                                                        vm.imagePresent = image
+                                                        vm.shareBool = true
+                                                    } label: {
+                                                        WebImage(url: URL(string: image))
+//                                                        Image(uiImage: image)
+                                                            .resizable()
+                                                            .scaledToFill()
+                                                            .frame(width: 100, height: 100)
+                                                            .clipped()
+                                                            .cornerRadius(15)
+                                                    }
                                                 }
                                             }
                                             
@@ -340,10 +340,10 @@ struct PlaceDetals: View {
             StarsRatingView(placeModel: vm.places, userPlace: vm.userPlace, starsBoolView: $vm.starsBool)
         }
         .sheet(isPresented: $vm.redactPlace) {
-            NewPlaceView(place: vm.places)
+            NewPlaceView(mv: ModelNewPlaceView(place: vm.places, user: vm.user))
         }
         .sheet(isPresented: $vm.shareBool) {
-            PresentImage(image: $vm.imagePresent, item: $vm.itemImagePresent)
+            PresentImage(imageUrl: $vm.imagePresent)
         }
     }
    

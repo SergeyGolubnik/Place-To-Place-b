@@ -9,9 +9,12 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ListPlace: View {
+    @StateObject var data = FirebaseData()
+    
+    
+    @Binding var detailBool: Bool
+    @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @Binding var place: [PlaceModel]
-        @Binding var detailBool: Bool
-        @Binding var detailPlace: PlaceModel
     var body: some View {
         GeometryReader{ gometry in
             
@@ -83,7 +86,7 @@ struct ListPlace: View {
                                         Spacer()
                                         Button {
                                             detailBool.toggle()
-                                            detailPlace = plac
+                                            placeDetailViewModel = PlaceDetalsViewModel(places: plac, user: data.myUser, userAll: data.userAll)
                                         } label: {
                                             VStack{
                                                 Spacer()

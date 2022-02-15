@@ -23,6 +23,8 @@ struct PlaceListMap: View {
     @State var filter = ""
     @State var filterMy = false
     
+    @State var strungType = ""
+    
     @State var tranferCategory = false
     @State var placeF = [PlaceModel]()
     
@@ -46,8 +48,7 @@ struct PlaceListMap: View {
                         .environmentObject(mapData)
                 } else {
                     
-                    ListPlace(place: filter != "" ? $placeF : $data.places, detailBool: $goDetail, detailPlace: $placeDetail)
-                        .environmentObject(mapData)
+                    ListPlace( detailBool: $goDetail, placeDetailViewModel: $placeDetailViewModel, place: filter != "" ? $placeF : $data.places)
                             .padding(.bottom, 55)
                     
                     
@@ -124,9 +125,7 @@ struct PlaceListMap: View {
             
             locationManager.delegate = mapData
             locationManager.requestWhenInUseAuthorization()
-            DispatchQueue.main.async {
                 mapData.rmovePlace(place: data.places)
-            }
             data.fetchData()
             
         })
@@ -150,7 +149,7 @@ struct PlaceListMap: View {
 
             })
             .sheet(isPresented: $tranferCategory) {
-                CategoryView(enterType: $filter)
+                CategoryView(enterType: $filter, imageString: $strungType)
             }
             .navigationViewStyle(StackNavigationViewStyle())
     }

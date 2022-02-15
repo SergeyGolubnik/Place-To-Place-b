@@ -10,8 +10,8 @@ import Firebase
 
 struct FirstPage : View {
     
-    @State var ccode = "+1"
-    @State var no = "1111111111"
+    @State var ccode = "+7"
+    @State var no = "9773448064"
     @State var show = false
     @State var msg = ""
     @State var alert = false

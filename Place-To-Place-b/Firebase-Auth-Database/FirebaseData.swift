@@ -10,13 +10,14 @@ import Firebase
 import UIKit
 import SwiftUI
 import FirebaseFirestore
+import Contacts
 
 class FirebaseData: NSObject, ObservableObject {
     static var shared = FirebaseData()
     let auth: Auth
     let storage: Storage
     let firestore: Firestore
-//    var ref: DatabaseReference!
+    //    var ref: DatabaseReference!
     var user: Users!
     var myUser: Users!
     let db = Firestore.firestore()
@@ -30,19 +31,24 @@ class FirebaseData: NSObject, ObservableObject {
     @Published var arrayFavorit = [PlaceModel]()
     @Published var ref: DatabaseReference!
     @Published var stringArray = [String]()
+    @Published var phoneContact = [PhoneContact]()
+    @Published var userPhoneAll = [String]()
+    @Published var contactArrayAppPlace = [PhoneContact]()
+    @Published var contactArrayAppPlaceNoApp = [PhoneContact]()
     
     override init() {
         self.auth = Auth.auth()
         self.storage = Storage.storage()
         self.firestore = Firestore.firestore()
         super .init()
-        self.getUserAll()
+        
         self.fetchData()
         self.deviseToken = self.downUserData()
+        //        getContact()
     }
     
-  
-   
+    
+    
     func fetchData() {
         ref = Database.database().reference(withPath: "user")
         guard let currentUser = Auth.auth().currentUser else {return}
@@ -64,15 +70,15 @@ class FirebaseData: NSObject, ObservableObject {
             var array = [PlaceModel]()
             for item in snapshot.children {
                 let placeModel = PlaceModel(snapshot: item as! DataSnapshot)
-                if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {} else {
-                                       
+                if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId && !placeModel.phoneNumber.contains(self?.myUser.phoneNumber ?? "") {} else {
+                    
                     array.append(placeModel)
                 }
             }
             self?.places = array.sorted(by: {$0.date! > $1.date!})
         }
         
-       
+        self.getUserAll()
         
     }
     func examenationDeviseTocen() {
@@ -85,7 +91,7 @@ class FirebaseData: NSObject, ObservableObject {
                 }
             }
             
-        } 
+        }
     }
     func getUserData(user: Users, completion: @escaping (Result<Users, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
@@ -122,16 +128,19 @@ class FirebaseData: NSObject, ObservableObject {
         db.collection("users").getDocuments() {[weak self] (resalt, error) in
             
             if let error = error {
-                print("____________________________________________________________\(error.localizedDescription)")
+                print("FirebaseData____________________________________________________________\(error.localizedDescription)")
             }
+            var phoneAll = [String]()
             var array = [Users]()
             for item in resalt!.documents {
                 let user = Users(document: item)
                 array.append(user!)
+                phoneAll.append(user?.phoneNumber ?? "")
             }
             self?.userAll = array
+            self?.userPhoneAll = phoneAll
+            self?.vremPhone()
         }
-        
     }
     func favoritFilter() {
         
@@ -156,6 +165,7 @@ class FirebaseData: NSObject, ObservableObject {
     }
     
     func getImageUIImage(url: String) -> UIImage {
+        
         let defaultImage = UIImage(named: "place-to-place-banner")
         
         let imageUrlString = url
@@ -168,8 +178,9 @@ class FirebaseData: NSObject, ObservableObject {
             print(error.localizedDescription)
             return defaultImage!
         }
+        
     }
-
+    
     func getDocument(){
         db.collection("users").getDocuments() { [weak self] (querySnapshot, err) in
             if let err = err {
@@ -196,4 +207,114 @@ class FirebaseData: NSObject, ObservableObject {
             }
         }
     }
+    
+    
+    func vremPhone() {
+        self.phoneContact = [
+            PhoneContact(name: "Anna", avatarData: nil, phoneNumber: ["+11111111111", "+22222222222", "+223456789"]),
+            PhoneContact(name: "Boris", avatarData: nil, phoneNumber: ["+423456789","+22222222222"]),
+            PhoneContact(name: "Владимир", avatarData: nil, phoneNumber: ["+79163603209", "+123456789"]),
+            PhoneContact(name: "Геннадий", avatarData: nil, phoneNumber: ["+7123123"]),
+            PhoneContact(name: "Дмитрий", avatarData: nil, phoneNumber: []),
+            PhoneContact(name: "Евгений", avatarData: nil, phoneNumber: ["+7123123000000"]),
+            PhoneContact(name: "Женя", avatarData: nil, phoneNumber: ["+7123120003", "+123450006789", "+22222222222"]),
+            PhoneContact(name: "Зина", avatarData: nil, phoneNumber: ["+7120003123", "+123456789"]),
+            PhoneContact(name: "Ирина", avatarData: nil, phoneNumber: ["+712310023", "+123400056789"])
+        ]
+        var arrayPhoneContact = [PhoneContact]()
+        for userData in self.userPhoneAll {
+            for phoneContact in self.phoneContact {
+                if phoneContact.phoneNumber.contains(userData) {
+                    arrayPhoneContact.append(phoneContact)
+                    
+                }
+            }
+        }
+        self.contactArrayAppPlace = Array(Set(arrayPhoneContact.sorted { $0.name ?? "" < $1.name ?? ""}))
+        self.contactArrayAppPlaceNoApp = phoneContact.filter { !contactArrayAppPlace.contains($0) } .sorted { $0.name ?? "" < $1.name ?? ""}
+    }
+    
+//    func getContacts() -> [CNContact] { //  ContactsFilter is Enum find it below
+//
+//        let contactStore = CNContactStore()
+//        let keysToFetch = [
+//            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+//            CNContactPhoneNumbersKey,
+//            CNContactEmailAddressesKey,
+//            CNContactThumbnailImageDataKey] as [Any]
+//
+//        var allContainers: [CNContainer] = []
+//        do {
+//            allContainers = try contactStore.containers(matching: nil)
+//        } catch {
+//            print("Error fetching containers")
+//        }
+//        var results: [CNContact] = []
+//
+//        for container in allContainers {
+//            let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+//
+//            do {
+//                let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+//                results.append(contentsOf: containerResults)
+//            } catch {
+//                print("Error fetching containers")
+//            }
+//        }
+//        return results
+//    }
+//    func getContact() {
+//        var con = [PhoneContact]()
+//        for cont in getContacts() {
+//
+//            con.append(PhoneContact(contact: cont))
+//        }
+//        print(con[0].phoneNumber)
+//        self.phoneContact = Array(Set(con.sorted { $0.name ?? "" < $1.name ?? ""}))
+//        var arrayPhoneContact = [PhoneContact]()
+//        for userData in self.userPhoneAll {
+//            for phoneContact in self.phoneContact {
+//                if phoneContact.phoneNumber.contains(userData) {
+//                    arrayPhoneContact.append(phoneContact)
+//
+//                }
+//            }
+//        }
+//        self.contactArrayAppPlace = Array(Set(arrayPhoneContact.sorted { $0.name ?? "" < $1.name ?? ""}))
+//        self.contactArrayAppPlaceNoApp = phoneContact.filter { !contactArrayAppPlace.contains($0) } .sorted { $0.name ?? "" < $1.name ?? ""}
+//    }
+    
+    
 }
+
+class PhoneContact: NSObject, Identifiable {
+    
+    var id = UUID()
+    var name: String?
+    var avatarData: Data?
+    var phoneNumber: [String] = [String]()
+    var email: [String] = [String]()
+    var isSelected: Bool = false
+    var isInvited = false
+    
+    init(contact: CNContact) {
+        name        = contact.givenName + " " + contact.familyName
+        avatarData  = contact.thumbnailImageData
+        for phone in contact.phoneNumbers {
+            phoneNumber.append("+\(phone.value.stringValue.components(separatedBy: CharacterSet.decimalDigits.inverted).joined(separator: ""))")
+        }
+        for mail in contact.emailAddresses {
+            email.append(mail.value as String)
+        }
+    }
+    init(name: String?, avatarData: Data?, phoneNumber: [String] ) {
+        self.name = name
+        self.phoneNumber = phoneNumber
+        self.avatarData = avatarData
+    }
+    
+    override init() {
+        super.init()
+    }
+}
+

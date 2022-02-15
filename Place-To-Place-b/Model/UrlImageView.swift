@@ -48,12 +48,10 @@ class UrlImageModel: ObservableObject {
         guard let urlString = urlString else {
             return
         }
-        if urlString != "" {
-            let url = URL(string: urlString)!
-            let task = URLSession.shared.dataTask(with: url, completionHandler: getImageFromResponse(data:response:error:))
-            task.resume()
-        }
         
+        let url = URL(string: urlString)!
+        let task = URLSession.shared.dataTask(with: url, completionHandler: getImageFromResponse(data:response:error:))
+        task.resume()
     }
     
     

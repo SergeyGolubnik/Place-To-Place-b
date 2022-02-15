@@ -11,7 +11,6 @@ import SwiftUI
 struct TabViewPlace: View {
 
     @State var newPlace = false
-    @State var user: Users?
     @State var selected = 0
     @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", nikNamePlace: "", avatarNikPlace: "", switchPlace: "", deviseToken: "")
@@ -25,8 +24,8 @@ struct TabViewPlace: View {
     var body: some View {
         if exitBool {
             ContentView()
-//        } else if data.places == [] {
-//            LoaderView()
+        } else if data.places == [] {
+            LoaderView()
         } else {
             ZStack {
                 Text(message)
@@ -38,7 +37,7 @@ struct TabViewPlace: View {
                 } else if selected == 3 {
                     UserSetings(exitBool: $exitBool)
                 } else if selected == 2 {
-                    MainMessagesView()
+                    MainMessagesView() 
                 }
                 VStack{
                     
@@ -98,6 +97,7 @@ struct TabViewPlace: View {
             }
             .onAppear(perform: {
                 data.examenationDeviseTocen()
+                print("TabViewPlace_________________")
             })
             .environmentObject(data)
             
@@ -105,7 +105,7 @@ struct TabViewPlace: View {
                     PlaceDetals(vm: placeDetailViewModel)
             })
             .sheet(isPresented: $newPlace, content: {
-                NewPlaceView()
+                NewPlaceView(mv: ModelNewPlaceView(place: nil, user: data.myUser))
             })
         }
             

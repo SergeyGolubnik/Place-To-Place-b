@@ -14,15 +14,15 @@ class PlaceDetalsViewModel: ObservableObject {
     @Published var myFavorit = ""
     @Published var stars = "-"
     @Published var comentArray = [Comment]()
-    @Published var imageGeneral = UIImage()
-    @Published var imageGellery = [UIImage]()
+    @Published var imageGeneral = ""
+    @Published var imageGellery = [String]()
     @Published var isLoading = true
     @Published var userPlace: Users!
     @Published var userNik = ""
     @Published var categoryArray = Category()
     @Published var type = ""
     @Published var defaultImage = UIImage(named: "place-to-place-banner")
-    @Published var imagePresent = UIImage()
+    @Published var imagePresent = ""
     @Published var itemImagePresent = [Any]()
     @Published var redactPlace = false
     @Published var messageBool = false
@@ -42,7 +42,11 @@ class PlaceDetalsViewModel: ObservableObject {
         self.user = user
         self.places = places
         self.userAll = userAll
-        getData()
+        starsRating()
+        comentPlace()
+        imagePhoto()
+        self.getData()
+        
     }
     private func starsRating() {
         guard let places = places else { return }
@@ -67,12 +71,8 @@ class PlaceDetalsViewModel: ObservableObject {
         if places.coments != nil {
             var arrayCom = [Comment]()
             for (keyCom, valuesComent) in places.coments! {
-                guard let userAll = userAll else {
-                    return
-                }
-
+                guard let userAll = userAll else {return}
                 for user1 in userAll {
-                    
                     if user1.uid == keyCom {
                         var stars = 0
                         if places.rating != nil {
@@ -95,14 +95,9 @@ class PlaceDetalsViewModel: ObservableObject {
     private func imagePhoto() {
         DispatchQueue.main.async {
             guard let places = self.places else {return}
-            guard let imageUrl = places.imageUrl else {return
-                self.imageGeneral = UIImage(named: "no_image")!
-            }
-            self.imageGeneral = FirebaseData.shared.getImageUIImage(url: imageUrl)
-            
             if places.gellery != nil, places.gellery != [] {
                 for imageStringUrl in places.gellery! {
-                    self.imageGellery.append(FirebaseData.shared.getImageUIImage(url: imageStringUrl))
+                    self.imageGellery.append(imageStringUrl)
                 }
             }
             self.isLoading = false
@@ -143,9 +138,7 @@ class PlaceDetalsViewModel: ObservableObject {
                 }
             }
         }
-        starsRating()
-        comentPlace()
-        imagePhoto()
+
     }
     
 }

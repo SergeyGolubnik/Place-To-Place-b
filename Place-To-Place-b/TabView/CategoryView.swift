@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var enterType: String
+    @Binding var imageString: String
     
     @State var categoryArray = Category()
     var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
@@ -30,14 +31,15 @@ struct CategoryView: View {
                     LazyVGrid (columns: columns){
                         ForEach(categoryArray.categoryArray, id: \.id) { cat in
                             CategoryCart(cart: $enterType, image: cat.imageString!, title: cat.name!)
+                                .onTapGesture {
+                                    imageString = cat.imageString ?? ""
+                                    enterType = cat.name ?? ""
+                                    presentationMode.wrappedValue.dismiss()
+                        }
                         }
                     }
                     
                 }
-            }
-            .onChange(of: enterType) { newValue in
-                presentationMode.wrappedValue.dismiss()
-                dataNewPlace.type = enterType
             }
         }
     }
@@ -45,7 +47,7 @@ struct CategoryView: View {
 
 struct CategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryView(enterType: .constant(""))
+        CategoryView(enterType: .constant(""), imageString: .constant(""))
     }
 }
 struct CategoryCart: View {
@@ -71,9 +73,6 @@ struct CategoryCart: View {
         .padding(5)
 //        .background(Color.gray)
         .cornerRadius(10)
-        .onTapGesture {
-            cart = title
-        }
     }
 }
 struct CategoryCart_Previews: PreviewProvider {

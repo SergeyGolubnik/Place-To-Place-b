@@ -8,10 +8,11 @@
 import SwiftUI
 import Photos
 import Firebase
+import SDWebImageSwiftUI
+
 
 
 struct ImagePicker : View {
-    @Binding var imageArray: [UIImage]
     @State var image = UIImage(named: "avatar-1")
     @Binding var gelleryStringArray: [String]
     @State var show = false
@@ -29,18 +30,19 @@ struct ImagePicker : View {
             VStack{
                 
                 
-                if !self.imageArray.isEmpty{
+                if !self.gelleryStringArray.isEmpty{
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         
                         HStack(spacing: 20){
                             
-                            ForEach(self.imageArray,id: \.self){i in
+                            ForEach(self.gelleryStringArray,id: \.self){i in
                                 ZStack{
                                     VStack{
                                         
                                     
-                                    Image(uiImage: i)
+//                                    Image(uiImage: i)
+                                    WebImage(url: URL(string: i))
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 250, height: 250)
@@ -61,7 +63,7 @@ struct ImagePicker : View {
                                             }
                                             
                                         }.onTapGesture {
-                                            let index = imageArray.firstIndex(of: i)
+                                            let index = gelleryStringArray.firstIndex(of: i)
                                             let desertRef = Storage.storage().reference().child(gelleryStringArray[index!])
 
                                             // Delete the file
@@ -72,8 +74,6 @@ struct ImagePicker : View {
                                             }
                                             
                                             if gelleryStringArray.count > 0 {
-                                            print("Tap gesture\(String(describing: imageArray.firstIndex(of: i)))")
-                                            imageArray.remove(at: index!)
                                             
                                                 gelleryStringArray.remove(at: index!)
                                             }
@@ -99,7 +99,7 @@ struct ImagePicker : View {
                     isLoading = true
                 }) {
                     if gelleryStringArray.count <= 9 {
-                        Text(imageArray == [] ? "Добавить фото" : "Добавьте еще фото")
+                        Text(gelleryStringArray == [] ? "Добавить фото" : "Добавьте еще фото")
                             .foregroundColor(.white)
                             .padding(.vertical,10)
                             .frame(width: UIScreen.main.bounds.width / 2)
@@ -146,7 +146,6 @@ struct ImagePicker : View {
                     
                 case .success(let url):
                     gelleryStringArray.append(url.absoluteString)
-                    imageArray.append(image!)
                     isLoading = false
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -158,7 +157,6 @@ struct ImagePicker : View {
 
 struct ImagePicker_Previews: PreviewProvider {
     static var previews: some View {
-        let imge = UIImage(named: "fon-1")
-        ImagePicker(imageArray: .constant([imge!]), gelleryStringArray: .constant([""]))
+        ImagePicker(gelleryStringArray: .constant([""]))
     }
 }
