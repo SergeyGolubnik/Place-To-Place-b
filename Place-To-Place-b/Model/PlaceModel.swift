@@ -23,6 +23,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
     var nikNamePlace: String
     var avatarNikPlace: String
     var phoneNumber: String
+    var phoneNumberArray: [String]?
     var key: String
     var location: String?
     var type: String?
@@ -63,6 +64,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         nikNamePlace = snapshotVaiue["nikNamePlace"] as! String
         avatarNikPlace = snapshotVaiue["avatarNikPlace"] as! String
         phoneNumber = snapshotVaiue["phoneNumber"] as! String
+        phoneNumberArray = snapshotVaiue["phoneNumberArray"] as? [String]
         location = snapshotVaiue["location"] as? String
         latitude = snapshotVaiue["latitude"] as? String
         longitude = snapshotVaiue["Longitude"] as? String
@@ -81,13 +83,14 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         ref = snapshot.ref
     }
 
-    init(userId: String, name: String, key: String, nikNamePlace: String, avatarNikPlace: String, phoneNumber: String, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?, moderation: Bool?) {
+    init(userId: String, name: String, key: String, nikNamePlace: String, avatarNikPlace: String, phoneNumber: String, phoneNumberArray: [String]?, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?, moderation: Bool?) {
         self.userId = userId
         self.name = name
         self.key = key
         self.nikNamePlace = nikNamePlace
         self.avatarNikPlace = avatarNikPlace
         self.phoneNumber = phoneNumber
+        self.phoneNumberArray = phoneNumberArray
         self.location = location
         self.type = type
         self.rating = rating
@@ -131,23 +134,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
     
 }
 
-class NewPlaceModel: ObservableObject {
-    @Published var userId: String?
-    @Published var name = ""
-    @Published var key: String?
-    @Published var location = ""
-    @Published var type = ""
-    @Published var imageUrl: String?
-    @Published var latitude = ""
-    @Published var deviseToken: String?
-    @Published var longitude = ""
-    @Published var discription = ""
-    @Published var switchPlace = "Делится"
-    @Published var messageBool = true
-    @Published var gellery: [String]?
-    @Published var date: String?
-    @Published var imageURLtoUI: UIImage?
-}
+
 struct Comment: Hashable {
     var userName: String
     var userUid: String

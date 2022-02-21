@@ -16,7 +16,6 @@ class PlaceDetalsViewModel: ObservableObject {
     @Published var comentArray = [Comment]()
     @Published var imageGeneral = ""
     @Published var imageGellery = [String]()
-    @Published var isLoading = true
     @Published var userPlace: Users!
     @Published var userNik = ""
     @Published var categoryArray = Category()
@@ -44,7 +43,6 @@ class PlaceDetalsViewModel: ObservableObject {
         self.userAll = userAll
         starsRating()
         comentPlace()
-        imagePhoto()
         self.getData()
         
     }
@@ -91,17 +89,6 @@ class PlaceDetalsViewModel: ObservableObject {
             comentArray = arrayCom
         }
         
-    }
-    private func imagePhoto() {
-        DispatchQueue.main.async {
-            guard let places = self.places else {return}
-            if places.gellery != nil, places.gellery != [] {
-                for imageStringUrl in places.gellery! {
-                    self.imageGellery.append(imageStringUrl)
-                }
-            }
-            self.isLoading = false
-        }
     }
     private func getData() {
         guard let places = places else {return}

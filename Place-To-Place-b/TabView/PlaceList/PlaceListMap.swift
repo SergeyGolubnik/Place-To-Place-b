@@ -14,7 +14,7 @@ struct PlaceListMap: View {
 //    PlaceDetail
     @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @Binding var placeDetail: PlaceModel
-    @Binding var goDetail: Bool
+    @State var goDetail = false
     @Binding var message: String
     
     @StateObject var mapData = MapViewModel()
@@ -48,7 +48,7 @@ struct PlaceListMap: View {
                         .environmentObject(mapData)
                 } else {
                     
-                    ListPlace( detailBool: $goDetail, placeDetailViewModel: $placeDetailViewModel, place: filter != "" ? $placeF : $data.places)
+                    ListPlace(placeDetailViewModel: $placeDetailViewModel, place: filter != "" ? $placeF : $data.places)
                             .padding(.bottom, 55)
                     
                     
@@ -104,7 +104,7 @@ struct PlaceListMap: View {
             .navigationBarItems(leading:
                                     Button(action: {
                 filterMy.toggle()
-                filter = filterMy ? data.users.uid : ""
+                filter = filterMy ? data.user.uid : ""
             }) {
                 Text(filterMy ? "Все" : "Мои")
                     .foregroundColor(Color(.label))
@@ -127,6 +127,9 @@ struct PlaceListMap: View {
             locationManager.requestWhenInUseAuthorization()
                 mapData.rmovePlace(place: data.places)
             data.fetchData()
+            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1) {
+                print("PlaceListMap_________\(data.users)")
+            }
             
         })
         
@@ -135,7 +138,7 @@ struct PlaceListMap: View {
                 if value == filter, value != data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.type == filter}
                     mapData.rmovePlace(place: placeF)
-                } else if value == data.users.uid, filter != "" {
+                } else if value == data.user.uid, filter != "" {
                     placeF = data.places.filter {$0.userId == filter}
                     mapData.rmovePlace(place: placeF)
                 } else {
@@ -151,6 +154,9 @@ struct PlaceListMap: View {
             .sheet(isPresented: $tranferCategory) {
                 CategoryView(enterType: $filter, imageString: $strungType)
             }
+            .sheet(isPresented: $goDetail, content: {
+                    PlaceDetals(vm: placeDetailViewModel)
+            })
             .navigationViewStyle(StackNavigationViewStyle())
     }
     
@@ -236,10 +242,10 @@ struct MapView: UIViewRepresentable {
         }
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let place = view.annotation as? PlaceModel else {return}
-            placeDetail = place
-            goDetalsBool = true
-            message = "Прошла транзакция"
-            placeDetailViewModel = PlaceDetalsViewModel(places: place, user: firebaseModel.myUser, userAll: firebaseModel.userAll)
+            self.placeDetail = place
+            self.goDetalsBool = true
+            self.message = "Прошла транзакция"
+            self.placeDetailViewModel = PlaceDetalsViewModel(places: place, user: firebaseModel.myUser, userAll: firebaseModel.userAll)
         }
     }
     

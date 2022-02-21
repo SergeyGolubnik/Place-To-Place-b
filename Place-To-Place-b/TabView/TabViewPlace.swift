@@ -14,7 +14,6 @@ struct TabViewPlace: View {
     @State var selected = 0
     @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", nikNamePlace: "", avatarNikPlace: "", switchPlace: "", deviseToken: "")
-    @State var goDetail = false
     @State var exitBool = false
     @State var message = ""
     @StateObject var data = FirebaseData()
@@ -30,12 +29,12 @@ struct TabViewPlace: View {
             ZStack {
                 Text(message)
 //                if selected == 0 {
-                PlaceListMap(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeD, goDetail: $goDetail, message: $message)
+                PlaceListMap(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeD, message: $message)
 //                }
                 if selected == 1 {
-                    FavoritList(place: data.places, deailPlace: $placeD, detailPlaceBool: $goDetail)
+                    FavoritList(title: "Любимые места", place: data.places)
                 } else if selected == 3 {
-                    UserSetings(exitBool: $exitBool)
+                    UserSetings(place: data.places, user: $data.myUser, exitBool: $exitBool)
                 } else if selected == 2 {
                     MainMessagesView() 
                 }
@@ -78,7 +77,6 @@ struct TabViewPlace: View {
                         .padding(.horizontal, 10)
                         .background(CurvedShape()
                                         .ignoresSafeArea())
-                        
                         Button(action: {
                             
                             self.newPlace = true
@@ -97,13 +95,10 @@ struct TabViewPlace: View {
             }
             .onAppear(perform: {
                 data.examenationDeviseTocen()
-                print("TabViewPlace_________________")
             })
             .environmentObject(data)
             
-            .sheet(isPresented: $goDetail, content: {
-                    PlaceDetals(vm: placeDetailViewModel)
-            })
+          
             .sheet(isPresented: $newPlace, content: {
                 NewPlaceView(mv: ModelNewPlaceView(place: nil, user: data.myUser))
             })
@@ -119,16 +114,19 @@ struct TabViewPlace_Previews: PreviewProvider {
 }
 struct CurvedShape: View {
     var body: some View {
-        Path { path in
-            path.move(to: CGPoint(x: 0, y: 0))
-            path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 0))
-            path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 90))
-            path.addArc(center: CGPoint(x: UIScreen.main.bounds.width / 2, y: 90), radius: 30, startAngle: .zero, endAngle: .init(degrees: 180), clockwise: true)
-            path.addLine(to: CGPoint(x: 0, y: 90))
+        GeometryReader{ geo in
+            
+            Path { path in
+                path.move(to: CGPoint(x: geo.size.width - geo.size.width, y: geo.size.height - geo.size.height))
+                path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height - geo.size.height))
+                path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height - 7))
+//                path.addArc(center: CGPoint(x: geo.size.width / 2, y: geo.size.height - 7), radius: 30, startAngle: .zero, endAngle: .init(degrees: geo.size.width - 18), clockwise: true)
+                path.addLine(to: CGPoint(x: geo.size.width - geo.size.width, y: geo.size.height - 7))
+            }
+            .fill(Color.init(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1)))
+            .rotationEffect(.init(degrees: 180))
+            
+            
         }
-        .fill(Color.init(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1)))
-        .rotationEffect(.init(degrees: 180))
-        
-        
     }
 }

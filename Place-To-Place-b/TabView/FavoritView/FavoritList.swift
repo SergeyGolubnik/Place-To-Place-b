@@ -9,29 +9,35 @@ import SwiftUI
 import MapKit
 
 struct FavoritList: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State var title: String
     @State var placeArray = [PlaceModel]()
     @State var place: [PlaceModel]
-    @Binding var deailPlace: PlaceModel
-    @Binding var detailPlaceBool: Bool
-    @EnvironmentObject var firebaseModel: FirebaseData
+    @State var textMessage = ""
+    @State var detailPlaceBool = false
+    @StateObject var data = FirebaseData()
     var body: some View {
         
         NavigationView {
-            
-            if placeArray == [PlaceModel]() {
-                Text("У вас не отмеченно любимых мест")
-                    .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-                    .navigationBarTitle("Любимые места", displayMode: .inline)
-            } else {
-                List{
-                    
+            ZStack{
+                
+                Text(textMessage)
+                if placeArray == [PlaceModel]() {
+                    Text("У вас не отмеченно любимых мест")
+                        .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
+                        .navigationBarTitle("Любимые места", displayMode: .inline)
+                } else {
+                    List{
+                        
                         ForEach(placeArray, id: \.id) { item in
                             
-                            FavoritCell(imageURL: item.imageUrl!, name: item.name!, location: item.location!, placeRating: item.rating)
+                            FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", placeRating: item.rating)
                                 .onTapGesture {
-                                    self.deailPlace = item
                                     self.detailPlaceBool = true
                                 }
+                                .sheet(isPresented: $detailPlaceBool, content: {
+                                    PlaceDetals(vm: PlaceDetalsViewModel(places: item, user: data.user, userAll: data.userAll))
+                                })
                         }
                         
                         .onDelete { indexSet in
@@ -40,10 +46,10 @@ struct FavoritList: View {
                             for index in indexSet {
                                 
                                 placeKey = placeArray[index].key
-                                favorit = (placeArray[index].favorit?.filter {$0 != firebaseModel.user.uid})!
+                                favorit = (placeArray[index].favorit?.filter {$0 != data.user.uid})!
                                 placeArray.remove(at: index)
                             }
-                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: firebaseModel.ref) { resalt in
+                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: data.ref) { resalt in
                                 switch resalt {
                                     
                                 case .success():
@@ -53,36 +59,50 @@ struct FavoritList: View {
                                 }
                             }
                         }
+                        
+                    }
+                    .listSeparatorStyle(style: .none)
+                    
+                    .listStyle(PlainListStyle())
+                    
+                    
+                    .navigationBarColor(uiColorApp)
+                    .navigationBarTitle(title, displayMode: .inline)
+                    .toolbar  {
+                        ToolbarItemGroup(placement: .navigationBarLeading) {
+                            Button {
+                                presentationMode.wrappedValue.dismiss()
+                            } label: {
+                                Text("Выйти")
+                                    .foregroundColor(.blue)
+                            }
+
+                        }
+                    }
                 }
-                .listSeparatorStyle(style: .none)
                 
-                .listStyle(PlainListStyle())
-                
-                .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-                .navigationBarTitle("Любимые места", displayMode: .inline)
-                
-                
-               
             }
-             
-        }
+            }
         .onAppear {
-            
-            for item in place {
-                if item.favorit != nil {
-            
-                    for i in item.favorit! {
-                        if i == self.firebaseModel.users.uid {
-                            placeArray.append(item)
+            if title == "Все" {
+                placeArray = place.filter { $0.userId == data.user.uid}
+            }
+            if title == "Любимые места" {
+                
+                for item in place {
+                    if item.favorit != nil {
+                        
+                        for i in item.favorit! {
+                            if i == self.data.user.uid {
+                                placeArray.append(item)
+                            }
                         }
                     }
                 }
             }
-            print(placeArray)
         }
-        .environmentObject(firebaseModel)
         .navigationViewStyle(StackNavigationViewStyle())
-
+        
     }
     
 }

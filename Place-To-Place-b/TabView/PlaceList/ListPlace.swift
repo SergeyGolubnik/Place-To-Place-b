@@ -12,7 +12,7 @@ struct ListPlace: View {
     @StateObject var data = FirebaseData()
     
     
-    @Binding var detailBool: Bool
+    @State var detailBool = false
     @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @Binding var place: [PlaceModel]
     var body: some View {
@@ -105,7 +105,9 @@ struct ListPlace: View {
             }.padding(.horizontal, 30)
             
         }
-        
+        .sheet(isPresented: $detailBool, content: {
+            PlaceDetals(vm: placeDetailViewModel)
+        })
     }
     private func starsRating(placeRating: [String: Int]) -> Double {
         var ratingDouble = ""

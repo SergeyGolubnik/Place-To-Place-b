@@ -10,19 +10,22 @@ import SwiftUI
 
 
 struct PhoneContactView: View {
-    @ObservedObject var data = FirebaseData()
+    @StateObject var data = FirebaseData()
     @State var allUserTogle = false
     @Binding var arrayPhone: [String]
     @Binding var switchPlace: String
     @Binding var phoneContactApp: [PhoneContact]
     @Binding var phoneContactAppNoApp: [PhoneContact]
     var body: some View {
+        VStack {
+            Capsule()
+                .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
+                .frame(width: 60, height: 12, alignment: .center)
+                .padding(.vertical)
         
         List{
-            ForEach(arrayPhone, id: \.self) { i in
-                Text(i)
-            }
-            Section(header: Text("hwrvwru")) {
+            
+            Section(header: Text("Все"), footer: Text("Вы можете поделится точкой со всеми пользователями или оставть исключительно для собственного использования")) {
                 VStack{
                     HStack{
                         Text(allUserTogle ? "Видите только вы" : "Видят все")
@@ -35,21 +38,22 @@ struct PhoneContactView: View {
                             }
                             
                         }
-                        Text(switchPlace)
                     }
                 }
+                
             }
-            if !allUserTogle {
-                Section(header: Text("hwrvwru")) {
+            
+            if allUserTogle {
+                Section(header: Text("Поделитесь с друзьями")) {
                     
-                    ForEach(phoneContactApp, id: \.id) { contacts in
+                    ForEach(phoneContactApp, id: \.self) { contacts in
                         
                         if contacts.phoneNumber.count > 0 {
                             HStack{
                                 if phoneNumberContacns(pnoneContacts: contacts, phoneArray: arrayPhone) {
-                                    ToggleContacts(name: contacts.name!, phone: contacts.phoneNumber, buttonBool: true, arrayPhone: $arrayPhone)
+                                    ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, buttonBool: true, arrayPhone: $arrayPhone)
                                 } else {
-                                    ToggleContacts(name: contacts.name!, phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
+                                    ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
                                 }
                                 
                             }
@@ -59,18 +63,24 @@ struct PhoneContactView: View {
                 }
             }
             
-            Section(header: Text("hwrvwru")) {
+            Section(header: Text("Пригласите в приложение")) {
                 
-                ForEach(phoneContactAppNoApp, id: \.id) { contacts in
+                ForEach(phoneContactAppNoApp, id: \.self) { contacts in
                     
                     if contacts.phoneNumber.count > 0 {
                         HStack{
                             ToggleContactsNoApp(name: contacts.name!, phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
                         }
+                        
                     }
                 }
             }
         }
+        .onAppear(perform: {
+            if switchPlace != "Делится" {
+                allUserTogle = true
+            }
+        })
         .onChange(of: arrayPhone) { newValue in
             if newValue != [] {
                 switchPlace = "Приватно"
@@ -80,7 +90,7 @@ struct PhoneContactView: View {
         }
         
         
-        
+        }
         
     }
     private func phoneNumberContacns(pnoneContacts: PhoneContact, phoneArray: [String]) -> Bool {

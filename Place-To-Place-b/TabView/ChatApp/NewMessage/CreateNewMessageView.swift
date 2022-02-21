@@ -65,9 +65,9 @@ struct CreateNewMessageView: View {
 
 struct CreateNewMessageView_Previews: PreviewProvider {
     static var previews: some View {
-//        CreateNewMessageView(didSelectNewUser: {user in
-//
-//        })
-                MainMessagesView()
+        CreateNewMessageView(didSelectNewUser: {user in
+
+        })
+//                MainMessagesView()
     }
 }

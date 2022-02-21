@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct FavoritCell: View {
     @State var imageURL = ""
     @State var name = "Бар Ресторан дрова и угли"
     @State var location = "Москва, Большая одинокая ордынка д12 "
-    @State var rating = 3
+    @State var rating = 0
     @State var type = "Парки и скверы"
     @State var typeString = "bar"
     @State var categoryArray = Category()
@@ -22,7 +23,11 @@ struct FavoritCell: View {
         ZStack{
             HStack(spacing: 0){
                 VStack{
-                    UrlImageView(urlString: imageURL, wight: 110, height: 110, defaultImage: defaultImage!)
+                    WebImage(url: URL(string: imageURL))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 110, height: 110)
+                        .clipped()
                         .cornerRadius(4)
                         .shadow(radius: 5)
 //                        .padding()

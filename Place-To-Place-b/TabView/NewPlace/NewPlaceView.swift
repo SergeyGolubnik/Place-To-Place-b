@@ -11,7 +11,7 @@ import Firebase
 
 
 class ModelNewPlaceView: ObservableObject {
-    @StateObject var data = FirebaseData()
+    @ObservedObject var data = FirebaseData()
     
     @Published var namePlace = ""
     @Published var locationPlace = ""
@@ -24,9 +24,7 @@ class ModelNewPlaceView: ObservableObject {
     @Published var type = ""
     
     
-    @Published var isLoading = false
-    @Published var messageAlert = ""
-    @Published var titleAlert = ""
+    
     @Published var adressBool = false
     @Published var groupBool = false
     @Published var privateBool = false
@@ -59,6 +57,7 @@ class ModelNewPlaceView: ObservableObject {
         self.discription = place.discription ?? ""
         self.latitude = place.latitude ?? ""
         self.longitude = place.longitude ?? ""
+        self.arrayPhone = place.phoneNumberArray ?? []
         gelleryStringArray.append((place.imageUrl) ?? "")
         if place.gellery != nil, place.gellery != [] {
             for imageGellery in (place.gellery)! {
@@ -66,56 +65,20 @@ class ModelNewPlaceView: ObservableObject {
             }
         }
     }
-    func newPlaceGet() {
-        isLoading = true
-        var geleryArray = [String]()
-        if gelleryStringArray.count > 1 {
-            for i in gelleryStringArray[1...] {
-                geleryArray.append(i)
-            }
-        }
-        FirebaseAuthDatabase.newPlace(name: namePlace, userId: user?.uid ?? "", phoneNumber: user?.phoneNumber ?? "", nikNamePlace: user?.lastName ?? "", avatarNikPlace: user?.avatarsURL ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, moderation: false, ref: data.ref) { result in
-            
-            switch result {
-            case .success:
-                self.isLoading = false
-                self.titleAlert = "Поздравляем"
-                self.messageAlert = "Ваша точка сохранилась"
-            case .failure(let error):
-                self.titleAlert = "Ошибка"
-                self.messageAlert = error.localizedDescription
-            }
-        }
-    }
-    func rePlaceGet() {
-        isLoading = true
-        var geleryArray = [String]()
-        if gelleryStringArray.count > 1 {
-            for i in gelleryStringArray[1...] {
-                geleryArray.append(i)
-            }
-        }
-        FirebaseAuthDatabase.updatePlace(key: place!.key, name: namePlace, userId: user?.uid ?? "", nikNamePlace: user?.lastName ?? "", avatarNikPlace: user?.avatarsURL ?? "", phoneNumber: user?.phoneNumber ?? "", location: locationPlace, latitude: latitude, Longitude: longitude, type: typeString, image: gelleryStringArray[0], switchPlace: switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: discription, gellery: geleryArray, messageBool: messageBool, moderation: false, ref: data.ref) { result in
-            switch result {
-            case .success:
-                self.isLoading = false
-                self.titleAlert = "Поздравляем"
-                self.messageAlert = "Ваша точка сохранилась"
-            case .failure(let error):
-                self.titleAlert = "Ошибка"
-                self.messageAlert = error.localizedDescription
-            }
-        }
-    }
+
+    
 }
 
 
 struct NewPlaceView: View {
     
-    @ObservedObject var mv: ModelNewPlaceView
+    @StateObject var mv: ModelNewPlaceView
     @StateObject var data = FirebaseData()
     @Environment(\.presentationMode) var presentationMode
     @State var newPlaceGoo = false
+    @State var isLoading = false
+    @State var messageAlert = ""
+    @State var titleAlert = ""
     var body: some View {
         ScrollView{
             
@@ -142,12 +105,42 @@ struct NewPlaceView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                         if mv.namePlace != "", mv.locationPlace != "", mv.typeString != "",  mv.gelleryStringArray.count > 0, mv.discription != "" {
                             Button {
+                                isLoading = true
+                                var geleryArray = [String]()
+                                if mv.gelleryStringArray.count > 1 {
+                                    for i in mv.gelleryStringArray[1...] {
+                                        geleryArray.append(i)
+                                    }
+                                }
                                 if mv.place == nil {
-                                    mv.newPlaceGet()
-                                    newPlaceGoo = true
+                                    FirebaseAuthDatabase.newPlace(name: mv.namePlace, userId: mv.user?.uid ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: false, ref: data.ref) { result in
+                                        
+                                        switch result {
+                                        case .success:
+                                            self.titleAlert = "Поздравляем"
+                                            self.messageAlert = "Ваша точка сохранилась"
+                                            self.newPlaceGoo = true
+                                            self.isLoading = false
+                                        case .failure(let error):
+                                            self.titleAlert = "Ошибка"
+                                            self.messageAlert = error.localizedDescription
+                                            self.newPlaceGoo = true
+                                        }
+                                    }
                                 } else {
-                                    mv.rePlaceGet()
-                                    newPlaceGoo = true
+                                    FirebaseAuthDatabase.updatePlace(key: mv.place!.key, name: mv.namePlace, userId: mv.user?.uid ?? "", nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: false, ref: data.ref) { result in
+                                        switch result {
+                                        case .success:
+                                            self.titleAlert = "Поздравляем"
+                                            self.messageAlert = "Ваша точка сохранилась"
+                                            self.isLoading = false
+                                            self.newPlaceGoo = true
+                                        case .failure(let error):
+                                            self.titleAlert = "Ошибка"
+                                            self.messageAlert = error.localizedDescription
+                                            self.newPlaceGoo = true
+                                        }
+                                    }
                                 }
                             } label: {
                                 Text("Сохранить")
@@ -158,7 +151,7 @@ struct NewPlaceView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 5))
                             }.overlay (
                                 ZStack {
-                                    if mv.isLoading {
+                                    if isLoading {
                                         Color.black
                                             .opacity(0.25)
                                         
@@ -257,12 +250,13 @@ struct NewPlaceView: View {
                             Spacer()
                             Button {
                                 mv.privateBool.toggle()
+//                                data.getContact()
                             } label: {
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .frame(width: 100, height: 100)
                                         .foregroundColor(mv.switchPlace == "Делится" ? .green : .blue)
-                                    Text(mv.switchPlace == "Делится" ? "Видят\nвсе" : "Видите\nтолько вы")
+                                    Text(mv.switchPlace == "Делится" ? "Видят\nвсе" : mv.arrayPhone != [] ? "Видите\nтолько вы\nи друзья" : "Видите\nтолько вы")
                                         .fontWeight(.bold)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(.white)
@@ -324,13 +318,13 @@ struct NewPlaceView: View {
         .sheet(isPresented: $mv.privateBool) {
             PhoneContactView(arrayPhone: $mv.arrayPhone, switchPlace: $mv.switchPlace, phoneContactApp: $data.contactArrayAppPlace, phoneContactAppNoApp: $data.contactArrayAppPlaceNoApp)
         }
+        
         .alert(isPresented: $newPlaceGoo) {
-            Alert(title: Text(mv.titleAlert), message: Text(mv.messageAlert), dismissButton: .default(Text("Ok"), action: {
-                if mv.titleAlert == "Ошибка" {
-                    mv.messageAlert = "Попробуйте позже"
+            
+            Alert(title: Text(titleAlert), message: Text(messageAlert), dismissButton: .default(Text("Ok"), action: {
+                if titleAlert == "Ошибка" {
+                    messageAlert = "Попробуйте позже"
                 } else {
-                    self.data.places.removeAll()
-                    self.data.fetchData()
                     
                     self.presentationMode.wrappedValue.dismiss()
                     

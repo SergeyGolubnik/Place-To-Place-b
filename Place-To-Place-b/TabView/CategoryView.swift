@@ -15,7 +15,7 @@ struct CategoryView: View {
     @State var categoryArray = Category()
     var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     
-    @StateObject var dataNewPlace = NewPlaceModel()
+//    @StateObject var dataNewPlace = NewPlaceModel()
     
     var body: some View {
         ZStack {
