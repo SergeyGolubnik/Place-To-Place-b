@@ -41,10 +41,12 @@ class PlaceDetalsViewModel: ObservableObject {
         self.user = user
         self.places = places
         self.userAll = userAll
-        starsRating()
-        comentPlace()
+        self.starsRating()
+        self.comentPlace()
         self.getData()
-        
+        print("PlaceDetalsViewModel ____ imageGellery ______ \(self.imageGellery.count)")
+        print("PlaceDetalsViewModel ____ stars ______ \(self.stars)")
+        print("PlaceDetalsViewModel ____ comentArray ______ \(self.comentArray.count)")
     }
     private func starsRating() {
         guard let places = places else { return }
@@ -123,6 +125,11 @@ class PlaceDetalsViewModel: ObservableObject {
                 if i == user.uid {
                     self.myFavorit = i
                 }
+            }
+        }
+        if let plaG = places.gellery {
+            for i in plaG {
+                imageGellery.append(i)
             }
         }
 

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSContactsUsageDescription</key>
-	<string>Приложение использует ваши контакты</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -41,6 +39,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires usage of camera to function property! </string>
+	<key>NSContactsUsageDescription</key>
+	<string>Приложение использует ваши контакты</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>При использовании программы, будет определятся ваше местоположение</string>
 	<key>NSPhotoLibraryUsageDescription</key>

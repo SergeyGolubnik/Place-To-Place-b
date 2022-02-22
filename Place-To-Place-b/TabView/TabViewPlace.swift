@@ -32,7 +32,7 @@ struct TabViewPlace: View {
                 PlaceListMap(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeD, message: $message)
 //                }
                 if selected == 1 {
-                    FavoritList(title: "Любимые места", place: data.places)
+                    FavoritList(placeDetailViewModel: $placeDetailViewModel, title: "Любимые места",  place: data.places)
                 } else if selected == 3 {
                     UserSetings(place: data.places, user: $data.myUser, exitBool: $exitBool)
                 } else if selected == 2 {

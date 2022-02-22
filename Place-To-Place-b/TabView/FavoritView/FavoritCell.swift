@@ -61,7 +61,7 @@ struct FavoritCell: View {
                                 ForEach(1...5, id: \.self) {index in
                                     Image(index <= rating ? "filledStar" : "emptyStar")
                                         .resizable()
-                                        .frame(width: 25, height: 25)
+                                        .frame(width: 20, height: 20)
                                         .foregroundColor(.orange)
                                         
                                 }

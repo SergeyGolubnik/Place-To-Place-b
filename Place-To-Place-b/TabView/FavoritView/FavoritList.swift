@@ -10,12 +10,12 @@ import MapKit
 
 struct FavoritList: View {
     @Environment(\.presentationMode) var presentationMode
+    @Binding var placeDetailViewModel: PlaceDetalsViewModel
     @State var title: String
     @State var placeArray = [PlaceModel]()
     @State var place: [PlaceModel]
     @State var textMessage = ""
     @State var detailPlaceBool = false
-    @StateObject var data = FirebaseData()
     var body: some View {
         
         NavigationView {
@@ -24,32 +24,29 @@ struct FavoritList: View {
                 Text(textMessage)
                 if placeArray == [PlaceModel]() {
                     Text("У вас не отмеченно любимых мест")
-                        .navigationBarColor(#colorLiteral(red: 0.9960784314, green: 0.8784313725, blue: 0.5254901961, alpha: 1))
-                        .navigationBarTitle("Любимые места", displayMode: .inline)
                 } else {
                     List{
                         
                         ForEach(placeArray, id: \.id) { item in
-                            
-                            FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", placeRating: item.rating)
-                                .onTapGesture {
-                                    self.detailPlaceBool = true
-                                }
-                                .sheet(isPresented: $detailPlaceBool, content: {
-                                    PlaceDetals(vm: PlaceDetalsViewModel(places: item, user: data.user, userAll: data.userAll))
-                                })
+                            Button  {
+                                self.placeDetailViewModel = PlaceDetalsViewModel(places: item, user: FirebaseData.shared.myUser, userAll: FirebaseData.shared.userAll)
+                                self.detailPlaceBool = true
+                                print("FavoritList ---- detailPlaceBool --- \(self.detailPlaceBool)")
+                            } label: {
+                                FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", placeRating: item.rating)
+                            }.foregroundColor(.black)
+                                
                         }
-                        
                         .onDelete { indexSet in
                             var favorit = [String]()
                             var placeKey = ""
                             for index in indexSet {
                                 
                                 placeKey = placeArray[index].key
-                                favorit = (placeArray[index].favorit?.filter {$0 != data.user.uid})!
+                                favorit = (placeArray[index].favorit?.filter {$0 != FirebaseData.shared.user.uid})!
                                 placeArray.remove(at: index)
                             }
-                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: data.ref) { resalt in
+                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: FirebaseData.shared.ref) { resalt in
                                 switch resalt {
                                     
                                 case .success():
@@ -61,20 +58,16 @@ struct FavoritList: View {
                         }
                         
                     }
-                    .listSeparatorStyle(style: .none)
-                    
-                    .listStyle(PlainListStyle())
-                    
-                    
-                    .navigationBarColor(uiColorApp)
-                    .navigationBarTitle(title, displayMode: .inline)
                     .toolbar  {
                         ToolbarItemGroup(placement: .navigationBarLeading) {
-                            Button {
-                                presentationMode.wrappedValue.dismiss()
-                            } label: {
-                                Text("Выйти")
-                                    .foregroundColor(.blue)
+                            if title == "Все" {
+                                
+                                Button {
+                                    presentationMode.wrappedValue.dismiss()
+                                } label: {
+                                    Text("Выйти")
+                                        .foregroundColor(.blue)
+                                }
                             }
 
                         }
@@ -82,10 +75,13 @@ struct FavoritList: View {
                 }
                 
             }
+            .navigationBarColor(uiColorApp)
+            .navigationBarTitle(title, displayMode: .inline)
             }
+        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             if title == "Все" {
-                placeArray = place.filter { $0.userId == data.user.uid}
+                placeArray = place.filter { $0.userId == FirebaseData.shared.user.uid}
             }
             if title == "Любимые места" {
                 
@@ -93,7 +89,7 @@ struct FavoritList: View {
                     if item.favorit != nil {
                         
                         for i in item.favorit! {
-                            if i == self.data.user.uid {
+                            if i == FirebaseData.shared.user.uid {
                                 placeArray.append(item)
                             }
                         }
@@ -101,8 +97,9 @@ struct FavoritList: View {
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        
+        .sheet(isPresented: $detailPlaceBool, content: {
+            PlaceDetals(vm: placeDetailViewModel)
+        })
     }
     
 }
@@ -113,36 +110,3 @@ struct PlaceList_Previews: PreviewProvider {
     }
 }
 
-
-struct PlaceListView: View {
-    
-    
-    var body: some View {
-        
-        VStack{
-            
-        }
-        
-    }
-    
-}
-
-
-struct ListSeparatorStyle: ViewModifier {
-    
-    let style: UITableViewCell.SeparatorStyle
-    
-    func body(content: Content) -> some View {
-        content
-            .onAppear() {
-                UITableView.appearance().separatorStyle = self.style
-            }
-    }
-}
- 
-extension View {
-    
-    func listSeparatorStyle(style: UITableViewCell.SeparatorStyle) -> some View {
-        ModifiedContent(content: self, modifier: ListSeparatorStyle(style: style))
-    }
-}

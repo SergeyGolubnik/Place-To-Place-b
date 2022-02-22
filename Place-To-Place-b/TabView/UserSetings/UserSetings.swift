@@ -10,6 +10,9 @@ import Firebase
 import SDWebImageSwiftUI
 
 struct UserSetings: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
+    @State var title = "Все"
     @State var avatarUpdate = false
     @State var placeMy = false
     @State var place = [PlaceModel]()
@@ -36,41 +39,50 @@ struct UserSetings: View {
                 }.padding()
                 VStack{
                     List{
-                        NavigationLink("Ваши места", isActive: $placeMy) {
-                            FavoritList(title: "Все", place: place)
+                        Button {
+                            self.placeMy = true
+                        } label: {
+                            HStack{
+                                Text("Ваши места")
+                            }
+                           
+                        }
+                    }
+                    List{
+                        Button(action: {
+                            do {
+                                try Auth.auth().signOut()
+                                exitBool = true
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                            
+                        }) {
+                            Text("Выход")
+                            
                             
                         }
-
-                    }
-                }
-                Spacer()
-                    Button(action: {
-                        do {
-                            try Auth.auth().signOut()
-                            exitBool = true
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                        
-                    }) {
-                        Text("Выход")
-                            .frame(width: 70, height: 30, alignment: .center)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.gray)
-                            .cornerRadius(10)
                     }
                 
+                
+                    
+                }
             }
             
             .background(Color(.init(gray: 0.7, alpha: 0.19)))
             .navigationBarColor(uiColorApp)
-            
-            .navigationBarTitle(user.lastName ?? "")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(false)
+            .navigationBarTitle(user.lastName ?? "",displayMode: .inline)
+            .fullScreenCover(isPresented: $placeMy) {
+                dismiss()
+            } content: {
+                FavoritList(placeDetailViewModel: $placeDetailViewModel, title: title, place: place)
+            }
+
         }
-        
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+    func dismiss() {
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

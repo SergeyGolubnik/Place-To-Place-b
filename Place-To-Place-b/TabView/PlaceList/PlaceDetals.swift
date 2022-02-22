@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 
 struct PlaceDetals: View {
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm: PlaceDetalsViewModel
     // Chat
     @State var chatUser: ChatUsers?
@@ -322,6 +323,9 @@ struct PlaceDetals: View {
                 }
             }
         }
+        .onAppear {
+            print("PlaceDetals_____________on")
+        }
         .fullScreenCover(isPresented: $vm.messageBool) {
             ChatLogView(vm: chatLogViewModel)
         }
@@ -334,10 +338,13 @@ struct PlaceDetals: View {
         .sheet(isPresented: $vm.shareBool) {
             PresentImage(imageUrl: $vm.imagePresent)
         }
+        
     }
    
     
-    
+    func dismiss() {
+        presentationMode.wrappedValue.dismiss()
+    }
    
    
 }
