@@ -16,6 +16,7 @@ struct FavoritList: View {
     @State var place: [PlaceModel]
     @State var textMessage = ""
     @State var detailPlaceBool = false
+    
     var body: some View {
         
         NavigationView {
@@ -30,7 +31,12 @@ struct FavoritList: View {
                         ForEach(placeArray, id: \.id) { item in
                             Button  {
                                 self.placeDetailViewModel = PlaceDetalsViewModel(places: item, user: FirebaseData.shared.myUser, userAll: FirebaseData.shared.userAll)
-                                self.detailPlaceBool = true
+                                
+                                if title != "Все", title != "Любимые места" {
+                                    presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    self.detailPlaceBool = true
+                                }
                                 print("FavoritList ---- detailPlaceBool --- \(self.detailPlaceBool)")
                             } label: {
                                 FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", placeRating: item.rating)
@@ -38,29 +44,17 @@ struct FavoritList: View {
                                 
                         }
                         .onDelete { indexSet in
-                            var favorit = [String]()
-                            var placeKey = ""
-                            for index in indexSet {
-                                
-                                placeKey = placeArray[index].key
-                                favorit = (placeArray[index].favorit?.filter {$0 != FirebaseData.shared.user.uid})!
-                                placeArray.remove(at: index)
-                            }
-                            FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: FirebaseData.shared.ref) { resalt in
-                                switch resalt {
-                                    
-                                case .success():
-                                    break
-                                case .failure(let error):
-                                    print(error.localizedDescription)
-                                }
+                            if title == "Все" {
+                                deletePlace(indexSet: indexSet)
+                            } else if title == "Любимые места" {
+                                deleteFavorit(indexSet: indexSet)
                             }
                         }
                         
-                    }
+                    }.listStyle(.plain)
                     .toolbar  {
                         ToolbarItemGroup(placement: .navigationBarLeading) {
-                            if title == "Все" {
+                            if title != "Любимые места" {
                                 
                                 Button {
                                     presentationMode.wrappedValue.dismiss()
@@ -82,8 +76,7 @@ struct FavoritList: View {
         .onAppear {
             if title == "Все" {
                 placeArray = place.filter { $0.userId == FirebaseData.shared.user.uid}
-            }
-            if title == "Любимые места" {
+            } else if title == "Любимые места" {
                 
                 for item in place {
                     if item.favorit != nil {
@@ -95,13 +88,40 @@ struct FavoritList: View {
                         }
                     }
                 }
+            } else {
+                placeArray = place.filter { $0.userId == placeDetailViewModel.places?.userId}
             }
         }
         .sheet(isPresented: $detailPlaceBool, content: {
             PlaceDetals(vm: placeDetailViewModel)
         })
     }
-    
+    private func deleteFavorit(indexSet: IndexSet) {
+        var favorit = [String]()
+        var placeKey = ""
+        for index in indexSet {
+            placeKey = placeArray[index].key
+            favorit = (placeArray[index].favorit?.filter {$0 != FirebaseData.shared.user.uid})!
+            placeArray.remove(at: index)
+        }
+        FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: FirebaseData.shared.ref) { resalt in
+            switch resalt {
+                
+            case .success():
+                break
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    private func deletePlace(indexSet: IndexSet) {
+        var placeK: PlaceModel!
+        for index in indexSet {
+            placeK = placeArray[index]
+            placeArray.remove(at: index)
+        }
+        FirebaseAuthDatabase.remowePlace(key: placeK.key, ref: FirebaseData.shared.ref, image: placeK.imageUrl ?? "", gellery: placeK.gellery ?? [])
+    }
 }
 
 struct PlaceList_Previews: PreviewProvider {

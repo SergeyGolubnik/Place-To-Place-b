@@ -40,7 +40,7 @@ struct LoaderView: View {
             VStack {
                 Circle()
                     .trim(from: 0.3, to: 1)
-                    .stroke(Color.white, lineWidth: 2)
+                    .stroke(Color(.gray), lineWidth: 2)
                     .frame(width:50, height: 50)
                     .padding(.all, 8)
                     .rotationEffect(.degrees(isSpinCircle ? 0 : -360), anchor: .center)
@@ -57,6 +57,7 @@ struct LoaderView_Previews: PreviewProvider {
     static var previews: some View {
         
         LoaderView()
+        LoaderView().preferredColorScheme(.dark)
     }
 }
 import Combine

@@ -220,6 +220,28 @@ class FirebaseAuthDatabase {
             "favorit": favorit as [String]
         ])
     }
+    static func remowePlace(key: String, ref: DatabaseReference, image: String, gellery: [String]) {
+        if image != "" {
+            let desertRef = Storage.storage().reference().child(image)
+            desertRef.delete { error in
+                if let error = error {
+                    print("Tap gesture delete\(error.localizedDescription)")
+                }
+            }
+        }
+        if gellery != [] {
+            for imageG in gellery {
+                let desertRef = Storage.storage().reference().child(imageG)
+                desertRef.delete { error in
+                  if let error = error {
+                      print("Tap gesture delete\(error.localizedDescription)")
+                  }
+                }
+            }
+        }
+        let placeRef = ref.child(key)
+        placeRef.removeValue()
+    }
     static func aploadGellery(key: String, gellery: [String], ref: DatabaseReference, completion: @escaping(Result <Void, Error>) -> Void) {
         
         let placeRef = ref.child(key)
@@ -240,7 +262,34 @@ class FirebaseAuthDatabase {
         ])
     }
     
-    
+    static func updateAvatarImage(user: Users, image: UIImage, completion: @escaping(Result <URL, Error>) -> Void){
+        guard user.avatarsURL != nil else {return}
+        let desertRef = Storage.storage().reference().child(user.avatarsURL ?? "")
+        desertRef.delete { error in
+            if let error = error {
+                print("Tap gesture delete\(error.localizedDescription)")
+            }
+        }
+        self.aploadImage(photoName: user.uid, photo: image, dataUrl: "avatars") { result in
+            switch result {
+                
+            case .success(let url):
+                completion(.success(url))
+                let db = Firestore.firestore()
+                db.collection("users").document(user.uid).updateData([
+                    "avatarsURL": url.absoluteString
+                ]) { (error) in
+                    if let error = error {
+                        completion(.failure(error))
+                        print(error.localizedDescription)
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     
     static func newPlace(name: String,
@@ -299,6 +348,7 @@ class FirebaseAuthDatabase {
                     }
                   }
         }
+    
     static func updatePlace(key: String,
                             name: String,
                             userId: String,
@@ -348,6 +398,7 @@ class FirebaseAuthDatabase {
                     }
                   }
             }
+    
         
 }
 

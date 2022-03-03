@@ -7,24 +7,25 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import MapKit
 
 
 struct PlaceDetals: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var vm: PlaceDetalsViewModel
+    @StateObject var vm: PlaceDetalsViewModel
     // Chat
     @State var chatUser: ChatUsers?
     @StateObject var vw = MainMessagesViewModel()
-    
-    
-   
+    @StateObject var dataMap = MapViewModelPresent()
+    @StateObject var data = FirebaseData()
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     
     var chatLogViewModel = ChatLogViewModel(chatUser: nil, chatCurentUser: nil)
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
     
     
     
-     
+    
     var body: some View {
         
         ZStack {
@@ -38,10 +39,10 @@ struct PlaceDetals: View {
                             .frame(width: 60, height: 12, alignment: .center)
                             .padding(.vertical)
                         HStack{
-                                Text(plase.name ?? "")
-                                    .font(.title)
-                                    .fontWeight(.heavy)
-                                    .padding(.leading)
+                            Text(plase.name ?? "")
+                                .font(.title)
+                                .fontWeight(.heavy)
+                                .padding(.leading)
                             
                             Spacer()
                             if plase.userId == vm.user!.uid {
@@ -100,13 +101,13 @@ struct PlaceDetals: View {
                                     } label: {
                                         HStack {
                                             WebImage(url: URL(string: plase.imageUrl ?? ""))
-//                                            Image(uiImage: vm.imageGeneral)
+                                            //                                            Image(uiImage: vm.imageGeneral)
                                                 .resizable()
                                                 .scaledToFill()
                                                 .frame(width: 210, height: 210)
                                                 .clipped()
                                                 .cornerRadius(15)
-                                                
+                                            
                                         }
                                         .padding(.leading, 30)
                                         
@@ -124,7 +125,7 @@ struct PlaceDetals: View {
                                                         vm.shareBool = true
                                                     } label: {
                                                         WebImage(url: URL(string: image))
-//                                                        Image(uiImage: image)
+                                                        //                                                        Image(uiImage: image)
                                                             .resizable()
                                                             .scaledToFill()
                                                             .frame(width: 100, height: 100)
@@ -189,9 +190,12 @@ struct PlaceDetals: View {
                                 
                                 //                            if vm.places.avatarNikPlace != nil {
                                 Button(action: {
+                                    placeDetailViewModel.places = vm.places
+                                    placeDetailViewModel.user = vm.user
+                                    placeDetailViewModel.userAll = vm.userAll
                                     vm.userPlaceBool.toggle()
                                 }) {
-                                    Image(uiImage: FirebaseData.shared.getImageUIImage(url: plase.avatarNikPlace))
+                                    WebImage(url: URL(string: plase.avatarNikPlace))
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .clipShape(Circle())
@@ -323,11 +327,21 @@ struct PlaceDetals: View {
                 }
             }
         }
-        .onAppear {
-            print("PlaceDetals_____________on")
-        }
+//        .onChange(of: placeDetailViewModel, perform: { newValue in
+//            if placeDetailViewModel == newValue {
+//                self.vm.places = self.placeDetailViewModel.places
+//            }
+//        })
         .fullScreenCover(isPresented: $vm.messageBool) {
             ChatLogView(vm: chatLogViewModel)
+        }
+//        .fullScreenCover(isPresented: $vm.userPlaceBool) {
+//            FavoritList(placeDetailViewModel: $placeDetailViewModel, title: vm.places?.name ?? "", place: data.places)
+//        }
+        .fullScreenCover(isPresented: $vm.userPlaceBool) {
+            dismiss()
+        } content: {
+            FavoritList(placeDetailViewModel: $placeDetailViewModel, title: vm.places?.name ?? "", place: data.places)
         }
         .sheet(isPresented: $vm.starsBool) {
             StarsRatingView(placeModel: vm.places, userPlace: vm.userPlace, starsBoolView: $vm.starsBool)
@@ -338,15 +352,32 @@ struct PlaceDetals: View {
         .sheet(isPresented: $vm.shareBool) {
             PresentImage(imageUrl: $vm.imagePresent)
         }
-        
+        .actionSheet(isPresented: $vm.navigationBool) {
+            ActionSheet(title: Text("Построить маршрут"), message: nil, buttons: [
+                .default(Text("Apple")) {
+                    let lanchOption = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsMapSpanKey]
+                    vm.places?.mapItem?.openInMaps(launchOptions: lanchOption)
+                },
+                .default(Text("Yandex")) {
+                    guard let longitude = Float((vm.places?.longitude) ?? "") else {return}
+                    guard let latitude = Float((vm.places?.latitude) ?? "") else {return}
+                    guard let urlYandex = URL(string: "yandexnavi://build_route_on_map/?lat_to=\(latitude)&lon_to=\(longitude)") else {return}
+                    if UIApplication.shared.canOpenURL(urlYandex) {
+                        UIApplication.shared.open(urlYandex, options: [:])
+                    }
+                },
+                .cancel(Text("Выход"))
+            ])
+        }
     }
-   
+    
     
     func dismiss() {
-        presentationMode.wrappedValue.dismiss()
+        vm.places = placeDetailViewModel.places
+        vm.getData()
     }
-   
-   
+    
+    
 }
 
 struct PlaceDetals_Previews: PreviewProvider {

@@ -9,6 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ListPlace: View {
+    
     @StateObject var data = FirebaseData()
     
     

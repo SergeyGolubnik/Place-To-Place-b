@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 struct PresentImage: View {
     @Binding var imageUrl: String
@@ -22,24 +24,20 @@ struct PresentImage: View {
                         .fill(LinearGradient(gradient: Gradient(colors: [Color.white, Color.gray]), startPoint: .top, endPoint: .bottom))
                         .frame(width: 60, height: 12, alignment: .center)
                         .padding(.top)
-                    Image(uiImage: image!)
+                    WebImage(url: URL(string: imageUrl))
+                        .onSuccess { image, data, cacheType in
+                          
+                        }
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: 500)
+                        .placeholder(Image(systemName: "photo"))
+                        .placeholder {
+                            Rectangle().foregroundColor(.gray)
+                        }
+                        .indicator(.activity) // Activity Indicator
+                        .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                        .scaledToFit()
+                        .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .center)
                         .clipped()
-                        .padding(.top, 30)
-                        .overlay (
-                            ZStack {
-                                if isLoading {
-                                    Color.black
-                                        .opacity(0.25)
-                                    
-                                    ProgressView()
-                                        .font(.title2)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .cornerRadius(12)
-                                }
-                            })
                     Spacer()
                     Button {
                         item.removeAll()

@@ -130,10 +130,11 @@ struct MessageView: View {
 
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
-        //        NavigationView {
-        //            ChatLogView(chatUser: .init(data: ["uid": "jtscJf1sAocUXWIcHKjvZfVjGma2", "name": "Sergey2", "email": "sergey82823@mail.ru"]))
-        //        }
-        MainMessagesView()
+        let chatLog = ChatLogViewModel(chatUser: ChatUsers(name: "Sergey", uid: "1234567", phoneNumber: "7903888888234", profileImage: "", token: ""), chatCurentUser: ChatUsers(name: "Sergey", uid: "1234567", phoneNumber: "7903888888234", profileImage: "", token: ""))
+                NavigationView {
+                    ChatLogView(vm: chatLog)
+                }
+//        MainMessagesView()
         
     }
 }

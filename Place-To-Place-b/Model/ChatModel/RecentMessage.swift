@@ -26,11 +26,14 @@ struct RecentMessage: Identifiable {
         self.fromId = data[FirebaseStatic.fromId] as? String ?? ""
         self.toId = data[FirebaseStatic.toId] as? String ?? ""
         self.profileImageUrl = data[FirebaseStatic.profileImageUrl] as? String ?? ""
-        self.timestamp = data[FirebaseStatic.toId] as? Date ?? Date()
+        self.timestamp = data[FirebaseStatic.timestamp] as? Date ?? Date()
     }
     var timeAgo: String {
         let formater = RelativeDateTimeFormatter()
         formater.unitsStyle = .abbreviated
+        print(timestamp)
+        print("\(Date())")
+        print(formater.localizedString(for: timestamp, relativeTo: Date()))
         return formater.localizedString(for: timestamp, relativeTo: Date())
     }
 }

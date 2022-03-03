@@ -59,7 +59,7 @@ class ChatLogViewModel: ObservableObject {
             .document(fromId)
             .collection(toId)
             .document()
-        let messageData = [FirebaseStatic.fromId: fromId, FirebaseStatic.toId: toId, FirebaseStatic.text: chatText, "timestamp": Timestamp()] as [String: Any]
+        let messageData = [FirebaseStatic.fromId: fromId, FirebaseStatic.toId: toId, FirebaseStatic.text: chatText, "timestamp": Date()] as [String: Any]
         document.setData(messageData) { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -97,7 +97,7 @@ class ChatLogViewModel: ObservableObject {
             .collection("messages")
             .document(toId)
         let data = [
-            FirebaseStatic.timestamp: Timestamp(),
+            FirebaseStatic.timestamp: Date(),
             FirebaseStatic.text: self.chatText,
             FirebaseStatic.fromId: uid,
             FirebaseStatic.toId: toId,
@@ -117,7 +117,7 @@ class ChatLogViewModel: ObservableObject {
             .collection("messages")
             .document(uid)
         let dataTo = [
-            FirebaseStatic.timestamp: Timestamp(),
+            FirebaseStatic.timestamp: Date(),
             FirebaseStatic.text: self.chatText,
             FirebaseStatic.fromId: toId,
             FirebaseStatic.toId: uid,

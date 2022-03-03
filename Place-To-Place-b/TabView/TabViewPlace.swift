@@ -109,6 +109,7 @@ struct TabViewPlace: View {
 
 struct TabViewPlace_Previews: PreviewProvider {
     static var previews: some View {
+        TabViewPlace().preferredColorScheme(.dark)
         TabViewPlace()
     }
 }

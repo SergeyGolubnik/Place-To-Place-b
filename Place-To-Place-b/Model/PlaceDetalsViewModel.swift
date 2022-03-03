@@ -41,8 +41,7 @@ class PlaceDetalsViewModel: ObservableObject {
         self.user = user
         self.places = places
         self.userAll = userAll
-        self.starsRating()
-        self.comentPlace()
+        
         self.getData()
         print("PlaceDetalsViewModel ____ imageGellery ______ \(self.imageGellery.count)")
         print("PlaceDetalsViewModel ____ stars ______ \(self.stars)")
@@ -92,7 +91,8 @@ class PlaceDetalsViewModel: ObservableObject {
         }
         
     }
-    private func getData() {
+    func getData() {
+        imageGellery.removeAll()
         guard let places = places else {return}
         if places.userId != "" {
 
@@ -132,7 +132,8 @@ class PlaceDetalsViewModel: ObservableObject {
                 imageGellery.append(i)
             }
         }
-
+        self.starsRating()
+        self.comentPlace()
     }
     
 }

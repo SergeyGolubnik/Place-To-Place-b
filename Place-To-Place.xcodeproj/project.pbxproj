@@ -67,6 +67,7 @@
 		87B25E0426D03BBF0008C719 /* PolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0326D03BBF0008C719 /* PolicyView.swift */; };
 		87B25E0826D03EA20008C719 /* WebViewRepresentebel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */; };
 		87C1FB4A27A5779800F9BB26 /* PlaceDetalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C1FB4927A5779800F9BB26 /* PlaceDetalsViewModel.swift */; };
+		87CE923F27D0C61B0058C2D7 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CE923E27D0C61B0058C2D7 /* NetworkExtension.framework */; };
 		87D0204826FBCC3400C22D55 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204726FBCC3400C22D55 /* CategoryModel.swift */; };
 		87D0204C26FBD3A100C22D55 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204B26FBD3A100C22D55 /* CategoryView.swift */; };
 		87D0204E26FE820200C22D55 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0204D26FE820100C22D55 /* UrlImageView.swift */; };
@@ -135,6 +136,7 @@
 		87B25E0326D03BBF0008C719 /* PolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyView.swift; sourceTree = "<group>"; };
 		87B25E0726D03EA20008C719 /* WebViewRepresentebel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentebel.swift; sourceTree = "<group>"; };
 		87C1FB4927A5779800F9BB26 /* PlaceDetalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetalsViewModel.swift; sourceTree = "<group>"; };
+		87CE923E27D0C61B0058C2D7 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		87D0204726FBCC3400C22D55 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		87D0204B26FBD3A100C22D55 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		87D0204D26FE820100C22D55 /* UrlImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				875AE832276BC018005CFE6B /* FirebaseMessaging in Frameworks */,
 				875AE82C276BC002005CFE6B /* FirebaseAuth in Frameworks */,
 				875AE834276BC020005CFE6B /* FirebaseStorage in Frameworks */,
+				87CE923F27D0C61B0058C2D7 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +223,7 @@
 			children = (
 				87251AF626CD47CE00DC22A9 /* Place-To-Place-b */,
 				87251AF526CD47CE00DC22A9 /* Products */,
+				87CE923D27D0C61B0058C2D7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -412,6 +416,14 @@
 				875AE837276D2A53005CFE6B /* ComentsView.swift */,
 			);
 			path = PlaceList;
+			sourceTree = "<group>";
+		};
+		87CE923D27D0C61B0058C2D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87CE923E27D0C61B0058C2D7 /* NetworkExtension.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		87DA93A22757B26B00451433 /* MapPlacePresent */ = {

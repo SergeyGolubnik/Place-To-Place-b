@@ -13,72 +13,170 @@ struct UserSetings: View {
     @Environment(\.presentationMode) var presentationMode
     @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
     @State var title = "Все"
-    @State var avatarUpdate = false
     @State var placeMy = false
+    @State var supportBooll = false
     @State var place = [PlaceModel]()
     @Binding var user: Users
     @Binding var exitBool: Bool
+    @State var alertDelete = false
+    @State var showImagePicker: Bool = false
+    @State var imageURL = ""
+    @State var image = UIImage(named: "avatar-1")
+    @State var showSheet: Bool = false
+    @State var sourceType: UIImagePickerController.SourceType = .camera
     var body: some View {
         NavigationView {
             
             VStack{
                 VStack{
-                    WebImage(url: URL(string: user.avatarsURL ?? ""))
+                    WebImage(url: URL(string: imageURL))
+                        .onSuccess { image, data, cacheType in
+                            
+                        }
                         .resizable()
+                        .placeholder(Image(systemName: "photo")) // Placeholder Image
+                    // Supports ViewBuilder as well
+                        .placeholder {
+                            Rectangle().foregroundColor(.gray)
+                        }
+                        .indicator(.activity) // Activity Indicator
+                        .transition(.fade(duration: 0.5)) // Fade Transition with duration
                         .scaledToFill()
                         .frame(width: 150, height: 150)
                         .cornerRadius(150)
                         .clipped()
-                        .shadow(radius: 5)
                     Button {
-                        avatarUpdate = true
+                        showSheet = true
                     } label: {
                         Text("Изменить")
                     }
-
+                    
                 }.padding()
                 VStack{
-                    List{
-                        Button {
-                            self.placeMy = true
-                        } label: {
-                            HStack{
-                                Text("Ваши места")
-                            }
-                           
+                    Button {
+                        self.placeMy = true
+                    } label: {
+                        HStack{
+                            Text("Ваши места")
+                                .padding()
+                            Spacer()
                         }
+                        .foregroundColor(.black)
+                        .frame(width: 320, height: 30)
+                        .background(Color.white)
+                        .cornerRadius(10)
                     }
-                    List{
-                        Button(action: {
-                            do {
-                                try Auth.auth().signOut()
-                                exitBool = true
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                            
-                        }) {
-                            Text("Выход")
-                            
-                            
-                        }
-                    }
-                
-                
                     
+                    Button(action: {
+                        do {
+                            try Auth.auth().signOut()
+                            exitBool = true
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                        
+                    }) {
+                        HStack{
+                            
+                            Text("Выход")
+                                .padding()
+                            Spacer()
+                        }
+                        .foregroundColor(.red)
+                        .frame(width: 320, height: 30)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                    }
+                    .padding()
+                    .padding(.top, 50)
+                    
+                    Button {
+                        self.alertDelete = true
+                    } label: {
+                        HStack{
+                            Text("Выйти и удалить")
+                                .padding()
+                            Spacer()
+                        }
+                        .foregroundColor(.red)
+                        .frame(width: 320, height: 30)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                    }
+                    Button {
+                        self.supportBooll = true
+                    } label: {
+                        HStack{
+                            Text("Написать в техпотдержку")
+                                .padding()
+                            Spacer()
+                        }
+                        .foregroundColor(.blue)
+                        .frame(width: 320, height: 30)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                    }
                 }
+                Spacer()
             }
             
-            .background(Color(.init(gray: 0.7, alpha: 0.19)))
             .navigationBarColor(uiColorApp)
             .navigationBarTitle(user.lastName ?? "",displayMode: .inline)
+            .onAppear {
+                imageURL = user.avatarsURL ?? ""
+            }
             .fullScreenCover(isPresented: $placeMy) {
                 dismiss()
             } content: {
                 FavoritList(placeDetailViewModel: $placeDetailViewModel, title: title, place: place)
             }
-
+            .sheet(isPresented: $showImagePicker, content: {
+                OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
+            })
+            
+            .actionSheet(isPresented: $showSheet) {
+                ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
+                    .default(Text("Галерея")) {
+                        self.showImagePicker = true
+                        self.sourceType = .photoLibrary
+                    },
+                    .default(Text("Камера")) {
+                        self.showImagePicker = true
+                        self.sourceType = .camera
+                    },
+                    .cancel(Text("Выход"))
+                ])
+            }
+            .onChange(of: image, perform: { newValue in
+                if newValue == newValue {
+                    FirebaseAuthDatabase.updateAvatarImage(user: user, image: newValue!) { result in
+                        switch result {
+                            
+                        case .success(let url):
+                            imageURL = url.absoluteString
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            })
+            .alert(isPresented: $alertDelete) {
+                Alert(title: Text("Выйти и удалить"), message: Text("Удаления аккаунта и выход. Вы не сможете его востоновить"), primaryButton: .cancel(Text("Выйти")), secondaryButton: .default(Text("Ok"), action: {
+                    let user = Auth.auth().currentUser
+                    
+                    user?.delete { error in
+                        if let error = error {
+                            print(error.localizedDescription)
+                        } else {
+                            exitBool = true
+                        }
+                    }
+                }))
+            }
+            .background(Color(.init(gray: 0.7, alpha: 0.19)))
+            .ignoresSafeArea(edges: .bottom)
         }
+        
         .navigationViewStyle(StackNavigationViewStyle())
     }
     func dismiss() {

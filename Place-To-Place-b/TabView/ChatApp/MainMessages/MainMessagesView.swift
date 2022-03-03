@@ -38,14 +38,14 @@ struct MainMessagesView: View {
                 Text(vw.chatCurentUser?.name ?? "")
                     .font(.system(size: 24, weight: .bold))
                 
-                HStack {
-                    Circle()
-                        .foregroundColor(.green)
-                        .frame(width: 14, height: 14)
-                    Text("online")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(.lightGray))
-                }
+//                HStack {
+//                    Circle()
+//                        .foregroundColor(.green)
+//                        .frame(width: 14, height: 14)
+//                    Text("online")
+//                        .font(.system(size: 12))
+//                        .foregroundColor(Color(.lightGray))
+//                }
                 
             }
             
@@ -128,8 +128,8 @@ struct MainMessagesView: View {
                             }
                             Spacer()
                             
-                            Text(recientMessage.timeAgo)
-                                .font(.system(size: 14, weight: .semibold))
+//                            Text(recientMessage.timeAgo)
+//                                .font(.system(size: 14, weight: .semibold))
                         }
                     }
                     

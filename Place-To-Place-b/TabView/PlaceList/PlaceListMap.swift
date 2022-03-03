@@ -107,7 +107,7 @@ struct PlaceListMap: View {
                 filter = filterMy ? data.user.uid : ""
             }) {
                 Text(filterMy ? "Все" : "Мои")
-                    .foregroundColor(Color(.label))
+                    .foregroundColor(.black)
             }
                                     ,trailing:
                                     Button(action: {
@@ -165,6 +165,7 @@ struct PlaceListMap: View {
 
 struct PlaceListMap_Previews: PreviewProvider {
     static var previews: some View {
+        TabViewPlace().preferredColorScheme(.dark)
         TabViewPlace()
     }
 }
@@ -256,7 +257,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var mapView = MKMapView()
     
     @Published var region: MKCoordinateRegion!
-    
+    @Published var latitude: CGFloat!
     func rmovePlace(place: [PlaceModel]) {
         
         mapView.removeAnnotations(mapView.annotations)
@@ -287,6 +288,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         self.mapView.setRegion(self.region, animated: true)
         self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
-        
+        self.latitude = location.coordinate.latitude
     }
 }
