@@ -15,10 +15,10 @@ import Firebase
 
 
 struct MainMessagesView: View {
-    @StateObject var vw = MainMessagesViewModel()
+    @ObservedObject var vw = MainMessagesViewModel()
     @StateObject var createModel = CreateNewMessageViewModel()
     @State var shouIdNavigateToChatLogView = false
-//    @State var shouldShowLogOutOptions = false
+    //    @State var shouldShowLogOutOptions = false
     @State var shouldShowNewMessageScreen = false
     @State var chatUser: ChatUsers?
     private var chatLogViewModel = ChatLogViewModel(chatUser: nil, chatCurentUser: nil)
@@ -37,38 +37,11 @@ struct MainMessagesView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(vw.chatCurentUser?.name ?? "")
                     .font(.system(size: 24, weight: .bold))
-                
-//                HStack {
-//                    Circle()
-//                        .foregroundColor(.green)
-//                        .frame(width: 14, height: 14)
-//                    Text("online")
-//                        .font(.system(size: 12))
-//                        .foregroundColor(Color(.lightGray))
-//                }
-                
             }
-            
             Spacer()
-//            Button {
-//                shouldShowLogOutOptions.toggle()
-//            } label: {
-//                Image(systemName: "gear")
-//                    .font(.system(size: 24, weight: .bold))
-//                    .foregroundColor(Color(.label))
-//            }
         }
         .padding()
         .background(colorApp)
-//        .actionSheet(isPresented: $shouldShowLogOutOptions) {
-//            .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
-//                .destructive(Text("Sign Out"), action: {
-//                    print("handle sign out")
-//                    vw.handleSignOut()
-//                }),
-//                .cancel()
-//            ])
-//        }
     }
     
     var body: some View {
@@ -77,24 +50,19 @@ struct MainMessagesView: View {
             VStack {
                 customNavBar
                 messagesView
-//                NavigationLink("", isActive: $shouIdNavigateToChatLogView) {
-//                    ChatLogView(vm: chatLogViewModel)
-//                }
             }
             .navigationBarColor(uiColorApp)
-//            .overlay(newMessageButton, alignment: .bottom)
             .padding(.bottom, 50)
             .navigationBarHidden(true)
         }
     }
     
     private var messagesView: some View {
-        ScrollView {
+        List {
             
             ForEach(vw.recientMessage) { recientMessage in
                 VStack {
                     Button {
-                        print("recientMessage nil image \(recientMessage.profileImageUrl)")
                         let uid = FirebaseData.shared.auth.currentUser?.uid == recientMessage.fromId ? recientMessage.toId : recientMessage.fromId
                         self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: "")
                         self.chatLogViewModel.chatUser = self.chatUser
@@ -128,59 +96,80 @@ struct MainMessagesView: View {
                             }
                             Spacer()
                             
-//                            Text(recientMessage.timeAgo)
-//                                .font(.system(size: 14, weight: .semibold))
+                            //                            Text(recientMessage.timeAgo)
+                            //                                .font(.system(size: 14, weight: .semibold))
                         }
                     }
-                    
-                    Divider()
-                        .padding(.vertical, 8)
-                }.padding(.horizontal)
-                
-            }.padding(.bottom, 50)
-                .fullScreenCover(isPresented: $shouIdNavigateToChatLogView) {
-                    ChatLogView(vm: chatLogViewModel)
-                    
+                    .padding(.vertical, 8)
                 }
+                .padding(.horizontal)
+            }.onDelete { indexSet in
+                deleteChat(indexSet: indexSet)
+            }
+            .fullScreenCover(isPresented: $shouIdNavigateToChatLogView) {
+                ChatLogView(vm: chatLogViewModel)
+                
+            }
         }
+        .listStyle(.plain)
     }
     
-//    private var newMessageButton: some View {
-//            Button {
-//                shouldShowNewMessageScreen.toggle()
-//            } label: {
-//                HStack {
-//                    Spacer()
-//                    Text("+ New Message")
-//                        .font(.system(size: 16, weight: .bold))
-//                    Spacer()
-//                }
-//                .foregroundColor(.white)
-//                .padding(.vertical)
-//                .background(Color.blue)
-//                .cornerRadius(32)
-//                .padding(.horizontal)
-//                .shadow(radius: 15)
-//            }
-//        .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
-//            CreateNewMessageView(didSelectNewUser: {user in
-//                self.chatUser = user
-//                self.shouIdNavigateToChatLogView.toggle()
-//                self.chatLogViewModel.chatUser = user
-//                self.chatLogViewModel.chatCurentUser = vw.chatCurentUser
-//                self.chatLogViewModel.fetchMessage()
-//                print(user.name)
-//            })
-//        }
-//    }
     
+    private func deleteChat(indexSet: IndexSet){
+        var messageR: RecentMessage!
+        for index in indexSet {
+            messageR = vw.recientMessage[index]
+            
+            
+        }
+        deleteFirestore(messageR: messageR, indexSet: indexSet)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            
+            print(vw.recientMessage)
+        }
+        
+    }
+    private func deleteFirestore(messageR: RecentMessage, indexSet: IndexSet) {
+        let uid = FirebaseData.shared.auth.currentUser?.uid == messageR.fromId ? messageR.toId : messageR.fromId
+        self.chatUser = ChatUsers(name: messageR.name, uid: uid, phoneNumber: messageR.phoneNumber, profileImage: messageR.profileImageUrl, token: "")
+        self.chatLogViewModel.chatUser = self.chatUser
+        self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
+        self.chatLogViewModel.fetchMessage()
+        let uidR = messageR.fromId
+        print(uidR)
+        let db = Firestore.firestore()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            
+            print(chatLogViewModel.chatMessages)
+            for document in chatLogViewModel.chatMessages {
+                db.collection("messages").document(uidR).collection(messageR.toId).document(document.documentId).delete() { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    }
+                }
+            }
+        }
+        db.collection("recent_message").document(uidR).collection("messages").document(messageR.toId).delete() { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                db.collection("messages").document(uidR).delete() { err in
+                    if let err = err {
+                        print("Error removing document: \(err)")
+                    } else {
+                        vw.recientMessage.remove(atOffsets: indexSet)
+                    }
+                }
+            }
+        }
+        
+    }
 }
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
         MainMessagesView()
             .preferredColorScheme(.dark)
-        
         MainMessagesView()
     }
 }

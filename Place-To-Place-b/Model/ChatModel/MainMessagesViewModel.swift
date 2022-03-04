@@ -27,8 +27,8 @@ class MainMessagesViewModel: ObservableObject {
     
     func fethRecientMessage() {
         guard let uid = FirebaseData.shared.auth.currentUser?.uid else {return}
-        //        firestoreLisener?.remove()
-        //        self.recientMessage.removeAll()
+            firestoreLisener?.remove()
+            self.recientMessage.removeAll()
         FirebaseData.shared.firestore
             .collection("recent_message")
             .document(uid)

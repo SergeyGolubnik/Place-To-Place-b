@@ -15,6 +15,7 @@ struct ChatMessage: Identifiable {
     let fromId, toId, text: String
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
+        
         self.fromId = data[FirebaseStatic.fromId] as? String ?? ""
         self.toId = data[FirebaseStatic.toId] as? String ?? ""
         self.text = data[FirebaseStatic.text] as? String ?? ""

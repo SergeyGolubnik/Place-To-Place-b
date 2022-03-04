@@ -24,6 +24,11 @@ struct UserSetings: View {
     @State var image = UIImage(named: "avatar-1")
     @State var showSheet: Bool = false
     @State var sourceType: UIImagePickerController.SourceType = .camera
+    
+    @StateObject var vw = MainMessagesViewModel()
+    @State var chatUser: ChatUsers?
+    var chatLogViewModel = ChatLogViewModel(chatUser: nil, chatCurentUser: nil)
+    
     var body: some View {
         NavigationView {
             
@@ -104,6 +109,11 @@ struct UserSetings: View {
                         .cornerRadius(10)
                     }
                     Button {
+                        let uid = supportUid
+                        self.chatUser = ChatUsers(name: supportName, uid: uid, phoneNumber: supportPhone, profileImage: supportPhoto, token: "")
+                        self.chatLogViewModel.chatUser = self.chatUser
+                        self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
+                        self.chatLogViewModel.fetchMessage()
                         self.supportBooll = true
                     } label: {
                         HStack{
@@ -146,6 +156,9 @@ struct UserSetings: View {
                     },
                     .cancel(Text("Выход"))
                 ])
+            }
+            .fullScreenCover(isPresented: $supportBooll) {
+                ChatLogView(vm: chatLogViewModel)
             }
             .onChange(of: image, perform: { newValue in
                 if newValue == newValue {
