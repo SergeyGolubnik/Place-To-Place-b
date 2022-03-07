@@ -199,7 +199,7 @@ struct UserSetings: View {
 
 struct UserSetings_Previews: PreviewProvider {
     static var previews: some View {
-        UserSetings(user: .constant(Users(lastName: "Sergey", email: "sergey8282@list.ru", avatarsURL: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/avatars%2FxWqXJkftXjZKlf1JCBHY1dkvdPN2?alt=media&token=45dc9b14-f65d-44e5-9d90-6867faa419ae", uid: "12343234", deviseToken: "ewtv4t", phoneNumber: "+79773448064")), exitBool: .constant(false))
+        UserSetings(user: .constant(Users(lastName: "Sergey", email: "sergey8282@list.ru", avatarsURL: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/avatars%2FxWqXJkftXjZKlf1JCBHY1dkvdPN2?alt=media&token=45dc9b14-f65d-44e5-9d90-6867faa419ae", uid: "12343234", deviseToken: "ewtv4t", phoneNumber: "+79773448064", blokUser: nil)), exitBool: .constant(false))
     }
 }
 

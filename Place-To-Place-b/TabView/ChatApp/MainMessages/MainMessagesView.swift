@@ -63,7 +63,7 @@ struct MainMessagesView: View {
             ForEach(vw.recientMessage) { recientMessage in
                 VStack {
                     Button {
-                        let uid = FirebaseData.shared.auth.currentUser?.uid == recientMessage.fromId ? recientMessage.toId : recientMessage.fromId
+                        let uid = recientMessage.toId
                         self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: "")
                         self.chatLogViewModel.chatUser = self.chatUser
                         self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser

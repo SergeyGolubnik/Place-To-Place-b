@@ -91,7 +91,7 @@ class FirebaseData: ObservableObject {
             if place.userId == user.uid {
                 if place.deviseToken != deviseToken {
                     guard let newToken = deviseToken, let ref = ref else {return}
-                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, nikNamePlace: user.lastName ?? "", avatarNikPlace: myUser.avatarsURL ?? ""
+                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, nikNamePlace: user.lastName ?? "", avatarNikPlace: user.avatarsURL ?? ""
                                                      , phoneNumber: user.phoneNumber ?? "", newToken: newToken, ref: ref)
                 }
             }

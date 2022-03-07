@@ -64,7 +64,7 @@ struct Users: Hashable, Decodable {
         rep["deviseToken"] = deviseToken
         return rep as [String : Any]
     }
-    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String, phoneNumber: String) {
+    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String, phoneNumber: String, blokUser: [String]?) {
         self.lastName = lastName
         self.avatarsURL = avatarsURL
         self.uid = uid
@@ -86,4 +86,24 @@ struct Users: Hashable, Decodable {
         let lowercasedFilter = filter.lowercased()
         return lastName!.lowercased().contains(lowercasedFilter)
     }
+}
+struct BlokUser: Hashable, Decodable {
+    var blokUser: String
+    init?(document: QueryDocumentSnapshot) {
+        let data = document.data()
+        guard let blokUser = data["blokUser"] as? String else { return nil }
+        
+        self.blokUser = blokUser
+    }
+    init(uid: String) throws {
+        blokUser = uid
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(blokUser)
+    }
+    
+    static func == (lhs: BlokUser, rhs: BlokUser) -> Bool {
+        return lhs.blokUser == rhs.blokUser
+    }
+    
 }
