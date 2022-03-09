@@ -18,9 +18,6 @@ struct ChatLogView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm: ChatLogViewModel
     @State var popapSetings = false
-    @State var blokUser = false
-    @State var blokUserTo = false
-    @State var uidFrend = ""
     
     var body: some View {
         NavigationView {
@@ -50,7 +47,7 @@ struct ChatLogView: View {
                 Text(vm.messageError)
                 
                             .background(Color(.init(white: 0.95, alpha: 1)))
-                if blokUser {
+                if vm.blokUser {
                     Text("\(vm.chatUser?.name ?? "") не готов(а) с вами общаться")
                         .padding()
                 } else {
@@ -111,72 +108,33 @@ struct ChatLogView: View {
             .tolbarPopover(show: $popapSetings, content: {
                 Button {
                     let arrayUser = [vm.chatCurentUser?.uid, vm.chatUser?.uid]
-                    
+                    guard let toId = vm.chatUser?.uid else {return}
                     let uid = FirebaseData.shared.user.uid
-                    if blokUserTo {
-                        FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").document(uidFrend).delete() { (error) in
+                    if vm.blokUserTo {
+                        FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").document(toId).delete() { (error) in
                             if let error = error {
                                 print(error.localizedDescription)
                             }
                         }
-                        blokUserTo = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            vm.blokUserTo = false
+                        }
+                        
                     } else {
                         
-                        FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").document(uidFrend).setData([
-                            "blokUser": uidFrend
+                        FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").document(toId).setData([
+                            "blokUser": toId
                         ]) { (error) in
                             if let error = error {
                                 print(error.localizedDescription)
                             }
                         }
-                        blokUserTo = true
                     }
                     print("\(arrayUser)")
                 } label: {
-                    Text(blokUserTo ? "Разблокировать" : "Заблокировать" )
+                    Text(vm.blokUserTo ? "Разблокировать" : "Заблокировать" )
+                        .foregroundColor(vm.blokUserTo ? .blue : .red)
                 }
-            })
-            .onAppear(perform: {
-                
-                let arrayUser = [vm.chatCurentUser?.uid, vm.chatUser?.uid]
-                let uid = FirebaseData.shared.user.uid
-                
-                for userFr in arrayUser {
-                    if uid != userFr {
-                        uidFrend = userFr ?? ""
-                    }
-                }
-                FirebaseData.shared.firestore.collection("users").document(uidFrend).collection("blokUser").getDocuments() {(resalt, error) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    }
-                    guard let resalt = resalt else {return}
-                    for item in resalt.documents {
-                        guard let userBlok = BlokUser(document: item) else {return}
-                        if userBlok.blokUser == uid {
-                            self.blokUser = true
-                        }
-                    }
-                    
-                }
-                FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").getDocuments() {(resalt, error) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    }
-                    guard let resalt = resalt else {return}
-                    for item in resalt.documents {
-                        guard let userBlok = BlokUser(document: item) else {return}
-                        if userBlok.blokUser == uidFrend {
-                            self.blokUserTo = true
-                        }
-                        
-                        
-                    }
-                    
-                }
-                print(blokUser)
-                print(blokUserTo)
-                
             })
             .onDisappear {
                 vm.firestoreLisener?.remove()

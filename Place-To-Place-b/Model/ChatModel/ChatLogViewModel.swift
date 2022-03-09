@@ -13,6 +13,8 @@ import Firebase
 class ChatLogViewModel: ObservableObject {
     @Published var chatText = ""
     @Published var chatMessages = [ChatMessage]()
+    @Published var blokUser = false
+    @Published var blokUserTo = false
     var messageError = ""
     var chatUser: ChatUsers?
     var chatCurentUser: ChatUsers?
@@ -23,6 +25,8 @@ class ChatLogViewModel: ObservableObject {
         fetchMessage()
     }
     var firestoreLisener: ListenerRegistration?
+    var firestoreLisenerUserBlok: ListenerRegistration?
+    var firestoreLisenerUserBlokTo: ListenerRegistration?
     
     func fetchMessage() {
         guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
@@ -49,7 +53,8 @@ class ChatLogViewModel: ObservableObject {
                     self.count += 1
                 }
             }
-        
+       
+        self.blokUserUid()
     }
     func handleSend() {
         guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
@@ -132,6 +137,44 @@ class ChatLogViewModel: ObservableObject {
             }
         }
     }
-    
+    func blokUserUid() {
+        guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
+        guard let toId = chatUser?.uid else {return}
+        print(fromId)
+        print(toId)
+        firestoreLisenerUserBlok?.remove()
+        firestoreLisenerUserBlok = FirebaseData.shared.firestore.collection("users").document(toId).collection("blokUser").addSnapshotListener {quereSnapshot, error in
+            if let error = error {
+                print("______________________________\(error.localizedDescription)")
+                return
+            }
+            var array = [String]()
+            quereSnapshot?.documentChanges.forEach({ change in
+                    let data = change.document.data()
+                    let userBlok = BlokUser(data: data)
+                    array.append(userBlok!.blokUser)
+                
+            })
+            
+            self.blokUser = array.contains(fromId)
+        }
+        firestoreLisenerUserBlokTo?.remove()
+        firestoreLisenerUserBlokTo = FirebaseData.shared.firestore.collection("users").document(fromId).collection("blokUser").addSnapshotListener { quereSnapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            var array = [String]()
+            quereSnapshot?.documentChanges.forEach({ change in
+                    let data = change.document.data()
+                    let userBlok = BlokUser(data: data)
+                    array.append(userBlok!.blokUser)
+                
+            })
+            self.blokUserTo = array.contains(toId)
+        }
+        
+        
+    }
     @Published var count = 0
 }
