@@ -95,6 +95,12 @@ struct BlokUser: Hashable, Decodable {
         
         self.blokUser = blokUser
     }
+    init?(data: [String: Any]) {
+        
+        let blokUser = data["blokUser"] as? String ?? ""
+        
+        self.blokUser = blokUser
+    }
     init(uid: String) throws {
         blokUser = uid
     }
