@@ -64,7 +64,7 @@ struct MainMessagesView: View {
                 VStack {
                     Button {
                         let uid = recientMessage.toId
-                        self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: "")
+                        self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: recientMessage.tocen)
                         self.chatLogViewModel.chatUser = self.chatUser
                         self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
                         self.chatLogViewModel.fetchMessage()
@@ -88,11 +88,30 @@ struct MainMessagesView: View {
                                 Text(recientMessage.name)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(Color(.label))
-                                Text(recientMessage.text)
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color(.lightGray))
-                                    .multilineTextAlignment(.leading)
-                                    .lineLimit(2)
+                                if recientMessage.imageURL != "" {
+                                    WebImage(url: URL(string: recientMessage.imageURL))
+                                        .onSuccess { image, data, cacheType in
+                                            
+                                        }
+                                        .resizable()
+                                        .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                    // Supports ViewBuilder as well
+                                        .placeholder {
+                                            Rectangle().foregroundColor(.gray)
+                                        }
+                                        .indicator(.activity) // Activity Indicator
+                                        .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                        .scaledToFill()
+                                        .frame(maxWidth: 40, maxHeight: 30)
+                                        .cornerRadius(1)
+                                        .clipped()
+                                } else {
+                                    Text(recientMessage.text)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(.lightGray))
+                                        .multilineTextAlignment(.leading)
+                                        .lineLimit(2)
+                                }
                             }
                             Spacer()
                             
@@ -131,7 +150,7 @@ struct MainMessagesView: View {
     }
     private func deleteFirestore(messageR: RecentMessage, indexSet: IndexSet) {
         let uid = FirebaseData.shared.auth.currentUser?.uid == messageR.fromId ? messageR.toId : messageR.fromId
-        self.chatUser = ChatUsers(name: messageR.name, uid: uid, phoneNumber: messageR.phoneNumber, profileImage: messageR.profileImageUrl, token: "")
+        self.chatUser = ChatUsers(name: messageR.name, uid: uid, phoneNumber: messageR.phoneNumber, profileImage: messageR.profileImageUrl, token: messageR.tocen)
         self.chatLogViewModel.chatUser = self.chatUser
         self.chatLogViewModel.chatCurentUser = self.vw.chatCurentUser
         self.chatLogViewModel.fetchMessage()
@@ -142,6 +161,12 @@ struct MainMessagesView: View {
             
             print(chatLogViewModel.chatMessages)
             for document in chatLogViewModel.chatMessages {
+                let desertRef = Storage.storage().reference().child(document.image)
+                desertRef.delete { error in
+                    if let error = error {
+                        print("Tap gesture delete\(error.localizedDescription)")
+                    }
+                }
                 db.collection("messages").document(uidR).collection(messageR.toId).document(document.documentId).delete() { err in
                     if let err = err {
                         print("Error updating document: \(err)")

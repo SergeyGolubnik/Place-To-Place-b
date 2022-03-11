@@ -8,7 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestore
-
+import SDWebImageSwiftUI
 
 
 
@@ -18,7 +18,10 @@ struct ChatLogView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm: ChatLogViewModel
     @State var popapSetings = false
-    
+    @State var showImagePicker: Bool = false
+    @State var image = UIImage(named: "avatar-1")
+    @State var showSheet: Bool = false
+    @State var sourceType: UIImagePickerController.SourceType = .camera
     var body: some View {
         NavigationView {
             
@@ -53,9 +56,15 @@ struct ChatLogView: View {
                 } else {
                     
                     HStack {
-                        //                    Image(systemName: "photo.on.rectangle")
-                        //                        .font(.system(size: 24))
-                        //                        .foregroundColor(Color(.darkGray))
+                        Button {
+                            showSheet = true
+                        } label: {
+                            Image(systemName: "photo.on.rectangle")
+                                .font(.system(size: 24))
+                                .foregroundColor(Color(.darkGray))
+                        }
+
+                                            
                         TextEditor(text: $vm.chatText)
                             .frame(height: 35)
                             .cornerRadius(5)
@@ -139,30 +148,118 @@ struct ChatLogView: View {
             .onDisappear {
                 vm.firestoreLisener?.remove()
             }
+            .sheet(isPresented: $showImagePicker, content: {
+                OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
+            })
+            
+            .actionSheet(isPresented: $showSheet) {
+                ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
+                    .default(Text("Галерея")) {
+                        self.showImagePicker = true
+                        self.sourceType = .photoLibrary
+                    },
+                    .default(Text("Камера")) {
+                        self.showImagePicker = true
+                        self.sourceType = .camera
+                    },
+                    .cancel(Text("Выход"))
+                ])
+            }
+            .onChange(of: image) { newValue in
+                if newValue == newValue {
+                    guard let image = image else {return}
+                    guard let imageNameUid = vm.chatCurentUser?.uid else {return}
+                    let photoName = ("\(imageNameUid)\(UUID())")
+                    FirebaseAuthDatabase.aploadImage(photoName: photoName, photo: image, dataUrl: "chatImage") { result in
+                        switch result {
+                            
+                        case .success(let url):
+                            vm.imageMessageURL = url.absoluteString
+                            vm.handleSend()
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                }
+            }
         }
     }
 }
 struct MessageView: View {
     let message: ChatMessage
+    @State var shareBool = false
+    @State var image = ""
     var body: some View {
         
         HStack{
             if message.fromId == FirebaseData.shared.auth.currentUser?.uid {
                 Spacer()
                 HStack{
+
+                    if message.image != "" {
+                        Button {
+                            image = message.image
+                            shareBool = true
+                        } label: {
+                            
+                            WebImage(url: URL(string: message.image))
+                                .onSuccess { image, data, cacheType in
+                                    
+                                }
+                                .resizable()
+                                .placeholder(Image(systemName: "photo")) // Placeholder Image
+                            // Supports ViewBuilder as well
+                                .placeholder {
+                                    Rectangle().foregroundColor(.gray)
+                                }
+                                .indicator(.activity) // Activity Indicator
+                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                .scaledToFill()
+                                .frame(maxWidth: 150, maxHeight: 150)
+                                .cornerRadius(10)
+                                .clipped()
+                        }
+                    } else {
                     Text(message.text)
                         .foregroundColor(.black)
+                    }
                 }
-                .padding()
+                .padding(message.image != "" ? 0 : 10)
                 .background(colorApp)
                 .cornerRadius(8)
             } else {
                 
                 HStack{
-                    Text(message.text)
-                        .foregroundColor(.black)
+                    if message.image != "" {
+                        Button {
+                            image = message.image
+                            shareBool = true
+                        } label: {
+                            
+                            WebImage(url: URL(string: message.image))
+                                .onSuccess { image, data, cacheType in
+                                    
+                                }
+                                .resizable()
+                                .placeholder(Image(systemName: "photo")) // Placeholder Image
+                            // Supports ViewBuilder as well
+                                .placeholder {
+                                    Rectangle().foregroundColor(.gray)
+                                }
+                                .indicator(.activity) // Activity Indicator
+                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                .scaledToFill()
+                                .frame(maxWidth: 150, maxHeight: 150)
+                                .cornerRadius(10)
+                                .clipped()
+                        }
+                    } else {
+                        Text(message.text)
+                            .foregroundColor(.black)
+                    }
                 }
-                .padding()
+                .padding(message.image != "" ? 0 : 10)
                 .background(Color.white)
                 .cornerRadius(8)
                 .shadow(radius: 1)
@@ -172,7 +269,9 @@ struct MessageView: View {
         }
         .padding(.horizontal)
         .padding(.top, 8)
-        
+        .sheet(isPresented: $shareBool) {
+            PresentImage(imageUrl: $image)
+        }
     }
 }
 

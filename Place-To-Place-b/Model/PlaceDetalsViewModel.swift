@@ -37,10 +37,10 @@ class PlaceDetalsViewModel: ObservableObject {
     var user: Users?
     var userAll: [Users]?
     
-    init(places: PlaceModel?, user: Users?, userAll: [Users]?) {
-        self.user = user
+    init(places: PlaceModel?) {
+        self.user = FirebaseData.shared.user
         self.places = places
-        self.userAll = userAll
+        self.userAll = FirebaseData.shared.userAll
         
         self.getData()
         print("PlaceDetalsViewModel ____ imageGellery ______ \(self.imageGellery.count)")

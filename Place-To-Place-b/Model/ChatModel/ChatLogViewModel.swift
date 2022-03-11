@@ -12,6 +12,7 @@ import Firebase
 
 class ChatLogViewModel: ObservableObject {
     @Published var chatText = ""
+    @Published var imageMessageURL = ""
     @Published var chatMessages = [ChatMessage]()
     @Published var blokUser = false
     @Published var blokUserTo = false
@@ -49,7 +50,7 @@ class ChatLogViewModel: ObservableObject {
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
                     }
                 })
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     self.count += 1
                 }
             }
@@ -64,7 +65,7 @@ class ChatLogViewModel: ObservableObject {
             .document(fromId)
             .collection(toId)
             .document()
-        let messageData = [FirebaseStatic.fromId: fromId, FirebaseStatic.toId: toId, FirebaseStatic.text: chatText, "timestamp": Date()] as [String: Any]
+        let messageData = [FirebaseStatic.fromId: fromId, FirebaseStatic.toId: toId, FirebaseStatic.text: chatText, FirebaseStatic.imageURL: imageMessageURL, "timestamp": Date()] as [String: Any]
         document.setData(messageData) { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -88,6 +89,7 @@ class ChatLogViewModel: ObservableObject {
         self.count += 1
         
         self.chatText = ""
+        self.imageMessageURL = ""
     }
     private func persistRecentMessage() {
         guard let chatUser = chatUser else {return messageError = "chatUser nil"}
@@ -104,7 +106,9 @@ class ChatLogViewModel: ObservableObject {
         let data = [
             FirebaseStatic.timestamp: Date(),
             FirebaseStatic.text: self.chatText,
+            FirebaseStatic.imageURL: self.imageMessageURL,
             FirebaseStatic.fromId: uid,
+            FirebaseStatic.tocen: chatUser.token,
             FirebaseStatic.toId: toId,
             FirebaseStatic.profileImageUrl: chatUser.profileImage,
             FirebaseStatic.name: chatUser.name
@@ -124,7 +128,9 @@ class ChatLogViewModel: ObservableObject {
         let dataTo = [
             FirebaseStatic.timestamp: Date(),
             FirebaseStatic.text: self.chatText,
+            FirebaseStatic.imageURL: self.imageMessageURL,
             FirebaseStatic.fromId: toId,
+            FirebaseStatic.tocen: chatCurentUser.token,
             FirebaseStatic.toId: uid,
             FirebaseStatic.profileImageUrl: chatCurentUser.profileImage,
             FirebaseStatic.name: chatCurentUser.name
@@ -151,8 +157,8 @@ class ChatLogViewModel: ObservableObject {
             var array = [String]()
             quereSnapshot?.documentChanges.forEach({ change in
                     let data = change.document.data()
-                    let userBlok = BlokUser(data: data)
-                    array.append(userBlok!.blokUser)
+                guard let userBlok = BlokUser(data: data) else {return}
+                    array.append(userBlok.blokUser)
                 
             })
             
@@ -167,8 +173,8 @@ class ChatLogViewModel: ObservableObject {
             var array = [String]()
             quereSnapshot?.documentChanges.forEach({ change in
                     let data = change.document.data()
-                    let userBlok = BlokUser(data: data)
-                    array.append(userBlok!.blokUser)
+                guard let userBlok = BlokUser(data: data) else {return}
+                    array.append(userBlok.blokUser)
                 
             })
             self.blokUserTo = array.contains(toId)

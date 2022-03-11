@@ -30,7 +30,7 @@ struct FavoritList: View {
                         
                         ForEach(placeArray, id: \.id) { item in
                             Button  {
-                                self.placeDetailViewModel = PlaceDetalsViewModel(places: item, user: FirebaseData.shared.myUser, userAll: FirebaseData.shared.userAll)
+                                self.placeDetailViewModel.places = item
                                 
                                 if title != "Все", title != "Любимые места" {
                                     presentationMode.wrappedValue.dismiss()

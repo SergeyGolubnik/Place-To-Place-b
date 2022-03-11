@@ -11,6 +11,9 @@ import FirebaseStorage
 
 class FirebaseAuthDatabase {
     
+    
+    static let ref = Database.database().reference(withPath: "user")
+    
     static let storageRef = Storage.storage().reference()
     
     static var avatarsRef: StorageReference {
@@ -399,7 +402,19 @@ class FirebaseAuthDatabase {
                   }
             }
     
+    static func aploadPlaceUserAvatar(key: String, image: String, completion: @escaping(Result <Void, Error>) -> Void) {
         
+        let placeRef = ref.child(key)
+        placeRef.updateChildValues([
+            "avatarNikPlace": image as String
+        ]) { error, resalt in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            completion(.success(()))
+        }
+    }
 }
 
 

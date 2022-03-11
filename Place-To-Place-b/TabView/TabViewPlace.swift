@@ -12,7 +12,7 @@ struct TabViewPlace: View {
 
     @State var newPlace = false
     @State var selected = 0
-    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil)
     @State var placeD = PlaceModel(key: "", userId: "", phoneNumber: "", nikNamePlace: "", avatarNikPlace: "", switchPlace: "", deviseToken: "")
     @State var exitBool = false
     @State var message = ""

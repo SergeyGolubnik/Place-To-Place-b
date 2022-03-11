@@ -246,7 +246,7 @@ struct MapView: UIViewRepresentable {
             self.placeDetail = place
             self.goDetalsBool = true
             self.message = "Прошла транзакция"
-            self.placeDetailViewModel = PlaceDetalsViewModel(places: place, user: firebaseModel.myUser, userAll: firebaseModel.userAll)
+            self.placeDetailViewModel = PlaceDetalsViewModel(places: place)
         }
     }
     

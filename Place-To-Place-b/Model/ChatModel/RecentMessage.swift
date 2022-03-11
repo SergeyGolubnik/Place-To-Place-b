@@ -13,15 +13,18 @@ struct RecentMessage: Identifiable {
     var id: String {documentId}
     
     let documentId: String
-    let text, name, phoneNumber: String
+    let text, name, tocen, phoneNumber: String
     let fromId, toId: String
     let profileImageUrl: String
+    let imageURL: String
     let timestamp: Date
     
     init(documentId: String, data: [String: Any]){
         self.documentId = documentId
         self.text = data[FirebaseStatic.text] as? String ?? ""
+        self.imageURL = data[FirebaseStatic.imageURL] as? String ?? ""
         self.name = data[FirebaseStatic.name] as? String ?? ""
+        self.tocen = data[FirebaseStatic.tocen] as? String ?? ""
         self.phoneNumber = data[FirebaseStatic.phoneNumber] as? String ?? ""
         self.fromId = data[FirebaseStatic.fromId] as? String ?? ""
         self.toId = data[FirebaseStatic.toId] as? String ?? ""

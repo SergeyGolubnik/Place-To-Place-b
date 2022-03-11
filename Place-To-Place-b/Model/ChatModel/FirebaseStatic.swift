@@ -12,9 +12,10 @@ struct FirebaseStatic {
     static let fromId = "fromId"
     static let toId = "toId"
     static let text = "text"
-    static let profileImageUrl = "deviseToken"
+    static let profileImageUrl = "profileImageUrl"
     static let name = "lastname"
     static let phoneNumber = "phoneNumber"
     static let uid = "uid"
-    
+    static let imageURL = "image"
+    static let tocen = "tocen"
 }

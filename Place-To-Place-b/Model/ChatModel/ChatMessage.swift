@@ -12,12 +12,13 @@ struct ChatMessage: Identifiable {
     
     let documentId: String
     
-    let fromId, toId, text: String
+    let fromId, toId, image, text: String
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
         
         self.fromId = data[FirebaseStatic.fromId] as? String ?? ""
         self.toId = data[FirebaseStatic.toId] as? String ?? ""
         self.text = data[FirebaseStatic.text] as? String ?? ""
+        self.image = data[FirebaseStatic.imageURL] as? String ?? ""
     }
 }

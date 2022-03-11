@@ -18,7 +18,7 @@ struct PlaceDetals: View {
     @StateObject var vw = MainMessagesViewModel()
     @StateObject var dataMap = MapViewModelPresent()
     @StateObject var data = FirebaseData()
-    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil)
     
     var chatLogViewModel = ChatLogViewModel(chatUser: nil, chatCurentUser: nil)
     var columns: [GridItem] = Array(repeating: .init(.flexible(minimum: 100, maximum: 100)), count: 2)
@@ -101,13 +101,18 @@ struct PlaceDetals: View {
                                     } label: {
                                         HStack {
                                             WebImage(url: URL(string: plase.imageUrl ?? ""))
-                                            //                                            Image(uiImage: vm.imageGeneral)
                                                 .resizable()
+                                                .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                            // Supports ViewBuilder as well
+                                                .placeholder {
+                                                    Rectangle().foregroundColor(.gray)
+                                                }
+                                                .indicator(.activity) // Activity Indicator
+                                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
                                                 .scaledToFill()
                                                 .frame(width: 210, height: 210)
-                                                .clipped()
                                                 .cornerRadius(15)
-                                            
+                                                .clipped() 
                                         }
                                         .padding(.leading, 30)
                                         
@@ -125,12 +130,19 @@ struct PlaceDetals: View {
                                                         vm.shareBool = true
                                                     } label: {
                                                         WebImage(url: URL(string: image))
-                                                        //                                                        Image(uiImage: image)
                                                             .resizable()
+                                                            .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                                        // Supports ViewBuilder as well
+                                                            .placeholder {
+                                                                Rectangle().foregroundColor(.gray)
+                                                            }
+                                                            .indicator(.activity) // Activity Indicator
+                                                            .transition(.fade(duration: 0.5)) // Fade Transition with duration
                                                             .scaledToFill()
                                                             .frame(width: 100, height: 100)
-                                                            .clipped()
                                                             .cornerRadius(15)
+                                                            .clipped()
+                                                            
                                                     }
                                                 }
                                             }
@@ -385,7 +397,7 @@ struct PlaceDetals_Previews: PreviewProvider {
         let place = PlaceModel(userId: "", name: "Тест", key: "", nikNamePlace: "",avatarNikPlace: "", phoneNumber: "", phoneNumberArray: nil, location: "Мсква  ул Правды 27с7", type: "Бары и пабы", rating: ["dnnjnjj": 4], coments: ["GhNLVCg74wcJ5P4bgjQMcuzve2n1":"Дополнительный аргумент комментарии в вызове"], imageUrl: "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/PlacePhoto%2F-MqoHaLiofZLQ9R9cWV4?alt=media&token=8410a88a-5e95-45fc-9c65-54fdabdafafd", latitude: "55.7522", deviseToken: "", longitude: "37.6156", discription: "Координаты (широта и долгота) определяют положение точки на поверхности Земли.", switchPlace: "Делится", gellery:[ "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace20EE74AE-8579-434E-A0F1-B8ABFBCC15151639477897.611114?alt=media&token=aa3b734f-fa79-4d16-9c81-50fa75476206", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-laceF5E410C8-E2EE-41BC-8F1E-6626B7391A431639477902.93265?alt=media&token=ed19284c-00e3-42f0-abb4-499d9585f54c", "https://firebasestorage.googleapis.com:443/v0/b/sergeygolubnik-place-to-place.appspot.com/o/gellery%2Fplace-to-lace6A31128D-02DC-41C4-92AE-24300C65849E1639477909.47857?alt=media&token=a1505f77-d6db-4a25-a56e-29040e799dde"], favorit: nil, date: nil, messageBool: false, moderation: false)
         let user = Users(lastName: "Sergey", email: "sergey@mail.ru", avatarsURL: "https://firebasestorage.googleapis.com/v0/b/sergeygolubnik-place-to-place.appspot.com/o/avatars%2F00Klxwlx47aU7DgQN5ppKzTunkV2?alt=media&token=9b8de98e-4862-4a88-9711-3b69346b8faa", uid: "", deviseToken: "", phoneNumber: "", blokUser: nil)
         
-        let placeDetailViewModel = PlaceDetalsViewModel(places: place, user: user, userAll: nil)
+        let placeDetailViewModel = PlaceDetalsViewModel(places: place)
         PlaceDetals(vm: placeDetailViewModel)
     }
 }

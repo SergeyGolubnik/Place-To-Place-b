@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 
 struct UserSetings: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil, user: nil, userAll: nil)
+    @State var placeDetailViewModel = PlaceDetalsViewModel(places: nil)
     @State var title = "Все"
     @State var placeMy = false
     @State var supportBooll = false
@@ -161,16 +161,8 @@ struct UserSetings: View {
                 ChatLogView(vm: chatLogViewModel)
             }
             .onChange(of: image, perform: { newValue in
-                if newValue == newValue {
-                    FirebaseAuthDatabase.updateAvatarImage(user: user, image: newValue!) { result in
-                        switch result {
-                            
-                        case .success(let url):
-                            imageURL = url.absoluteString
-                        case .failure(let error):
-                            print(error.localizedDescription)
-                        }
-                    }
+                if let newValue = newValue {
+                    updateImageAvatar(newValue: newValue)
                 }
             })
             .alert(isPresented: $alertDelete) {
@@ -194,6 +186,29 @@ struct UserSetings: View {
     }
     func dismiss() {
         presentationMode.wrappedValue.dismiss()
+    }
+    private func updateImageAvatar(newValue: UIImage) {
+        FirebaseAuthDatabase.updateAvatarImage(user: user, image: newValue) { result in
+            switch result {
+                
+            case .success(let url):
+                imageURL = url.absoluteString
+                for place in place {
+                    if place.userId == user.uid {
+                        FirebaseAuthDatabase.aploadPlaceUserAvatar(key: place.key, image: url.absoluteString) { resalt in
+                            switch resalt {
+                            case .success():
+                                break
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 

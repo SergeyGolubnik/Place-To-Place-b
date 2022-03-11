@@ -87,7 +87,7 @@ struct ListPlace: View {
                                         Spacer()
                                         Button {
                                             detailBool.toggle()
-                                            placeDetailViewModel = PlaceDetalsViewModel(places: plac, user: data.myUser, userAll: data.userAll)
+                                            placeDetailViewModel.places = plac
                                         } label: {
                                             VStack{
                                                 Spacer()
