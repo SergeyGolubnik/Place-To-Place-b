@@ -33,22 +33,26 @@ struct PlaceListMap: View {
         NavigationView {
             ZStack {
                 if !listBool {
-//                Map(coordinateRegion: $mapData.region, showsUserLocation: true, annotationItems: data.places){ place in
-//                    MapAnnotation(coordinate: place.coordinate) {
-//                        Rectangle().stroke(Color.blue)
-//                                        .frame(width: 40, height: 40)
-//                                        .onTapGesture {
-//                                            goDetail = true
-//                                            placeDetail = place
-//                                        }
-//                    }
-//                }
+                    
+                Map(coordinateRegion: $mapData.region, showsUserLocation: true, annotationItems: placeF) { place in
+                    MapAnnotation(coordinate: place.coordinate) {
+                        
+                        AnnatatonPin(placeDetailViewModel: $placeDetailViewModel, place: .constant(place))
+                           
+                                        .onTapGesture {
+                                            placeDetail = place
+                                            self.message = "Прошла транзакция"
+                                            self.placeDetailViewModel = PlaceDetalsViewModel(places: place)
+                                            goDetail = true
+                                        }
+                    }
+                }
                 
-                    MapView(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeDetail, goDetalsBool: $goDetail, message: $message)
-                        .environmentObject(mapData)
+//                    MapView(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeDetail, goDetalsBool: $goDetail, message: $message)
+//                        .environmentObject(mapData)
                 } else {
                     
-                    ListPlace(placeDetailViewModel: $placeDetailViewModel, place: filter != "" ? $placeF : $data.places)
+                    ListPlace(placeDetailViewModel: $placeDetailViewModel, filter: $filter)
                             .padding(.bottom, 55)
                     
                     
@@ -127,10 +131,6 @@ struct PlaceListMap: View {
             locationManager.requestWhenInUseAuthorization()
                 mapData.rmovePlace(place: data.places)
             data.fetchData()
-            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1) {
-                print("PlaceListMap_________\(data.users)")
-            }
-            
         })
         
             .onChange(of: filter) { value in
@@ -148,6 +148,7 @@ struct PlaceListMap: View {
             .onChange(of: data.places, perform: { newValue in
                 if data.places == newValue, filter == "" {
                     mapData.rmovePlace(place: data.places)
+                    placeF = data.places
                 }
 
             })
@@ -255,8 +256,7 @@ struct MapView: UIViewRepresentable {
 
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var mapView = MKMapView()
-    
-    @Published var region: MKCoordinateRegion!
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 5000, longitudinalMeters: 5000)
     @Published var latitude: CGFloat!
     func rmovePlace(place: [PlaceModel]) {
         

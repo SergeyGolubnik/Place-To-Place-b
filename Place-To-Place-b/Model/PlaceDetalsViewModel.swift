@@ -7,6 +7,7 @@
 
 import Foundation
 import SDWebImageSwiftUI
+import FirebaseAuth
 
 
 
@@ -38,16 +39,15 @@ class PlaceDetalsViewModel: ObservableObject {
     var userAll: [Users]?
     
     init(places: PlaceModel?) {
-        self.user = FirebaseData.shared.user
+        guard let currentUser = Auth.auth().currentUser else {return}
+        self.user = Users(user: currentUser)
         self.places = places
         self.userAll = FirebaseData.shared.userAll
         
-        self.getData()
-        print("PlaceDetalsViewModel ____ imageGellery ______ \(self.imageGellery.count)")
-        print("PlaceDetalsViewModel ____ stars ______ \(self.stars)")
-        print("PlaceDetalsViewModel ____ comentArray ______ \(self.comentArray.count)")
+        
     }
-    private func starsRating() {
+    func starsRating() {
+        stars = "-"
         guard let places = places else { return }
         if places.rating != nil {
             var resalt = 0.0
@@ -64,7 +64,7 @@ class PlaceDetalsViewModel: ObservableObject {
             }
         }
     }
-    private func comentPlace() {
+    func comentPlace() {
         guard let places = places else {return}
         comentArray.removeAll()
         if places.coments != nil {
@@ -82,7 +82,7 @@ class PlaceDetalsViewModel: ObservableObject {
                             }
                         }
                         
-                        let comment = Comment(userName: user1.lastName ?? "", userUid: keyCom, avatarImage: FirebaseData.shared.getImageUIImage(url: user1.avatarsURL ?? ""), comment: valuesComent, stars: stars)
+                        let comment = Comment(userName: user1.lastName ?? "", userUid: keyCom, avatarImage: user1.avatarsURL ?? "", comment: valuesComent, stars: stars)
                         arrayCom.append(comment)
                     }
                 }
@@ -132,8 +132,6 @@ class PlaceDetalsViewModel: ObservableObject {
                 imageGellery.append(i)
             }
         }
-        self.starsRating()
-        self.comentPlace()
     }
     
 }

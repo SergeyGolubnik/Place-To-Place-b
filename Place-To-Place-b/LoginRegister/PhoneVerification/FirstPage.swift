@@ -57,7 +57,7 @@ struct FirstPage : View {
                     
                     // remove this when testing with real Phone Number
                     
-                    Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+//                    Auth.auth().settings?.isAppVerificationDisabledForTesting = true
                     PhoneAuthProvider.provider().verifyPhoneNumber("+" + self.ccode + self.no, uiDelegate: nil) { (ID, err) in
                         
                         if err != nil{

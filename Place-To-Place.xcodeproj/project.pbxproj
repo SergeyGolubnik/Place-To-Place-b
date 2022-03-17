@@ -30,6 +30,7 @@
 		87393D6A27987DA3007E4A3B /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87393D6927987DA3007E4A3B /* FirstPage.swift */; };
 		87393D6C27987DC4007E4A3B /* ScndPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87393D6B27987DC4007E4A3B /* ScndPage.swift */; };
 		87393D6E279880BE007E4A3B /* Indicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87393D6D279880BE007E4A3B /* Indicator.swift */; };
+		8749283127DFD12800B0401D /* AnnatatonPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8749283027DFD12800B0401D /* AnnatatonPin.swift */; };
 		87500CB9273015D400C07818 /* FavoritCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CB8273015D400C07818 /* FavoritCell.swift */; };
 		87500CBD273148E900C07818 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87500CBC273148E900C07818 /* GoogleService-Info.plist */; };
 		87500CC12731823F00C07818 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87500CC02731823F00C07818 /* Notifications.swift */; };
@@ -107,6 +108,7 @@
 		87393D6927987DA3007E4A3B /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
 		87393D6B27987DC4007E4A3B /* ScndPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScndPage.swift; sourceTree = "<group>"; };
 		87393D6D279880BE007E4A3B /* Indicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indicator.swift; sourceTree = "<group>"; };
+		8749283027DFD12800B0401D /* AnnatatonPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnatatonPin.swift; sourceTree = "<group>"; };
 		87500CB8273015D400C07818 /* FavoritCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritCell.swift; sourceTree = "<group>"; };
 		87500CBC273148E900C07818 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../файлфаербасе/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		87500CC02731823F00C07818 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				879B208F275E512600DEEC90 /* ImagePicker.swift */,
+				8725858627A3341E0037BA4C /* ListPlace.swift */,
 				877D8F1F27AC1ABC00415272 /* ToggleContacts.swift */,
 				87534CB227AC00F0007A096C /* PhoneContactView.swift */,
 				877C910E26F4E72700452FD1 /* NewPlaceView.swift */,
@@ -414,8 +417,8 @@
 			isa = PBXGroup;
 			children = (
 				87251B2226CD8B8200DC22A9 /* PlaceListMap.swift */,
+				8749283027DFD12800B0401D /* AnnatatonPin.swift */,
 				8750A1A327D297FB00F0C892 /* TestButtonDelete.swift */,
-				8725858627A3341E0037BA4C /* ListPlace.swift */,
 				879512B126EA9E5100DFD212 /* PlaceDetals.swift */,
 				877728F82703AF5400AB244B /* StarsRatingView.swift */,
 				875AE835276BC592005CFE6B /* PresentImage.swift */,
@@ -577,6 +580,7 @@
 				87500CB9273015D400C07818 /* FavoritCell.swift in Sources */,
 				87DA93A62757B2D700451433 /* MapViewModelPresent.swift in Sources */,
 				873243E026DD5EB100E4F1FD /* RegisterView.swift in Sources */,
+				8749283127DFD12800B0401D /* AnnatatonPin.swift in Sources */,
 				87500CC12731823F00C07818 /* Notifications.swift in Sources */,
 				87FD31C5273E43C0000C21E0 /* StaticFille.swift in Sources */,
 				87534CB327AC00F0007A096C /* PhoneContactView.swift in Sources */,
@@ -728,7 +732,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;
@@ -753,7 +757,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Place-To-Place-b/Place-To-Place-b.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Place-To-Place-b/Preview Content\"";
 				DEVELOPMENT_TEAM = XYRYJ88DZU;
 				ENABLE_PREVIEWS = YES;

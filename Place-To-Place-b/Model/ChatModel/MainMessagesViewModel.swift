@@ -13,6 +13,7 @@ import Firebase
 class MainMessagesViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var chatCurentUser: ChatUsers?
+    @Published var bidleBig = 0
     @Published var isUserCurrentlyLoggenOut = false
     @Published var recientMessage = [RecentMessage]()
     
@@ -38,6 +39,11 @@ class MainMessagesViewModel: ObservableObject {
                 if let error = error {
                     self.errorMessage = error.localizedDescription
                     return
+                }
+                for document in querySnapshot!.documents {
+                    let dataDescription = document.data()
+                    let recient = RecentMessage(documentId: document.documentID, data: dataDescription)
+                    
                 }
                 querySnapshot?.documentChanges.forEach({ change in
                     let docId = change.document.documentID

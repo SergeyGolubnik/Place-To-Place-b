@@ -18,4 +18,5 @@ struct FirebaseStatic {
     static let uid = "uid"
     static let imageURL = "image"
     static let tocen = "tocen"
+    static let bedj = "bedj"
 }

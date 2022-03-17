@@ -16,6 +16,9 @@ class ChatLogViewModel: ObservableObject {
     @Published var chatMessages = [ChatMessage]()
     @Published var blokUser = false
     @Published var blokUserTo = false
+    @Published var bedj = 0
+    @Published var bedjBig = 0
+    
     var messageError = ""
     var chatUser: ChatUsers?
     var chatCurentUser: ChatUsers?
@@ -58,8 +61,10 @@ class ChatLogViewModel: ObservableObject {
         self.blokUserUid()
     }
     func handleSend() {
+        
         guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
         guard let toId = chatUser?.uid else {return}
+        
         let document = FirebaseData.shared.firestore
             .collection("messages")
             .document(fromId)
@@ -92,9 +97,10 @@ class ChatLogViewModel: ObservableObject {
         self.imageMessageURL = ""
     }
     private func persistRecentMessage() {
+        
         guard let chatUser = chatUser else {return messageError = "chatUser nil"}
         guard let chatCurentUser = chatCurentUser else {return messageError = "chatCurentUser nil"}
-
+        
         let uid = chatCurentUser.uid
         
         let toId = chatUser.uid
@@ -133,14 +139,17 @@ class ChatLogViewModel: ObservableObject {
             FirebaseStatic.tocen: chatCurentUser.token,
             FirebaseStatic.toId: uid,
             FirebaseStatic.profileImageUrl: chatCurentUser.profileImage,
-            FirebaseStatic.name: chatCurentUser.name
+            FirebaseStatic.name: chatCurentUser.name,
+            FirebaseStatic.bedj: bedj
         ] as [String: Any]
+        
         documentTo.setData(dataTo) { error in
             if let error = error {
                 print(error.localizedDescription)
                 self.messageError = error.localizedDescription
                 return
             }
+            self.updateBadj()
         }
     }
     func blokUserUid() {
@@ -181,6 +190,31 @@ class ChatLogViewModel: ObservableObject {
         }
         
         
+    }
+    func updateBadj() {
+        
+        guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
+        guard let toId = chatUser?.uid else {return}
+        FirebaseData.shared.firestore.collection("recent_message").document(toId).collection("messages").document(fromId).getDocument{ document, error in
+            
+            if let document = document {
+                guard let dataDescription = document.data() else {return}
+              print("Cached document data: \(dataDescription)")
+                let recient = RecentMessage(documentId: document.documentID, data: dataDescription)
+                self.bedj = recient.bedj
+                print("Cached document recient: \(recient.bedj)")
+                self.bedjBigMetod()
+            } else {
+              print("Document does not exist in cache")
+            }
+          }
+    }
+    func bedjBigMetod() {
+        let summ = bedjBig + bedj
+        guard let toId = chatUser?.uid else {return}
+        FirebaseData.shared.firestore.collection("users").document(toId).updateData([
+            "bandel": summ
+        ])
     }
     @Published var count = 0
 }

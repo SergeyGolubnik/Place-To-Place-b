@@ -14,6 +14,7 @@ struct Users: Hashable, Decodable {
     var lastName: String?
     var avatarsURL: String?
     var deviseToken: String?
+    var bandel: Int = 0
     
     init(user: User) {
         self.uid = user.uid
@@ -28,6 +29,7 @@ struct Users: Hashable, Decodable {
         lastName = snapshotVaiue["lastname"] as? String
         deviseToken = snapshotVaiue["deviseToken"] as? String
         phoneNumber = snapshotVaiue["phoneNumber"] as? String
+        bandel = snapshotVaiue["bandel"] as? Int ?? 0
     }
     init?(document: DocumentSnapshot) {
         guard let data = document.data() else { return nil}
@@ -35,6 +37,7 @@ struct Users: Hashable, Decodable {
               let avatarsURL = data["avatarsURL"] as? String,
               let deviseToken = data["deviseToken"] as? String,
               let phoneNumber = data["phoneNumber"] as? String,
+              let bandel = data["bandel"] as? Int,
               let uid = data["uid"] as? String else { return nil }
         
         self.lastName = lastName
@@ -42,6 +45,7 @@ struct Users: Hashable, Decodable {
         self.uid = uid
         self.deviseToken = deviseToken
         self.phoneNumber = phoneNumber
+        self.bandel = bandel
     }
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
@@ -49,6 +53,7 @@ struct Users: Hashable, Decodable {
               let avatarsURL = data["avatarsURL"] as? String,
               let deviseToken = data["deviseToken"] as? String,
               let phoneNumber = data["phoneNumber"] as? String,
+              let bandel = data["bandel"] as? Int,
               let uid = data["uid"] as? String else { return nil }
         
         self.lastName = lastName
@@ -56,6 +61,7 @@ struct Users: Hashable, Decodable {
         self.uid = uid
         self.deviseToken = deviseToken
         self.phoneNumber = phoneNumber
+        self.bandel = bandel
     }
     var representation: [String: Any] {
         var rep = ["lastname": lastName]
@@ -64,12 +70,13 @@ struct Users: Hashable, Decodable {
         rep["deviseToken"] = deviseToken
         return rep as [String : Any]
     }
-    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String, phoneNumber: String, blokUser: [String]?) {
+    init(lastName: String, email: String, avatarsURL: String, uid: String, deviseToken: String, phoneNumber: String, blokUser: [String]?, bandel: Int) {
         self.lastName = lastName
         self.avatarsURL = avatarsURL
         self.uid = uid
         self.deviseToken = deviseToken
         self.phoneNumber = phoneNumber
+        self.bandel = bandel
     }
     
     func hash(into hasher: inout Hasher) {

@@ -28,16 +28,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         notifications.notificationCenter.delegate = notifications
         
         
-//        if let users = Auth.auth().currentUser {
-//            let user = Users(user: users)
-//            FirebaseData.shared.getUserData(user: user) { (result) in
-//                switch result {
-//                case .success(let muser):
-//                    self.user = muser
-//                case .failure(_): break
-//                }
-//            }
-//        }
+        if let users = Auth.auth().currentUser {
+            let user = Users(user: users)
+            FirebaseData.shared.getUserData(user: user) { (result) in
+                switch result {
+                case .success(let muser):
+                    self.user = muser
+                case .failure(_): break
+                }
+            }
+        }
         Messaging.messaging().token { token, error in
             if let error = error {
                 print("Error fetching FCM registration token: \(error)")

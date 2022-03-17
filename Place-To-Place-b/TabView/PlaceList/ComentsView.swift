@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-
+import SDWebImageSwiftUI
 struct ComentsView: View {
     
     @State var nikName = "Sergey"
-    @State var image = UIImage(named: "place-to-place-banner")
+    @State var image = ""
     @State var coment = ""
     @State var rating: Int?
     private func starsType(index: Int) -> String {
@@ -33,13 +33,13 @@ struct ComentsView: View {
                         
                 }
                 VStack(spacing: 0){
-                    Image(uiImage: image!)
+                    WebImage(url: URL(string: image))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 20)
                         .clipped()
                         .cornerRadius(10)
-                    HStack{
+                        HStack{
                         Text(nikName)
                             .font(Font.system(size: 12))
                             .frame(width: 50)

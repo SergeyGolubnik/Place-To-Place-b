@@ -37,9 +37,8 @@ struct FavoritList: View {
                                 } else {
                                     self.detailPlaceBool = true
                                 }
-                                print("FavoritList ---- detailPlaceBool --- \(self.detailPlaceBool)")
                             } label: {
-                                FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", placeRating: item.rating)
+                                FavoritCell(imageURL: item.imageUrl ?? "", name: item.name ?? "", location: item.location ?? "", type: item.type ?? "", placeRating: item.rating)
                             }.foregroundColor(.black)
                                 
                         }

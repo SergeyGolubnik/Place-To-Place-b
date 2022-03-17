@@ -18,6 +18,9 @@ struct TabViewPlace: View {
     @State var message = ""
     @StateObject var data = FirebaseData()
     
+    private var badgePosition: CGFloat = 2
+    private var tabsCount: CGFloat = 3
+    
     @State var categoryArray = Category()
     
     var body: some View {
@@ -28,9 +31,9 @@ struct TabViewPlace: View {
         } else {
             ZStack {
                 Text(message)
-//                if selected == 0 {
+                if selected == 0 {
                 PlaceListMap(placeDetailViewModel: $placeDetailViewModel, placeDetail: $placeD, message: $message)
-//                }
+                }
                 if selected == 1 {
                     FavoritList(placeDetailViewModel: $placeDetailViewModel, title: "Любимые места",  place: data.places)
                 } else if selected == 3 {
@@ -59,12 +62,30 @@ struct TabViewPlace: View {
                                     .font(.system(size: 25))
                             }.foregroundColor(self.selected == 1 ? .black : .gray)
                             Spacer().frame(width: 110)
+                            
+                            
                             Button(action: {
                                 self.selected = 2
                             }) {
-                                Image(systemName: self.selected == 2 ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right")
-                                    .font(.system(size: 25))
+                                ZStack{
+                                    
+                                    Image(systemName: self.selected == 2 ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right")
+                                        .font(.system(size: 25))
+                                    ZStack {
+                                                  Circle()
+                                                    .foregroundColor(.red)
+
+                                                    Text("\(1)")
+                                                    .foregroundColor(.white)
+                                                    .font(Font.system(size: 12))
+                                                }
+                                                .frame(width: 15, height: 15)
+                                                .offset(x: ( ( 2 * self.badgePosition) - 0.95 ) * ( 25 / ( 2 * self.tabsCount ) ) + 2, y: -15)
+                                                .opacity(1 == 0 ? 0 : 1.0)
+                                }
                             }.foregroundColor(self.selected == 2 ? .black : .gray)
+                            
+                            
                             Spacer(minLength: 12)
                             Button(action: {
                                 self.selected = 3

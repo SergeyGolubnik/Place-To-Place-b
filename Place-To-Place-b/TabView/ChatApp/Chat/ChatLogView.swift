@@ -72,7 +72,11 @@ struct ChatLogView: View {
                         
                         Button {
                             //                    if vm.chatText != "" {
+                            vm.bedj += 1
+                            
+                            FirebaseAuthDatabase.sendPushNotification(to: FirebaseData.shared.downUserData(), title: vm.chatCurentUser?.name ?? "", body: vm.chatText)
                             vm.handleSend()
+                            
                             
                             //                    }
                         } label: {
@@ -181,6 +185,73 @@ struct ChatLogView: View {
                         }
                     }
                     
+                }
+            }
+            .onAppear(perform: {
+                guard let toId = vm.chatUser?.uid else {return}
+                let uid = FirebaseData.shared.user.uid
+               
+                
+                FirebaseData.shared.getFrendUserData(userId: toId) { resalt in
+                    switch resalt {
+                    case .success(let user):
+                        vm.bedjBig = user.bandel
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+                vm.updateBadj()
+                var summBig = 0
+                FirebaseData.shared.getFrendUserData(userId: uid) { resalt in
+                    switch resalt {
+                    case .success(let user):
+                        summBig = user.bandel
+                        print("summBig_____________: \(user.bandel)")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+                var summBedj = 0
+                FirebaseData.shared.firestore.collection("recent_message").document(uid).collection("messages").document(toId).getDocument{ document, error in
+                    if let document = document {
+                        guard let dataDescription = document.data() else {return}
+                        let recient = RecentMessage(documentId: document.documentID, data: dataDescription)
+                        summBedj = recient.bedj
+                        print("Cached document recient: \(recient.bedj)")
+                        
+                    } else {
+                      print("Document does not exist in cache")
+                    }
+                  }
+                if summBig >= summBedj {
+                    let summ = summBig - summBedj
+                    FirebaseData.shared.firestore.collection("users").document(uid).updateData([
+                        "bandel": summ
+                    ]) { error in
+                        if let error = error {
+                            print("__________________\(error.localizedDescription)")
+                        } else {
+                            let documentTo = FirebaseData.shared.firestore
+                                .collection("recent_message")
+                                .document(uid)
+                                .collection("messages")
+                                .document(toId)
+                            let dataTo = [
+                                FirebaseStatic.bedj: 0
+                            ] as [String: Any]
+                            documentTo.updateData (dataTo) { error in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                    return
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .onTapGesture {
+                withAnimation {
+                    popapSetings = false
                 }
             }
         }

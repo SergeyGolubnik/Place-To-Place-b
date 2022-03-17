@@ -28,6 +28,23 @@ extension View {
             )
     }
 }
+extension View {
+    func tolbarPopoverPin<Content: View>(show: Binding<Bool>, @ViewBuilder content: @escaping ()-> Content)-> some View {
+        self
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(
+                ZStack{
+                    if show.wrappedValue {
+                        content()
+//                            .padding()
+                            .background(Color.white)
+                            .shadow(radius: 10)
+                            .offset(y: -150)
+                    }
+                }
+            )
+    }
+}
 
 struct Popover_Previews: PreviewProvider {
     static var previews: some View {

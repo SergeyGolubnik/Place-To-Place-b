@@ -50,7 +50,7 @@ class FirebaseData: ObservableObject {
     
     func fetchData() {
         
-        guard let currentUser = Auth.auth().currentUser else {return}
+        guard let currentUser = auth.currentUser else {return}
         user = Users(user: currentUser)
         
         getUserData(user: user) { [weak self] resalt in
@@ -144,8 +144,8 @@ class FirebaseData: ObservableObject {
             }
             self?.userAll = array
             self?.userPhoneAll = phoneAll
-            self?.vremPhone()
-//            self?.getContact()
+//            self?.vremPhone()
+            self?.getContact()
         }
     }
     func favoritFilter() {
@@ -170,22 +170,22 @@ class FirebaseData: ObservableObject {
         return token
     }
     
-    func getImageUIImage(url: String) -> UIImage {
-        
-        let defaultImage = UIImage(named: "place-to-place-banner")
-        
-        let imageUrlString = url
-
-        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
-        do {
-            let imageData = try Data(contentsOf: imageUrl)
-            return UIImage(data: imageData)!
-        } catch {
-            print(error.localizedDescription)
-            return defaultImage!
-        }
-        
-    }
+//    func getImageUIImage(url: String) -> UIImage {
+//
+//        let defaultImage = UIImage(named: "place-to-place-banner")
+//
+//        let imageUrlString = url
+//
+//        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
+//        do {
+//            let imageData = try Data(contentsOf: imageUrl)
+//            return UIImage(data: imageData)!
+//        } catch {
+//            print(error.localizedDescription)
+//            return defaultImage!
+//        }
+//
+//    }
     
     func getDocument(){
         db.collection("users").getDocuments() { [weak self] (querySnapshot, err) in

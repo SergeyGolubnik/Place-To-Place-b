@@ -112,63 +112,63 @@ class FirebaseAuthDatabase {
         }
     }
     
-    static func register(photo: UIImage?, lastName: String?, email: String?, password: String?, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
-        
-        guard Validators.isFilled(
-                                  lastName: lastName,
-                                  email: email,
-                                  password: password) else {
-            completion(.failure(AuthError.notFilled))
-            return
-        }
-        guard let email = email, let password = password else {
-            completion(.failure(AuthError.unknownError))
-            return
-        }
-        
-        guard Validators.isSimpleEmail(email) else {
-            completion(.failure(AuthError.invalidEmail))
-            return
-        }
-        guard let lastName = lastName else {
-            completion(.failure(AuthError.noNoFirstname))
-            return
-        }
-        
-        
-        Auth.auth().createUser(withEmail: email, password: password) {  (result, error) in
-            guard let result = result else { completion(.failure(error!))
-                return}
-            var photo = photo
-            if (photo == nil) {
-                photo = UIImage(named: "avatar-1")
-            }
-            
-            self.aploadImage(photoName: result.user.uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
-                switch myresalt {
-                
-                case .success(let url):
-                    let db = Firestore.firestore()
-                    db.collection("users").document(result.user.uid).setData([
-                        "lastname": lastName as String,
-                        "email": email as String,
-                        "avatarsURL": url.absoluteString,
-                        "uid": result.user.uid,
-                        "deviseToken": deviseToken! as String
-                    ]) { (error) in
-                        if let error = error {
-                            completion(.failure(error))
-                        }
-                        completion(.success)
-                    }
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-            
-            
-        }
-    }
+//    static func register(photo: UIImage?, lastName: String?, email: String?, password: String?, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
+//
+//        guard Validators.isFilled(
+//                                  lastName: lastName,
+//                                  email: email,
+//                                  password: password) else {
+//            completion(.failure(AuthError.notFilled))
+//            return
+//        }
+//        guard let email = email, let password = password else {
+//            completion(.failure(AuthError.unknownError))
+//            return
+//        }
+//
+//        guard Validators.isSimpleEmail(email) else {
+//            completion(.failure(AuthError.invalidEmail))
+//            return
+//        }
+//        guard let lastName = lastName else {
+//            completion(.failure(AuthError.noNoFirstname))
+//            return
+//        }
+//
+//
+//        Auth.auth().createUser(withEmail: email, password: password) {  (result, error) in
+//            guard let result = result else { completion(.failure(error!))
+//                return}
+//            var photo = photo
+//            if (photo == nil) {
+//                photo = UIImage(named: "avatar-1")
+//            }
+//
+//            self.aploadImage(photoName: result.user.uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
+//                switch myresalt {
+//
+//                case .success(let url):
+//                    let db = Firestore.firestore()
+//                    db.collection("users").document(result.user.uid).setData([
+//                        "lastname": lastName as String,
+//                        "email": email as String,
+//                        "avatarsURL": url.absoluteString,
+//                        "uid": result.user.uid,
+//                        "deviseToken": deviseToken! as String
+//                    ]) { (error) in
+//                        if let error = error {
+//                            completion(.failure(error))
+//                        }
+//                        completion(.success)
+//                    }
+//                case .failure(let error):
+//                    completion(.failure(error))
+//                }
+//            }
+//
+//
+//        }
+//    }
     static func registerPhone(photo: UIImage?, lastName: String, uid: String, phoneNumber: String, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
         self.aploadImage(photoName: uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
             switch myresalt {
@@ -180,7 +180,8 @@ class FirebaseAuthDatabase {
                     "phoneNumber": phoneNumber as String,
                     "avatarsURL": url.absoluteString,
                     "uid": uid,
-                    "deviseToken": deviseToken! as String
+                    "deviseToken": deviseToken! as String,
+                    "bandel": 0
                 ]) { (error) in
                     if let error = error {
                         completion(.failure(error))
@@ -414,6 +415,33 @@ class FirebaseAuthDatabase {
             }
             completion(.success(()))
         }
+    }
+    static func sendPushNotification(to token: String, title: String, body: String) {
+        let urlString = "https://fcm.googleapis.com/fcm/send"
+        let url = NSURL(string: urlString)!
+        let paramString: [String : Any] = ["to" : token,
+                                           "notification" : ["title" : title, "body" : body, "badge": "1", "sound": "default"]
+        ]
+        
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("key=AAAAqXAI73I:APA91bErPimwLjNNzHSElmVU1ulk7qqom9rMes4OupBNhf5F_bcbufOY2-kn28OoycWaFZAp5gTpJtz72EW0b192QcFKZfQVmCP5k4JXsu6RtxnrwsKo436l92KVl7p0RgvbXg1qbJj0", forHTTPHeaderField: "Authorization")
+        
+        let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
+            do {
+                if let jsonData = data {
+                    if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
+                        NSLog("Received data:\n\(jsonDataDict))")
+                    }
+                }
+            } catch let err as NSError {
+                print(err.debugDescription)
+            }
+        }
+        print(task)
+        task.resume()
     }
 }
 

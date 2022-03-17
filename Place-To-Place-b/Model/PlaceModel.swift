@@ -138,7 +138,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
 struct Comment: Hashable {
     var userName: String
     var userUid: String
-    var avatarImage: UIImage
+    var avatarImage: String
     var comment: String
     var stars: Int
 }

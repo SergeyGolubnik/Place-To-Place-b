@@ -17,10 +17,12 @@ import Firebase
 struct MainMessagesView: View {
     @ObservedObject var vw = MainMessagesViewModel()
     @StateObject var createModel = CreateNewMessageViewModel()
+    
     @State var shouIdNavigateToChatLogView = false
     //    @State var shouldShowLogOutOptions = false
     @State var shouldShowNewMessageScreen = false
     @State var chatUser: ChatUsers?
+ 
     private var chatLogViewModel = ChatLogViewModel(chatUser: nil, chatCurentUser: nil)
     private var customNavBar: some View {
         HStack(spacing: 16) {
@@ -61,7 +63,10 @@ struct MainMessagesView: View {
         List {
             
             ForEach(vw.recientMessage) { recientMessage in
+                
                 VStack {
+                    
+                    
                     Button {
                         let uid = recientMessage.toId
                         self.chatUser = ChatUsers(name: recientMessage.name, uid: uid, phoneNumber: recientMessage.phoneNumber, profileImage: recientMessage.profileImageUrl, token: recientMessage.tocen)
@@ -114,9 +119,21 @@ struct MainMessagesView: View {
                                 }
                             }
                             Spacer()
+                                
+                                ZStack{
+                                    Circle()
+                                        .foregroundColor(.red)
+                                    
+                                    Text("\(recientMessage.bedj)")
+                                        .foregroundColor(.white)
+                                        .font(Font.system(size: 15))
+                                }
+                                .frame(width: 25, height: 25)
+                                
+                                .opacity(recientMessage.bedj == 0 ? 0 : 1.0)
                             
-                            //                            Text(recientMessage.timeAgo)
-                            //                                .font(.system(size: 14, weight: .semibold))
+//                                                        Text(recientMessage.timeAgo)
+//                                                            .font(.system(size: 14, weight: .semibold))
                         }
                     }
                     .padding(.vertical, 8)
