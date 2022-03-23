@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ChatMessage: Identifiable {
     var id: String {documentId}
@@ -13,6 +14,7 @@ struct ChatMessage: Identifiable {
     let documentId: String
     
     let fromId, toId, image, text: String
+    let date: Timestamp
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
         
@@ -20,5 +22,6 @@ struct ChatMessage: Identifiable {
         self.toId = data[FirebaseStatic.toId] as? String ?? ""
         self.text = data[FirebaseStatic.text] as? String ?? ""
         self.image = data[FirebaseStatic.imageURL] as? String ?? ""
+        self.date = data[FirebaseStatic.timestamp] as? Timestamp ?? Timestamp()
     }
 }

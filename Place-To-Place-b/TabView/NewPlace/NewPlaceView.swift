@@ -11,8 +11,7 @@ import Firebase
 
 
 class ModelNewPlaceView: ObservableObject {
-    @ObservedObject var data = FirebaseData()
-    
+    @Published var categoryArray = Category()
     @Published var namePlace = ""
     @Published var locationPlace = ""
     @Published var typeString = ""
@@ -37,9 +36,9 @@ class ModelNewPlaceView: ObservableObject {
     
     var place: PlaceModel?
     var user: Users?
-    init (place: PlaceModel?, user: Users?) {
+    init (place: PlaceModel?) {
         self.place = place
-        self.user = user
+        self.user = FirebaseData.shared.user
         getPlaceData()
     }
     
@@ -51,7 +50,7 @@ class ModelNewPlaceView: ObservableObject {
         
         self.namePlace = place.name ?? ""
         self.locationPlace = place.location ?? ""
-        self.typeString = place.type ?? ""
+        self.type = place.type ?? ""
         self.switchPlace = place.switchPlace
         self.messageBool = place.messageBool ?? true
         self.discription = place.discription ?? ""
@@ -64,6 +63,14 @@ class ModelNewPlaceView: ObservableObject {
                 gelleryStringArray.append(imageGellery)
             }
         }
+        if type != "" {
+            for i in categoryArray.categoryArray {
+                if i.name == type {
+                    self.type = i.imageString!
+                }
+            }
+        }
+       
     }
 
     
@@ -340,7 +347,7 @@ struct NewPlaceView: View {
 
 struct NewPlaceView_Previews: PreviewProvider {
     static var previews: some View {
-        let place = ModelNewPlaceView(place: nil, user: nil)
+        let place = ModelNewPlaceView(place: nil)
         NewPlaceView(mv: place)
     }
 }

@@ -35,6 +35,7 @@ class FirebaseData: ObservableObject {
     @Published var userPhoneAll = [String]()
     @Published var contactArrayAppPlace = [PhoneContact]()
     @Published var contactArrayAppPlaceNoApp = [PhoneContact]()
+
     
     init() {
         self.auth = Auth.auth()
@@ -45,8 +46,6 @@ class FirebaseData: ObservableObject {
         fetchData()
         deviseToken = self.downUserData()
     }
-    
-    
     
     func fetchData() {
         
@@ -137,14 +136,15 @@ class FirebaseData: ObservableObject {
             }
             var phoneAll = [String]()
             var array = [Users]()
-            for item in resalt!.documents {
+            guard let document = resalt else {return}
+            for item in document.documents {
                 let user = Users(document: item)
                 array.append(user!)
                 phoneAll.append(user?.phoneNumber ?? "")
             }
             self?.userAll = array
             self?.userPhoneAll = phoneAll
-//            self?.vremPhone()
+            //            self?.vremPhone()
             self?.getContact()
         }
     }
@@ -170,22 +170,22 @@ class FirebaseData: ObservableObject {
         return token
     }
     
-//    func getImageUIImage(url: String) -> UIImage {
-//
-//        let defaultImage = UIImage(named: "place-to-place-banner")
-//
-//        let imageUrlString = url
-//
-//        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
-//        do {
-//            let imageData = try Data(contentsOf: imageUrl)
-//            return UIImage(data: imageData)!
-//        } catch {
-//            print(error.localizedDescription)
-//            return defaultImage!
-//        }
-//
-//    }
+    //    func getImageUIImage(url: String) -> UIImage {
+    //
+    //        let defaultImage = UIImage(named: "place-to-place-banner")
+    //
+    //        let imageUrlString = url
+    //
+    //        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
+    //        do {
+    //            let imageData = try Data(contentsOf: imageUrl)
+    //            return UIImage(data: imageData)!
+    //        } catch {
+    //            print(error.localizedDescription)
+    //            return defaultImage!
+    //        }
+    //
+    //    }
     
     func getDocument(){
         db.collection("users").getDocuments() { [weak self] (querySnapshot, err) in
@@ -232,7 +232,7 @@ class FirebaseData: ObservableObject {
             for phoneContact in self.phoneContact {
                 if phoneContact.phoneNumber.contains(userData) {
                     arrayPhoneContact.append(phoneContact)
-
+                    
                 }
             }
         }
@@ -241,14 +241,14 @@ class FirebaseData: ObservableObject {
     }
     
     func getContacts() -> [CNContact]? { //  ContactsFilter is Enum find it below
-
+        
         let contactStore = CNContactStore()
         let keysToFetch = [
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
             CNContactPhoneNumbersKey,
             CNContactEmailAddressesKey,
             CNContactThumbnailImageDataKey] as [Any]
-
+        
         var allContainers: [CNContainer] = []
         do {
             allContainers = try contactStore.containers(matching: nil)
@@ -256,10 +256,10 @@ class FirebaseData: ObservableObject {
             print("Error fetching containers")
         }
         var results: [CNContact] = []
-
+        
         for container in allContainers {
             let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
-
+            
             do {
                 let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
                 results.append(contentsOf: containerResults)
@@ -273,7 +273,7 @@ class FirebaseData: ObservableObject {
         var con = [PhoneContact]()
         guard let contacts = getContacts() else {return}
         for cont in contacts {
-
+            
             con.append(PhoneContact(contact: cont))
         }
         print(con[0].phoneNumber)
@@ -283,14 +283,14 @@ class FirebaseData: ObservableObject {
             for phoneContact in self.phoneContact {
                 if phoneContact.phoneNumber.contains(userData) {
                     arrayPhoneContact.append(phoneContact)
-
+                    
                 }
             }
         }
         self.contactArrayAppPlace = arrayPhoneContact.sorted { $0.name ?? "" < $1.name ?? ""}
         self.contactArrayAppPlaceNoApp = phoneContact.filter { !contactArrayAppPlace.contains($0) } .sorted { $0.name ?? "" < $1.name ?? ""}
     }
-
+    
     
 }
 
@@ -304,7 +304,7 @@ class PhoneContact: NSObject, Identifiable {
     var email: [String] = [String]()
     var isSelected: Bool = false
     var isInvited = false
-
+    
     init(contact: CNContact) {
         name        = contact.givenName + " " + contact.familyName
         avatarData  = contact.thumbnailImageData

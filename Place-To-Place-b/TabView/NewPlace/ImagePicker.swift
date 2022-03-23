@@ -39,14 +39,28 @@ struct ImagePicker : View {
                             ForEach(self.gelleryStringArray,id: \.self){i in
                                 ZStack{
                                     VStack{
-                                        
-                                    
-//                                    Image(uiImage: i)
-                                    WebImage(url: URL(string: i))
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 250, height: 250)
-                                        .cornerRadius(15)
+                                        if isLoading {
+                                            Rectangle()
+                                                .foregroundColor(.gray)
+                                                .frame(width: 250, height: 250)
+                                                .cornerRadius(15)
+                                        } else {
+                                            
+                                            WebImage(url: URL(string: i))
+                                                .resizable()
+                                                .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                            // Supports ViewBuilder as well
+                                                .placeholder {
+                                                    Rectangle().foregroundColor(.gray)
+                                                }
+                                                .indicator(.activity) // Activity Indicator
+                                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                                .scaledToFill()
+                                                .frame(width: 250, height: 250)
+                                                .cornerRadius(15)
+                                                .clipped()
+                                        }
+                                       
                                     }
                                        
                                     if gelleryStringArray.count > 1 {
@@ -96,7 +110,7 @@ struct ImagePicker : View {
                 Button(action: {
                     self.showSheet.toggle()
                     print(gelleryStringArray)
-                    isLoading = true
+                    
                 }) {
                     if gelleryStringArray.count <= 9 {
                         Text(gelleryStringArray == [] ? "Добавить фото" : "Добавьте еще фото")
@@ -106,23 +120,12 @@ struct ImagePicker : View {
                         
                     }
                     
-                }.overlay (
-                    ZStack {
-                        if isLoading {
-                            Color.black
-                                .opacity(0.25)
-                            
-                            ProgressView()
-                                .font(.title2)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .cornerRadius(12)
-                        }
-                    })
+                }
                 .background(Color.red)
                 .clipShape(Capsule())
                 .padding(.top, 25)
                 .sheet(isPresented: $showImagePicker, content: {
-                    OpenGallary(isShown: $showImagePicker, image: $image, imageBol: .constant(false), sourceType: sourceType)
+                    OpenGallary(isShown: $showImagePicker, image: $image, imageBol: $isLoading, sourceType: sourceType)
                 })
                 .actionSheet(isPresented: $showSheet) {
                     ActionSheet(title: Text("Загрузите фото"), message: nil, buttons: [
@@ -140,8 +143,10 @@ struct ImagePicker : View {
             }
             
         }.onChange(of: image) { _ in
+            guard let image = image else {return}
             let imageName = "place-to-lace\(UUID().uuidString)\(String(Date().timeIntervalSince1970))"
-            FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: image!, dataUrl: "gellery") { (result) in
+            isLoading = true
+            FirebaseAuthDatabase.aploadImage(photoName: imageName, photo: image, dataUrl: "gellery") { (result) in
                 switch result {
                     
                 case .success(let url):
@@ -149,6 +154,7 @@ struct ImagePicker : View {
                     isLoading = false
                 case .failure(let error):
                     print(error.localizedDescription)
+                    isLoading = false
                 }
             }
         }

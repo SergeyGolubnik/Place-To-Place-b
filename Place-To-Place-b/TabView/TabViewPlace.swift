@@ -7,6 +7,29 @@
 
 
 import SwiftUI
+import Firebase
+
+class TabViewPlaceModel: ObservableObject {
+    let db = Firestore.firestore()
+    @Published var bedj = 0
+    private var firestoreLisener: ListenerRegistration?
+    
+    init() {
+        inTimeUserUpdate()
+    }
+    
+    func inTimeUserUpdate() {
+        firestoreLisener = db.collection("users").document(FirebaseData.shared.user.uid)
+            .addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                let usersMy = Users(document: document)
+                self.bedj = usersMy?.bandel ?? 0
+            }
+    }
+}
 
 struct TabViewPlace: View {
 
@@ -17,11 +40,14 @@ struct TabViewPlace: View {
     @State var exitBool = false
     @State var message = ""
     @StateObject var data = FirebaseData()
+//    @ObservedObject var tabViewPlaceModel = TabViewPlaceModel()
     
     private var badgePosition: CGFloat = 2
     private var tabsCount: CGFloat = 3
     
     @State var categoryArray = Category()
+    
+    @State var bedg = 0
     
     var body: some View {
         if exitBool {
@@ -75,13 +101,13 @@ struct TabViewPlace: View {
                                                   Circle()
                                                     .foregroundColor(.red)
 
-                                                    Text("\(1)")
+                                        Text("\(bedg)")
                                                     .foregroundColor(.white)
                                                     .font(Font.system(size: 12))
                                                 }
                                                 .frame(width: 15, height: 15)
                                                 .offset(x: ( ( 2 * self.badgePosition) - 0.95 ) * ( 25 / ( 2 * self.tabsCount ) ) + 2, y: -15)
-                                                .opacity(1 == 0 ? 0 : 1.0)
+                                                .opacity(bedg == 0 ? 0 : 1)
                                 }
                             }.foregroundColor(self.selected == 2 ? .black : .gray)
                             
@@ -116,12 +142,22 @@ struct TabViewPlace: View {
             }
             .onAppear(perform: {
                 data.examenationDeviseTocen()
+                let db = Firestore.firestore()
+                db.collection("users").document(data.user.uid)
+                    .addSnapshotListener { documentSnapshot, error in
+                        guard let document = documentSnapshot else {
+                            print("Error fetching document: \(error!)")
+                            return
+                        }
+                        let usersMy = Users(document: document)
+                        self.bedg = usersMy?.bandel ?? 0
+                    }
             })
             .environmentObject(data)
             
           
             .sheet(isPresented: $newPlace, content: {
-                NewPlaceView(mv: ModelNewPlaceView(place: nil, user: data.myUser))
+                NewPlaceView(mv: ModelNewPlaceView(place: nil))
             })
         }
             

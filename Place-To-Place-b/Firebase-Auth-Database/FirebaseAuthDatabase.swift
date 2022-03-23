@@ -416,18 +416,18 @@ class FirebaseAuthDatabase {
             completion(.success(()))
         }
     }
-    static func sendPushNotification(to token: String, title: String, body: String) {
+    static func sendPushNotification(to token: String, title: String, badge: String, body: String) {
         let urlString = "https://fcm.googleapis.com/fcm/send"
         let url = NSURL(string: urlString)!
         let paramString: [String : Any] = ["to" : token,
-                                           "notification" : ["title" : title, "body" : body, "badge": "1", "sound": "default"]
+                                           "notification" : ["title" : title, "body" : body, "badge": badge, "sound": "default"]
         ]
         
         let request = NSMutableURLRequest(url: url as URL)
         request.httpMethod = "POST"
         request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("key=AAAAqXAI73I:APA91bErPimwLjNNzHSElmVU1ulk7qqom9rMes4OupBNhf5F_bcbufOY2-kn28OoycWaFZAp5gTpJtz72EW0b192QcFKZfQVmCP5k4JXsu6RtxnrwsKo436l92KVl7p0RgvbXg1qbJj0", forHTTPHeaderField: "Authorization")
+        request.setValue(keyNotisfactionFirebase, forHTTPHeaderField: "Authorization")
         
         let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
             do {

@@ -39,12 +39,9 @@ class PlaceDetalsViewModel: ObservableObject {
     var userAll: [Users]?
     
     init(places: PlaceModel?) {
-        guard let currentUser = Auth.auth().currentUser else {return}
-        self.user = Users(user: currentUser)
+        self.user = FirebaseData.shared.user
         self.places = places
         self.userAll = FirebaseData.shared.userAll
-        
-        
     }
     func starsRating() {
         stars = "-"

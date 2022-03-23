@@ -16,7 +16,7 @@ import SDWebImageSwiftUI
 struct ChatLogView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var vm: ChatLogViewModel
+    @StateObject var vm: ChatLogViewModel
     @State var popapSetings = false
     @State var showImagePicker: Bool = false
     @State var image = UIImage(named: "avatar-1")
@@ -49,7 +49,7 @@ struct ChatLogView: View {
                 }
                 Text(vm.messageError)
                 
-                            .background(Color(.init(white: 0.95, alpha: 1)))
+                    .background(Color(.init(white: 0.95, alpha: 1)))
                 if vm.blokUser {
                     Text("\(vm.chatUser?.name ?? "") не готов(а) с вами общаться")
                         .padding()
@@ -63,8 +63,8 @@ struct ChatLogView: View {
                                 .font(.system(size: 24))
                                 .foregroundColor(Color(.darkGray))
                         }
-
-                                            
+                        
+                        
                         TextEditor(text: $vm.chatText)
                             .frame(height: 35)
                             .cornerRadius(5)
@@ -74,7 +74,7 @@ struct ChatLogView: View {
                             //                    if vm.chatText != "" {
                             vm.bedj += 1
                             
-                            FirebaseAuthDatabase.sendPushNotification(to: FirebaseData.shared.downUserData(), title: vm.chatCurentUser?.name ?? "", body: vm.chatText)
+                            FirebaseAuthDatabase.sendPushNotification(to: vm.chatUser?.token ?? "", title: vm.chatCurentUser?.name ?? "", badge: "\(vm.bedj)", body: vm.chatText)
                             vm.handleSend()
                             
                             
@@ -179,6 +179,7 @@ struct ChatLogView: View {
                             
                         case .success(let url):
                             vm.imageMessageURL = url.absoluteString
+                            vm.bedj += 1
                             vm.handleSend()
                         case .failure(let error):
                             print(error.localizedDescription)
@@ -187,68 +188,10 @@ struct ChatLogView: View {
                     
                 }
             }
-            .onAppear(perform: {
-                guard let toId = vm.chatUser?.uid else {return}
-                let uid = FirebaseData.shared.user.uid
-               
+            .onDisappear {
                 
-                FirebaseData.shared.getFrendUserData(userId: toId) { resalt in
-                    switch resalt {
-                    case .success(let user):
-                        vm.bedjBig = user.bandel
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                }
-                vm.updateBadj()
-                var summBig = 0
-                FirebaseData.shared.getFrendUserData(userId: uid) { resalt in
-                    switch resalt {
-                    case .success(let user):
-                        summBig = user.bandel
-                        print("summBig_____________: \(user.bandel)")
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                }
-                var summBedj = 0
-                FirebaseData.shared.firestore.collection("recent_message").document(uid).collection("messages").document(toId).getDocument{ document, error in
-                    if let document = document {
-                        guard let dataDescription = document.data() else {return}
-                        let recient = RecentMessage(documentId: document.documentID, data: dataDescription)
-                        summBedj = recient.bedj
-                        print("Cached document recient: \(recient.bedj)")
-                        
-                    } else {
-                      print("Document does not exist in cache")
-                    }
-                  }
-                if summBig >= summBedj {
-                    let summ = summBig - summBedj
-                    FirebaseData.shared.firestore.collection("users").document(uid).updateData([
-                        "bandel": summ
-                    ]) { error in
-                        if let error = error {
-                            print("__________________\(error.localizedDescription)")
-                        } else {
-                            let documentTo = FirebaseData.shared.firestore
-                                .collection("recent_message")
-                                .document(uid)
-                                .collection("messages")
-                                .document(toId)
-                            let dataTo = [
-                                FirebaseStatic.bedj: 0
-                            ] as [String: Any]
-                            documentTo.updateData (dataTo) { error in
-                                if let error = error {
-                                    print(error.localizedDescription)
-                                    return
-                                }
-                            }
-                        }
-                    }
-                }
-            })
+                vm.chatBedjIcon()
+            }
             .onTapGesture {
                 withAnimation {
                     popapSetings = false
@@ -262,80 +205,105 @@ struct MessageView: View {
     @State var shareBool = false
     @State var image = ""
     var body: some View {
-        
-        HStack{
-            if message.fromId == FirebaseData.shared.auth.currentUser?.uid {
-                Spacer()
-                HStack{
-
-                    if message.image != "" {
-                        Button {
-                            image = message.image
-                            shareBool = true
-                        } label: {
-                            
-                            WebImage(url: URL(string: message.image))
-                                .onSuccess { image, data, cacheType in
+        VStack{
+            
+            HStack{
+                if message.fromId == FirebaseData.shared.auth.currentUser?.uid {
+                    Spacer()
+                    HStack{
+                        VStack(alignment: .trailing, spacing: 3){
+                            HStack{
+                                
+                                if message.image != "" {
+                                    Button {
+                                        image = message.image
+                                        shareBool = true
+                                    } label: {
+                                        
+                                        WebImage(url: URL(string: message.image))
+                                            .onSuccess { image, data, cacheType in
+                                                
+                                            }
+                                            .resizable()
+                                            .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                        // Supports ViewBuilder as well
+                                            .placeholder {
+                                                Rectangle().foregroundColor(.gray)
+                                            }
+                                            .indicator(.activity) // Activity Indicator
+                                            .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                            .scaledToFill()
+                                            .frame(maxWidth: 150, maxHeight: 150)
+                                            .cornerRadius(10)
+                                            .clipped()
+                                    }
+                                } else {
+                                    
+                                    Text(message.text)
+                                        .foregroundColor(.black)
                                     
                                 }
-                                .resizable()
-                                .placeholder(Image(systemName: "photo")) // Placeholder Image
-                            // Supports ViewBuilder as well
-                                .placeholder {
-                                    Rectangle().foregroundColor(.gray)
-                                }
-                                .indicator(.activity) // Activity Indicator
-                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
-                                .scaledToFill()
-                                .frame(maxWidth: 150, maxHeight: 150)
-                                .cornerRadius(10)
-                                .clipped()
+                            }
+                            .padding(message.image != "" ? 0 : 10)
+                            .background(colorApp)
+                            .cornerRadius(8)
+                            HStack(spacing: 0){
+                                Text(message.date.dateValue(), style: .date)
+                                Text(message.date.dateValue(), style: .time)
+                            }.font(.system(size: 8)).foregroundColor(.gray)
+                            
                         }
-                    } else {
-                    Text(message.text)
-                        .foregroundColor(.black)
                     }
+                    
+                } else {
+                    HStack{
+                        VStack(alignment: .leading, spacing: 3){
+                            
+                            HStack{
+                                if message.image != "" {
+                                    Button {
+                                        image = message.image
+                                        shareBool = true
+                                    } label: {
+                                        
+                                        WebImage(url: URL(string: message.image))
+                                            .onSuccess { image, data, cacheType in
+                                                
+                                            }
+                                            .resizable()
+                                            .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                        // Supports ViewBuilder as well
+                                            .placeholder {
+                                                Rectangle().foregroundColor(.gray)
+                                            }
+                                            .indicator(.activity) // Activity Indicator
+                                            .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                                            .scaledToFill()
+                                            .frame(maxWidth: 150, maxHeight: 150)
+                                            .cornerRadius(10)
+                                            .clipped()
+                                    }
+                                } else {
+                                    Text(message.text)
+                                        .foregroundColor(.black)
+                                }
+                            }
+                            .padding(message.image != "" ? 0 : 10)
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 1)
+//                            Spacer()
+                            HStack(spacing: 0){
+                                Text(message.date.dateValue(), style: .date)
+                                Text(message.date.dateValue(), style: .time)
+                            }.font(.system(size: 8)).foregroundColor(.gray)
+                        }
+                    }
+                    Spacer()
                 }
-                .padding(message.image != "" ? 0 : 10)
-                .background(colorApp)
-                .cornerRadius(8)
-            } else {
                 
-                HStack{
-                    if message.image != "" {
-                        Button {
-                            image = message.image
-                            shareBool = true
-                        } label: {
-                            
-                            WebImage(url: URL(string: message.image))
-                                .onSuccess { image, data, cacheType in
-                                    
-                                }
-                                .resizable()
-                                .placeholder(Image(systemName: "photo")) // Placeholder Image
-                            // Supports ViewBuilder as well
-                                .placeholder {
-                                    Rectangle().foregroundColor(.gray)
-                                }
-                                .indicator(.activity) // Activity Indicator
-                                .transition(.fade(duration: 0.5)) // Fade Transition with duration
-                                .scaledToFill()
-                                .frame(maxWidth: 150, maxHeight: 150)
-                                .cornerRadius(10)
-                                .clipped()
-                        }
-                    } else {
-                        Text(message.text)
-                            .foregroundColor(.black)
-                    }
-                }
-                .padding(message.image != "" ? 0 : 10)
-                .background(Color.white)
-                .cornerRadius(8)
-                .shadow(radius: 1)
-                Spacer()
             }
+            
             
         }
         .padding(.horizontal)
@@ -349,10 +317,10 @@ struct MessageView: View {
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
         let chatLog = ChatLogViewModel(chatUser: ChatUsers(name: "Sergey", uid: "1234567", phoneNumber: "7903888888234", profileImage: "", token: ""), chatCurentUser: ChatUsers(name: "", uid: "1234567", phoneNumber: "7903888888234", profileImage: "", token: ""))
-//                NavigationView {
-                    ChatLogView(vm: chatLog)
-//                }
-//        MainMessagesView()
+        //                NavigationView {
+        ChatLogView(vm: chatLog)
+        //                }
+        //        MainMessagesView()
         
     }
 }

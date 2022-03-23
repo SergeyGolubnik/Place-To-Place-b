@@ -362,7 +362,7 @@ struct PlaceDetals: View {
         .sheet(isPresented: $vm.redactPlace) {
             dismissNewPlace()
         } content: {
-            NewPlaceView(mv: ModelNewPlaceView(place: vm.places, user: vm.user))
+            NewPlaceView(mv: ModelNewPlaceView(place: vm.places))
         }
         .sheet(isPresented: $vm.shareBool) {
             PresentImage(imageUrl: $vm.imagePresent)
