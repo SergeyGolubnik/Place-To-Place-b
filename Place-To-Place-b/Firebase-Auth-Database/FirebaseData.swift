@@ -35,8 +35,9 @@ class FirebaseData: ObservableObject {
     @Published var userPhoneAll = [String]()
     @Published var contactArrayAppPlace = [PhoneContact]()
     @Published var contactArrayAppPlaceNoApp = [PhoneContact]()
-
     
+    var firestoreLisenerBedjBig: ListenerRegistration?
+    var firestoreLisenerBedg: ListenerRegistration?
     init() {
         self.auth = Auth.auth()
         self.storage = Storage.storage()
@@ -112,6 +113,51 @@ class FirebaseData: ObservableObject {
             }
         }
     }
+    func getUserDataBedjRecient(user: Users, completion: @escaping (Result<Int, Error>) -> Void) {
+        firestoreLisenerBedg?.remove()
+        firestoreLisenerBedjBig?.remove()
+        firestoreLisenerBedg = db.collection("recent_message").document(user.uid).collection("messages").addSnapshotListener {(resalt, error) in
+            if error != nil {
+                completion(.failure(UserError.cannotGetUserInfo))
+            }
+            if let document = resalt {
+                print("FirebaseData getUserDataBedjRecient  \(document)")
+                var summBedj = 0
+                var recientMessage = [RecentMessage]()
+                resalt?.documentChanges.forEach({ change in
+                    let docId = change.document.documentID
+                    recientMessage.insert(.init(documentId: docId, data: change.document.data()), at: 0)
+                })
+                for i in recientMessage {
+                    summBedj += i.bedj
+                }
+                print("FirebaseData getUserDataBedjRecient \(summBedj)")
+                print("FirebaseData getUserDataBedjRecient \(user.bandel)")
+                    self.firestore.collection("users").document(user.uid).updateData([
+                        "bandel": summBedj
+                    ]) { error in
+                        if let error = error {
+                            completion(.failure(error))
+                        }
+                        self.firestoreLisenerBedg = self.db.collection("users").document(user.uid)
+                            .addSnapshotListener { documentSnapshot, error in
+                                guard let document = documentSnapshot else {
+                                    print("Error fetching document: \(error!)")
+                                    completion(.failure(error!))
+                                    return
+                                }
+                                let usersMy = Users(document: document)
+                                completion(.success(usersMy?.bandel ?? 0))
+                                    
+                                
+                                UIApplication.shared.applicationIconBadgeNumber = usersMy?.bandel ?? 0
+                            }
+                    }
+            }
+            completion(.failure(UserError.cannotGetUserInfo))
+        }
+    }
+    
     func getFrendUserData(userId: String, completion: @escaping (Result<Users, Error>) -> Void) {
         let docRef = usersRef.document(userId)
         docRef.getDocument { (document, error) in

@@ -52,8 +52,8 @@ struct TabViewPlace: View {
     var body: some View {
         if exitBool {
             ContentView()
-        } else if data.places == [] {
-            LoaderView()
+//        } else if data.places == [] {
+//            LoaderView()
         } else {
             ZStack {
                 Text(message)
@@ -142,16 +142,14 @@ struct TabViewPlace: View {
             }
             .onAppear(perform: {
                 data.examenationDeviseTocen()
-                let db = Firestore.firestore()
-                db.collection("users").document(data.user.uid)
-                    .addSnapshotListener { documentSnapshot, error in
-                        guard let document = documentSnapshot else {
-                            print("Error fetching document: \(error!)")
-                            return
-                        }
-                        let usersMy = Users(document: document)
-                        self.bedg = usersMy?.bandel ?? 0
+                data.getUserDataBedjRecient(user: data.user) { (resalt) in
+                    switch resalt {
+                    case .success(let bedj):
+                        self.bedg = bedj
+                    case .failure(let error):
+                        print(error.localizedDescription)
                     }
+                }
             })
             .environmentObject(data)
             

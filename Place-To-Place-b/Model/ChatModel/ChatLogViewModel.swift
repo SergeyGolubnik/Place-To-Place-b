@@ -30,7 +30,7 @@ class ChatLogViewModel: ObservableObject {
     init(chatUser: ChatUsers?, chatCurentUser: ChatUsers?) {
         self.chatUser = chatUser
         self.chatCurentUser = chatCurentUser
-//        self.updateBadj()
+        //        self.updateBadj()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             self.fetchMessage()
         }
@@ -67,7 +67,7 @@ class ChatLogViewModel: ObservableObject {
                     self.count += 1
                 }
             }
-       
+        
         self.blokUserUid()
     }
     func handleSend() {
@@ -175,9 +175,9 @@ class ChatLogViewModel: ObservableObject {
             }
             var array = [String]()
             quereSnapshot?.documentChanges.forEach({ change in
-                    let data = change.document.data()
+                let data = change.document.data()
                 guard let userBlok = BlokUser(data: data) else {return}
-                    array.append(userBlok.blokUser)
+                array.append(userBlok.blokUser)
                 
             })
             
@@ -191,9 +191,9 @@ class ChatLogViewModel: ObservableObject {
             }
             var array = [String]()
             quereSnapshot?.documentChanges.forEach({ change in
-                    let data = change.document.data()
+                let data = change.document.data()
                 guard let userBlok = BlokUser(data: data) else {return}
-                    array.append(userBlok.blokUser)
+                array.append(userBlok.blokUser)
                 
             })
             self.blokUserTo = array.contains(toId)
@@ -201,7 +201,7 @@ class ChatLogViewModel: ObservableObject {
         
         
     }
-//    получаем количество бейджев в последних сообщениях друга
+    //    получаем количество бейджев в последних сообщениях друга
     func updateBadj() {
         updateBadjLisener?.remove()
         guard let fromId = FirebaseData.shared.auth.currentUser?.uid else {return}
@@ -213,13 +213,13 @@ class ChatLogViewModel: ObservableObject {
                 let recient = RecentMessage(documentId: document.documentID, data: dataDescription)
                 self.bedj = recient.bedj
                 print("получаем количество бейджев в последних сообщениях друга: \(recient.bedj)")
-               
+                
             } else {
-              print("Document does not exist in cache")
+                print("Document does not exist in cache")
             }
-          }
+        }
     }
-//    плюсуем бейджи другу в юзере
+    //    плюсуем бейджи другу в юзере
     func bedjBigMetod() {
         let summ = bedjBig + 1
         guard let toId = chatUser?.uid else {return}
@@ -227,7 +227,7 @@ class ChatLogViewModel: ObservableObject {
             "bandel": summ
         ])
     }
-//    Загрузка сколько бейджев у юзера
+    //    Загрузка сколько бейджев у юзера
     func downFrendBedj() {
         downFrendBedjLisener?.remove()
         guard let toId = chatUser?.uid else {return}
@@ -246,12 +246,12 @@ class ChatLogViewModel: ObservableObject {
             }
         }
     }
-//    Удаление и минусовка бейджев у себя
+    //    Удаление и минусовка бейджев у себя
     func chatBedjIcon() {
         guard let toId = chatUser?.uid else {return}
         let uid = FirebaseData.shared.user.uid
         
-//       загрузка сколько на данный момент бейджев
+        //       загрузка сколько на данный момент бейджев
         
         let docRef = usersRef.document(uid)
         docRef.getDocument { document, error in
@@ -270,9 +270,9 @@ class ChatLogViewModel: ObservableObject {
                         print("Получили свои беджи в последних сообщениях: \(recient.bedj)")
                         self.deleteBedj()
                     } else {
-                      print("ошибка класс ChatLogViewModel метод chatBedjIcon ")
+                        print("ошибка класс ChatLogViewModel метод chatBedjIcon ")
                     }
-                  }
+                }
             } else {
                 print("Ошибка в загрузке френда класс ChatLogViewModel метод chatBedjIcon")
                 return
@@ -282,64 +282,28 @@ class ChatLogViewModel: ObservableObject {
         
         print("summBig класс ChatLogViewModel метод chatBedjIcon __________________\(summBig)")
         print("summBedj класс ChatLogViewModel метод chatBedjIcon __________________\(summBedj)")
-       
+        
     }
     func deleteBedj() {
         guard let toId = chatUser?.uid else {return}
         let uid = FirebaseData.shared.user.uid
-        
-        if summBig >= summBedj {
-            let summ = summBig - summBedj
-            print("summ класс ChatLogViewModel метод chatBedjIcon __________________\(summ)")
-            FirebaseData.shared.firestore.collection("users").document(uid).updateData([
-                "bandel": summ
-            ]) { error in
-                if let error = error {
-                    print("ошибка класс ChatLogViewModel метод chatBedjIcon __________________\(error.localizedDescription)")
-                } else {
-                    print("summ класс ChatLogViewModel метод chatBedjIcon __________________\(summ)")
-                    let documentTo = FirebaseData.shared.firestore
-                        .collection("recent_message")
-                        .document(uid)
-                        .collection("messages")
-                        .document(toId)
-                    let dataTo = [
-                        FirebaseStatic.bedj: 0
-                    ] as [String: Any]
-                    documentTo.updateData (dataTo) { error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                            return
-                        }
-                    }
-                }
-            }
-            return
-        } else {
-            FirebaseData.shared.firestore.collection("users").document(uid).updateData([
-                "bandel": 0
-            ]) { error in
-                if let error = error {
-                    print("ошибка класс ChatLogViewModel метод chatBedjIcon __________________\(error.localizedDescription)")
-                } else {
-                    print("summ класс ChatLogViewModel метод chatBedjIcon \(0)")
-                    let documentTo = FirebaseData.shared.firestore
-                        .collection("recent_message")
-                        .document(uid)
-                        .collection("messages")
-                        .document(toId)
-                    let dataTo = [
-                        FirebaseStatic.bedj: 0
-                    ] as [String: Any]
-                    documentTo.updateData (dataTo) { error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                            return
-                        }
-                    }
-                }
+        let documentTo = FirebaseData.shared.firestore
+            .collection("recent_message")
+            .document(uid)
+            .collection("messages")
+            .document(toId)
+        let dataTo = [
+            FirebaseStatic.bedj: 0
+        ] as [String: Any]
+        documentTo.updateData (dataTo) { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
             }
         }
+        
+        
+        
     }
     @Published var count = 0
 }

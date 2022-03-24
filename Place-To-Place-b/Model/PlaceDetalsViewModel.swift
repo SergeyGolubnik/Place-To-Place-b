@@ -20,7 +20,7 @@ class PlaceDetalsViewModel: ObservableObject {
     @Published var userPlace: Users!
     @Published var userNik = ""
     @Published var categoryArray = Category()
-    @Published var type = ""
+    @Published var typeName = ""
     @Published var defaultImage = UIImage(named: "place-to-place-banner")
     @Published var imagePresent = ""
     @Published var itemImagePresent = [Any]()
@@ -106,13 +106,7 @@ class PlaceDetalsViewModel: ObservableObject {
             
         }
 
-        if places.type != "" {
-            for i in categoryArray.categoryArray {
-                if i.name == places.type {
-                    self.type = i.imageString!
-                }
-            }
-        }
+       
         guard let user = user else {
             return
         }

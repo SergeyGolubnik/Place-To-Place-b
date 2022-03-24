@@ -27,6 +27,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
     var key: String
     var location: String?
     var type: String?
+    var typeName: String?
     var rating: [String: Int]?
     var coments: [String: String]?
     var imageUrl: String?
@@ -69,6 +70,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         latitude = snapshotVaiue["latitude"] as? String
         longitude = snapshotVaiue["Longitude"] as? String
         type = snapshotVaiue["type"] as? String
+        typeName = snapshotVaiue["typeName"] as? String
         deviseToken = snapshotVaiue["deviseToken"] as! String
         rating = snapshotVaiue["rating"] as? [String: Int]
         coments = snapshotVaiue["coments"] as? [String: String]
@@ -83,7 +85,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         ref = snapshot.ref
     }
 
-    init(userId: String, name: String, key: String, nikNamePlace: String, avatarNikPlace: String, phoneNumber: String, phoneNumberArray: [String]?, location: String, type: String, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?, moderation: Bool?) {
+    init(userId: String, name: String, key: String, nikNamePlace: String, avatarNikPlace: String, phoneNumber: String, phoneNumberArray: [String]?, location: String, type: String, typeName: String?, rating: [String: Int], coments: [String: String]?, imageUrl: String, latitude: String?, deviseToken: String, longitude: String?, discription: String?, switchPlace: String, gellery: [String]?, favorit: [String]?, date: String?, messageBool: Bool?, moderation: Bool?) {
         self.userId = userId
         self.name = name
         self.key = key
@@ -93,6 +95,7 @@ class PlaceModel: NSObject, Identifiable, MKAnnotation {
         self.phoneNumberArray = phoneNumberArray
         self.location = location
         self.type = type
+        self.typeName = typeName
         self.rating = rating
         self.coments = coments
         self.imageUrl = imageUrl
