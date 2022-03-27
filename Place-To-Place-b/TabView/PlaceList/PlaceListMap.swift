@@ -37,7 +37,7 @@ struct PlaceListMap: View {
                 Map(coordinateRegion: $mapData.region, showsUserLocation: true, annotationItems: placeF) { place in
                     MapAnnotation(coordinate: place.coordinate) {
                         
-                        AnnatatonPin(placeDetailViewModel: $placeDetailViewModel, place: .constant(place))
+                        AnnatatonPin(image: place.typeName ?? "")
                            
                                         .onTapGesture {
                                             placeDetail = place

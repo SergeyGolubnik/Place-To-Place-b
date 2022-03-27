@@ -42,38 +42,49 @@ struct PhoneContactView: View {
                 }
                 
             }
-            
-            if allUserTogle {
-                Section(header: Text("Поделитесь с друзьями")) {
+            if phoneContactAppNoApp != [] || phoneContactApp != [] {
+                
+                if allUserTogle {
+                    Section(header: Text("Поделитесь с друзьями")) {
+                        
+                        ForEach(phoneContactApp, id: \.self) { contacts in
+                            
+                            if contacts.phoneNumber.count > 0 {
+                                HStack{
+                                    if phoneNumberContacns(pnoneContacts: contacts, phoneArray: arrayPhone) {
+                                        ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, buttonBool: true, arrayPhone: $arrayPhone)
+                                    } else {
+                                        ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
+                                    }
+                                    
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                
+                Section(header: Text("Пригласите в приложение")) {
                     
-                    ForEach(phoneContactApp, id: \.self) { contacts in
+                    ForEach(phoneContactAppNoApp, id: \.self) { contacts in
                         
                         if contacts.phoneNumber.count > 0 {
                             HStack{
-                                if phoneNumberContacns(pnoneContacts: contacts, phoneArray: arrayPhone) {
-                                    ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, buttonBool: true, arrayPhone: $arrayPhone)
-                                } else {
-                                    ToggleContacts(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
-                                }
-                                
+                                ToggleContactsNoApp(name: contacts.name ?? "", image: contacts.image ?? Image(systemName: "person.crop.circle"), phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
                             }
+                            
                         }
-                        
                     }
                 }
-            }
-            
-            Section(header: Text("Пригласите в приложение")) {
-                
-                ForEach(phoneContactAppNoApp, id: \.self) { contacts in
-                    
-                    if contacts.phoneNumber.count > 0 {
-                        HStack{
-                            ToggleContactsNoApp(name: contacts.name!, phone: contacts.phoneNumber, arrayPhone: $arrayPhone)
-                        }
-                        
-                    }
+            } else {
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                              }
+                } label: {
+                    Text("Включите доступ к контактам")
                 }
+
             }
         }
         .onAppear(perform: {

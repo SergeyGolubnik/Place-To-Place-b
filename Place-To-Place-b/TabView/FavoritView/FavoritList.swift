@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Firebase
 
 struct FavoritList: View {
     @Environment(\.presentationMode) var presentationMode
@@ -51,45 +52,54 @@ struct FavoritList: View {
                         }
                         
                     }.listStyle(.plain)
-                    .toolbar  {
-                        ToolbarItemGroup(placement: .navigationBarLeading) {
-                            if title != "Любимые места" {
-                                
-                                Button {
-                                    presentationMode.wrappedValue.dismiss()
-                                } label: {
-                                    Text("Выйти")
-                                        .foregroundColor(.blue)
-                                }
-                            }
-
-                        }
-                    }
+                       
                 }
                 
+            }
+            .toolbar  {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    if title != "Любимые места" {
+                        
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Text("Выйти")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                    
+                }
             }
             .navigationBarColor(uiColorApp)
             .navigationBarTitle(title, displayMode: .inline)
             }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
-            if title == "Все" {
-                placeArray = place.filter { $0.userId == FirebaseData.shared.user.uid}
-            } else if title == "Любимые места" {
+            guard let currentUser = Auth.auth().currentUser else {return}
+            let user = Users(user: currentUser)
+            if user.uid == "swjITaC8zPZ5rjdML7LZftuaZCi1" {
+                placeArray = place.filter { $0.moderation == false }
+            } else {
                 
-                for item in place {
-                    if item.favorit != nil {
-                        
-                        for i in item.favorit! {
-                            if i == FirebaseData.shared.user.uid {
-                                placeArray.append(item)
+                if title == "Все" {
+                    placeArray = place.filter { $0.userId == FirebaseData.shared.user.uid}
+                } else if title == "Любимые места" {
+                    
+                    for item in place {
+                        if item.favorit != nil {
+                            
+                            for i in item.favorit! {
+                                if i == FirebaseData.shared.user.uid {
+                                    placeArray.append(item)
+                                }
                             }
                         }
                     }
+                } else {
+                    placeArray = place.filter { $0.userId == placeDetailViewModel.places?.userId}
                 }
-            } else {
-                placeArray = place.filter { $0.userId == placeDetailViewModel.places?.userId}
             }
+            
         }
         .sheet(isPresented: $detailPlaceBool, content: {
             PlaceDetals(vm: placeDetailViewModel)

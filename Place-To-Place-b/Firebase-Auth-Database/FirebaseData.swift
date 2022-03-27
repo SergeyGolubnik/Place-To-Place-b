@@ -69,14 +69,25 @@ class FirebaseData: ObservableObject {
             var array = [PlaceModel]()
             for item in snapshot.children {
                 let placeModel = PlaceModel(snapshot: item as! DataSnapshot)
-                if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {
-                    if let placePhone = placeModel.phoneNumberArray {
-                        if placePhone.contains(self?.user.phoneNumber ?? "") {
+                
+                if self?.user.uid != "swjITaC8zPZ5rjdML7LZftuaZCi1" {
+                    
+                    if placeModel.moderation ?? true {
+                        if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {
+                            if let placePhone = placeModel.phoneNumberArray {
+                                if placePhone.contains(self?.user.phoneNumber ?? "") {
+                                    array.append(placeModel)
+                                    
+                                }
+                            }
+                        } else {
+                            
                             array.append(placeModel)
                         }
+                    } else if self?.user.uid == placeModel.userId {
+                        array.append(placeModel)
                     }
                 } else {
-                    
                     array.append(placeModel)
                 }
             }
@@ -299,7 +310,7 @@ class FirebaseData: ObservableObject {
         do {
             allContainers = try contactStore.containers(matching: nil)
         } catch {
-            print("Error fetching containers")
+            print(error.localizedDescription)
         }
         var results: [CNContact] = []
         
@@ -318,11 +329,14 @@ class FirebaseData: ObservableObject {
     func getContact() {
         var con = [PhoneContact]()
         guard let contacts = getContacts() else {return}
+        if contacts == [] {
+            return
+        }
+        print("getContact________________________________________\(contacts)")
         for cont in contacts {
             
             con.append(PhoneContact(contact: cont))
         }
-        print(con[0].phoneNumber)
         self.phoneContact = Array(Set(con.sorted { $0.name ?? "" < $1.name ?? ""}))
         var arrayPhoneContact = [PhoneContact]()
         for userData in self.userPhoneAll {

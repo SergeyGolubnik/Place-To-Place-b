@@ -21,6 +21,7 @@ class ModelNewPlaceView: ObservableObject {
     @Published var latitude = ""
     @Published var longitude = ""
     @Published var typeName = ""
+    @Published var moderation = false
     
     
     
@@ -57,6 +58,7 @@ class ModelNewPlaceView: ObservableObject {
         self.latitude = place.latitude ?? ""
         self.longitude = place.longitude ?? ""
         self.arrayPhone = place.phoneNumberArray ?? []
+        self.moderation = place.moderation ?? false
         gelleryStringArray.append((place.imageUrl) ?? "")
         if place.gellery != nil, place.gellery != [] {
             for imageGellery in (place.gellery)! {
@@ -104,7 +106,7 @@ struct NewPlaceView: View {
                             .padding(10)
                             .background(Color.gray.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 5))
-                        if mv.namePlace != "", mv.locationPlace != "", mv.typeString != "",  mv.gelleryStringArray.count > 0, mv.discription != "" {
+                        if mv.namePlace != "", mv.locationPlace != "", mv.typeName != "",  mv.gelleryStringArray.count > 0, mv.discription != "" {
                             Button {
                                 isLoading = true
                                 var geleryArray = [String]()
@@ -114,7 +116,7 @@ struct NewPlaceView: View {
                                     }
                                 }
                                 if mv.place == nil {
-                                    FirebaseAuthDatabase.newPlace(name: mv.namePlace, userId: mv.user?.uid ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, typeName: mv.typeName, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: false, ref: data.ref) { result in
+                                    FirebaseAuthDatabase.newPlace(name: mv.namePlace, userId: mv.user?.uid ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, typeName: mv.typeName, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: mv.switchPlace == "Делится" ? false : true, ref: data.ref) { result in
                                         
                                         switch result {
                                         case .success:
@@ -129,7 +131,7 @@ struct NewPlaceView: View {
                                         }
                                     }
                                 } else {
-                                    FirebaseAuthDatabase.updatePlace(key: mv.place!.key, name: mv.namePlace, userId: mv.user?.uid ?? "", nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, typeName: mv.typeName, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: false, ref: data.ref) { result in
+                                    FirebaseAuthDatabase.updatePlace(key: mv.place!.key, name: mv.namePlace, userId: mv.user?.uid ?? "", nikNamePlace: mv.user?.lastName ?? "", avatarNikPlace: mv.user?.avatarsURL ?? "", phoneNumber: mv.user?.phoneNumber ?? "", phoneNumberArray: mv.arrayPhone, location: mv.locationPlace, latitude: mv.latitude, Longitude: mv.longitude, type: mv.typeString, typeName: mv.typeName, image: mv.gelleryStringArray[0], switchPlace: mv.switchPlace, deviseToken: FirebaseData.shared.downUserData(), discription: mv.discription, gellery: geleryArray, messageBool: mv.messageBool, moderation: mv.switchPlace == "Делится" ? false : true, ref: data.ref) { result in
                                         switch result {
                                         case .success:
                                             self.titleAlert = "Поздравляем"

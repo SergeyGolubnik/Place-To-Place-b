@@ -7,20 +7,32 @@
 
 import Foundation
 import SDWebImageSwiftUI
-import FirebaseAuth
+import Firebase
 
 
 
 class PlaceDetalsViewModel: ObservableObject {
+    @Published var name = ""
+    @Published var userId = ""
+    @Published var key = ""
+    @Published var discription = ""
+    @Published var imageUrl = ""
+    @Published var location = ""
+    @Published var avatarNikPlace = ""
+    @Published var nikNamePlace = ""
+    @Published var favorit = [String]()
     @Published var myFavorit = ""
     @Published var stars = "-"
+    @Published var message = false
     @Published var comentArray = [Comment]()
     @Published var imageGeneral = ""
     @Published var imageGellery = [String]()
     @Published var userPlace: Users!
     @Published var userNik = ""
+    @Published var updatePlaceNew = false
     @Published var categoryArray = Category()
     @Published var typeName = ""
+    @Published var type = ""
     @Published var defaultImage = UIImage(named: "place-to-place-banner")
     @Published var imagePresent = ""
     @Published var itemImagePresent = [Any]()
@@ -31,6 +43,7 @@ class PlaceDetalsViewModel: ObservableObject {
     @Published var userPlaceBool = false
     @Published var favoritPlaceBool = false
     @Published var shareBool = false
+    @Published var moderation = false
    
     
     
@@ -42,6 +55,25 @@ class PlaceDetalsViewModel: ObservableObject {
         self.user = FirebaseData.shared.user
         self.places = places
         self.userAll = FirebaseData.shared.userAll
+        
+    }
+    func getPlace() {
+        guard let places = places else {
+            return
+        }
+        name = places.name ?? ""
+        userId = places.userId
+        key = places.key
+        moderation = places.moderation ?? true
+        discription = places.discription ?? ""
+        imageUrl = places.imageUrl ?? ""
+        message = places.messageBool ?? true
+        typeName = places.typeName ?? ""
+        type = places.type ?? ""
+        location = places.location ?? ""
+        avatarNikPlace = places.avatarNikPlace
+        nikNamePlace = places.nikNamePlace
+        favorit = places.favorit ?? []
     }
     func starsRating() {
         stars = "-"
@@ -105,7 +137,6 @@ class PlaceDetalsViewModel: ObservableObject {
             }
             
         }
-
        
         guard let user = user else {
             return
@@ -123,7 +154,19 @@ class PlaceDetalsViewModel: ObservableObject {
                 imageGellery.append(i)
             }
         }
+        getPlace()
     }
-    
+    func moderationPlace(){
+        guard let key = places?.key else {return}
+        let ref = Database.database().reference(withPath: "user")
+        let placeRef = ref.child(key)
+        placeRef.updateChildValues([
+            "moderation" : moderation
+        ]) { error, arg  in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
