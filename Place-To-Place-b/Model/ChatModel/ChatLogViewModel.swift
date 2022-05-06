@@ -249,7 +249,7 @@ class ChatLogViewModel: ObservableObject {
     //    Удаление и минусовка бейджев у себя
     func chatBedjIcon() {
         guard let toId = chatUser?.uid else {return}
-        let uid = FirebaseData.shared.user.uid
+        let uid = FirebaseData.shared.users.uid
         
         //       загрузка сколько на данный момент бейджев
         
@@ -286,7 +286,7 @@ class ChatLogViewModel: ObservableObject {
     }
     func deleteBedj() {
         guard let toId = chatUser?.uid else {return}
-        let uid = FirebaseData.shared.user.uid
+        let uid = FirebaseData.shared.users.uid
         let documentTo = FirebaseData.shared.firestore
             .collection("recent_message")
             .document(uid)

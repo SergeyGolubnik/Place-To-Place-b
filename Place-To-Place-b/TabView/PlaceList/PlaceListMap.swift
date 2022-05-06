@@ -58,7 +58,7 @@ struct PlaceListMap: View {
                     
                 }
                 
-                if filter != "", filter != data.user.uid {
+                if filter != "", filter != data.users.uid {
                     VStack{
                         HStack{
                             Spacer()
@@ -108,7 +108,7 @@ struct PlaceListMap: View {
             .navigationBarItems(leading:
                                     Button(action: {
                 filterMy.toggle()
-                filter = filterMy ? data.user.uid : ""
+                filter = filterMy ? data.users.uid : ""
             }) {
                 Text(filterMy ? "Все" : "Мои")
                     .foregroundColor(.black)
@@ -138,7 +138,7 @@ struct PlaceListMap: View {
                 if value == filter, value != data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.type == filter}
                     mapData.rmovePlace(place: placeF)
-                } else if value == data.user.uid, filter != "" {
+                } else if value == data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.userId == filter}
                     mapData.rmovePlace(place: placeF)
                 } else {

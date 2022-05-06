@@ -18,8 +18,6 @@ class FirebaseData: ObservableObject {
     let storage: Storage
     let firestore: Firestore
     let ref: DatabaseReference!
-    //    var ref: DatabaseReference!
-    var user: Users!
     @Published var myUser: Users!
     let db = Firestore.firestore()
     private var usersRef: CollectionReference {
@@ -51,9 +49,9 @@ class FirebaseData: ObservableObject {
     func fetchData() {
         
         guard let currentUser = auth.currentUser else {return}
-        user = Users(user: currentUser)
+        users = Users(user: currentUser)
         
-        getUserData(user: user) { [weak self] resalt in
+        getUserData(user: users) { [weak self] resalt in
             switch resalt {
                 
             case .success(let myUser):
@@ -70,12 +68,12 @@ class FirebaseData: ObservableObject {
             for item in snapshot.children {
                 let placeModel = PlaceModel(snapshot: item as! DataSnapshot)
                 
-                if self?.user.uid != "swjITaC8zPZ5rjdML7LZftuaZCi1" {
+                if self?.users.uid != "swjITaC8zPZ5rjdML7LZftuaZCi1" {
                     
                     if placeModel.moderation ?? true {
-                        if placeModel.switchPlace == "Приватно" && self?.user.uid != placeModel.userId {
+                        if placeModel.switchPlace == "Приватно" && self?.users.uid != placeModel.userId {
                             if let placePhone = placeModel.phoneNumberArray {
-                                if placePhone.contains(self?.user.phoneNumber ?? "") {
+                                if placePhone.contains(self?.users.phoneNumber ?? "") {
                                     array.append(placeModel)
                                     
                                 }
@@ -84,7 +82,7 @@ class FirebaseData: ObservableObject {
                             
                             array.append(placeModel)
                         }
-                    } else if self?.user.uid == placeModel.userId {
+                    } else if self?.users.uid == placeModel.userId {
                         array.append(placeModel)
                     }
                 } else {
@@ -99,11 +97,11 @@ class FirebaseData: ObservableObject {
     }
     func examenationDeviseTocen() {
         for place in places {
-            if place.userId == user.uid {
+            if place.userId == users.uid {
                 if place.deviseToken != deviseToken {
                     guard let newToken = deviseToken, let ref = ref else {return}
-                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: user.uid, nikNamePlace: user.lastName ?? "", avatarNikPlace: user.avatarsURL ?? ""
-                                                     , phoneNumber: user.phoneNumber ?? "", newToken: newToken, ref: ref)
+                    FirebaseAuthDatabase.updateToken(key: place.key, switchPlace: place.switchPlace, userId: users.uid, nikNamePlace: users.lastName ?? "", avatarNikPlace: users.avatarsURL ?? ""
+                                                     , phoneNumber: users.phoneNumber ?? "", newToken: newToken, ref: ref)
                 }
             }
             
@@ -117,8 +115,8 @@ class FirebaseData: ObservableObject {
                     completion(.failure(UserError.cannotUnwrapToUser))
                     return
                 }
-                self?.users = muser
                 completion(.success(muser))
+                self?.users = muser
             } else {
                 completion(.failure(UserError.cannotGetUserInfo))
             }
@@ -201,8 +199,8 @@ class FirebaseData: ObservableObject {
             }
             self?.userAll = array
             self?.userPhoneAll = phoneAll
-            //            self?.vremPhone()
-            self?.getContact()
+                        self?.vremPhone()
+//            self?.getContact()
         }
     }
     func favoritFilter() {
@@ -227,23 +225,6 @@ class FirebaseData: ObservableObject {
         return token
     }
     
-    //    func getImageUIImage(url: String) -> UIImage {
-    //
-    //        let defaultImage = UIImage(named: "place-to-place-banner")
-    //
-    //        let imageUrlString = url
-    //
-    //        guard let imageUrl = URL(string: imageUrlString) else {return defaultImage!}
-    //        do {
-    //            let imageData = try Data(contentsOf: imageUrl)
-    //            return UIImage(data: imageData)!
-    //        } catch {
-    //            print(error.localizedDescription)
-    //            return defaultImage!
-    //        }
-    //
-    //    }
-    
     func getDocument(){
         db.collection("users").getDocuments() { [weak self] (querySnapshot, err) in
             if let err = err {
@@ -251,7 +232,7 @@ class FirebaseData: ObservableObject {
             } else {
                 for document in querySnapshot!.documents {
                     let userData = Users(snapshot: document.data() as NSDictionary)
-                    if self?.user.uid == userData.uid {
+                    if self?.users.uid == userData.uid {
                         if self?.deviseToken != userData.deviseToken {
                             self?.db.collection("users").document(document.documentID).updateData([
                                 "deviseToken": (self?.deviseToken)! as String

@@ -52,7 +52,7 @@ class PlaceDetalsViewModel: ObservableObject {
     var userAll: [Users]?
     
     init(places: PlaceModel?) {
-        self.user = FirebaseData.shared.user
+        self.user = FirebaseData.shared.users
         self.places = places
         self.userAll = FirebaseData.shared.userAll
         
@@ -99,7 +99,7 @@ class PlaceDetalsViewModel: ObservableObject {
         if places.coments != nil {
             var arrayCom = [Comment]()
             for (keyCom, valuesComent) in places.coments! {
-                guard let userAll = userAll else {return}
+                guard let userAll = userAll else {return print("PlaceDetalsViewModel_return_comentPlace()_userAll = userAll")}
                 for user1 in userAll {
                     if user1.uid == keyCom {
                         var stars = 0
@@ -128,13 +128,8 @@ class PlaceDetalsViewModel: ObservableObject {
             guard let userAll = userAll else {
                 return
             }
-
-            for placeUser in userAll {
-                if places.userId == placeUser.uid {
-                    self.userPlace = placeUser
-                    
-                }
-            }
+            self.userPlace = userAll.filter {$0.uid == places.userId}.first
+           
             
         }
        

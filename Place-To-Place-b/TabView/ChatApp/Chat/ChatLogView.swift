@@ -122,7 +122,7 @@ struct ChatLogView: View {
                 Button {
                     let arrayUser = [vm.chatCurentUser?.uid, vm.chatUser?.uid]
                     guard let toId = vm.chatUser?.uid else {return}
-                    let uid = FirebaseData.shared.user.uid
+                    let uid = FirebaseData.shared.users.uid
                     if vm.blokUserTo {
                         FirebaseData.shared.firestore.collection("users").document(uid).collection("blokUser").document(toId).delete() { (error) in
                             if let error = error {

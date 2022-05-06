@@ -82,14 +82,14 @@ struct FavoritList: View {
             } else {
                 
                 if title == "Все" {
-                    placeArray = place.filter { $0.userId == FirebaseData.shared.user.uid}
+                    placeArray = place.filter { $0.userId == FirebaseData.shared.users.uid}
                 } else if title == "Любимые места" {
                     
                     for item in place {
                         if item.favorit != nil {
                             
                             for i in item.favorit! {
-                                if i == FirebaseData.shared.user.uid {
+                                if i == FirebaseData.shared.users.uid {
                                     placeArray.append(item)
                                 }
                             }
@@ -110,7 +110,7 @@ struct FavoritList: View {
         var placeKey = ""
         for index in indexSet {
             placeKey = placeArray[index].key
-            favorit = (placeArray[index].favorit?.filter {$0 != FirebaseData.shared.user.uid})!
+            favorit = (placeArray[index].favorit?.filter {$0 != FirebaseData.shared.users.uid})!
             placeArray.remove(at: index)
         }
         FirebaseAuthDatabase.updateFavorit(key: placeKey, favorit: favorit, ref: FirebaseData.shared.ref) { resalt in

@@ -52,32 +52,7 @@ class FirebaseAuthDatabase {
             }
         }
     }
-//    static func uploadImageMessage(photo: UIImage, to chat: MChat, completion: @escaping (Result<URL, Error>) -> Void) {
-//        guard let scaledImage = photo.scaledToSafeUploadSize, let imageData = scaledImage.jpegData(compressionQuality: 0.4) else {return}
-//
-//        let metodata = StorageMetadata()
-//        metodata.contentType = "image/jpeg"
-//
-//        let imageName = [UUID().uuidString, String(Date().timeIntervalSince1970)].joined()
-//        let uid: String = Auth.auth().currentUser!.uid
-//        let chatName = [chat.friendUsername, uid].joined()
-//        self.chatsRef.child(chatName).child(imageName).putData(imageData, metadata: metodata) { metodata, error in
-//            guard let _ = metodata else {
-//                completion(.failure(error!))
-//                return
-//            }
-//            self.chatsRef.child(chatName).child(imageName).downloadURL { (url, error) in
-//                guard let dowladURL = url else {
-//                    completion(.failure(error!))
-//                    return
-//                }
-//                completion(.success(dowladURL))
-//            }
-//
-//        }
-//
-//        
-//    }
+
     static func dowloudImage(url: URL, completion: @escaping (Result<UIImage?, Error>) -> Void) {
     
         let ref = Storage.storage().reference(forURL: url.absoluteString)
@@ -112,63 +87,7 @@ class FirebaseAuthDatabase {
         }
     }
     
-//    static func register(photo: UIImage?, lastName: String?, email: String?, password: String?, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
-//
-//        guard Validators.isFilled(
-//                                  lastName: lastName,
-//                                  email: email,
-//                                  password: password) else {
-//            completion(.failure(AuthError.notFilled))
-//            return
-//        }
-//        guard let email = email, let password = password else {
-//            completion(.failure(AuthError.unknownError))
-//            return
-//        }
-//
-//        guard Validators.isSimpleEmail(email) else {
-//            completion(.failure(AuthError.invalidEmail))
-//            return
-//        }
-//        guard let lastName = lastName else {
-//            completion(.failure(AuthError.noNoFirstname))
-//            return
-//        }
-//
-//
-//        Auth.auth().createUser(withEmail: email, password: password) {  (result, error) in
-//            guard let result = result else { completion(.failure(error!))
-//                return}
-//            var photo = photo
-//            if (photo == nil) {
-//                photo = UIImage(named: "avatar-1")
-//            }
-//
-//            self.aploadImage(photoName: result.user.uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
-//                switch myresalt {
-//
-//                case .success(let url):
-//                    let db = Firestore.firestore()
-//                    db.collection("users").document(result.user.uid).setData([
-//                        "lastname": lastName as String,
-//                        "email": email as String,
-//                        "avatarsURL": url.absoluteString,
-//                        "uid": result.user.uid,
-//                        "deviseToken": deviseToken! as String
-//                    ]) { (error) in
-//                        if let error = error {
-//                            completion(.failure(error))
-//                        }
-//                        completion(.success)
-//                    }
-//                case .failure(let error):
-//                    completion(.failure(error))
-//                }
-//            }
-//
-//
-//        }
-//    }
+
     static func registerPhone(photo: UIImage?, lastName: String, uid: String, phoneNumber: String, deviseToken: String?, completion: @escaping (AuthResult) -> Void) {
         self.aploadImage(photoName: uid, photo: photo!, dataUrl: "avatars") { (myresalt) in
             switch myresalt {

@@ -19,13 +19,13 @@ class TabViewPlaceModel: ObservableObject {
     }
     
     func inTimeUserUpdate() {
-        firestoreLisener = db.collection("users").document(FirebaseData.shared.user.uid)
+        firestoreLisener = db.collection("users").document(FirebaseData.shared.users.uid)
             .addSnapshotListener { documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     print("Error fetching document: \(error!)")
                     return
                 }
-                let usersMy = Users(document: document)
+                let usersMy = Users(document: document) 
                 self.bedj = usersMy?.bandel ?? 0
             }
     }
@@ -52,8 +52,8 @@ struct TabViewPlace: View {
     var body: some View {
         if exitBool {
             ContentView()
-//        } else if data.places == [] {
-//            LoaderView()
+        } else if data.places == [] {
+            LoaderView()
         } else {
             ZStack {
                 Text(message)
@@ -142,7 +142,7 @@ struct TabViewPlace: View {
             }
             .onAppear(perform: {
                 data.examenationDeviseTocen()
-                data.getUserDataBedjRecient(user: data.user) { (resalt) in
+                data.getUserDataBedjRecient(user: data.users) { (resalt) in
                     switch resalt {
                     case .success(let bedj):
                         self.bedg = bedj

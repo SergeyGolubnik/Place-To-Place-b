@@ -112,7 +112,7 @@ struct ListPlace: View {
                 placeF = data.places
                 if value == filter, value != data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.type == filter}
-                } else if value == data.user.uid, filter != "" {
+                } else if value == data.users.uid, filter != "" {
                     placeF = data.places.filter {$0.userId == filter}
                 } else {
                     placeF = data.places
