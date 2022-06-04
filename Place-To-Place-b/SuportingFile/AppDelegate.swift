@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import Firebase
+import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -46,9 +47,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 FirebaseData.shared.userData(token: token)
             }
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            
+            if #available(iOS 14, *) {
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+                    switch status {
+                    case .authorized:
+                        // Tracking authorization dialog was shown
+                        // and we are authorized
+                        print("Authorized")
+                    case .denied:
+                        // Tracking authorization dialog was
+                        // shown and permission is denied
+                        print("Denied")
+                    case .notDetermined:
+                        // Tracking authorization dialog has not been shown
+                        print("Not Determined")
+                    case .restricted:
+                        print("Restricted")
+                    @unknown default:
+                        print("Unknown")
+                    }
+                })
+            } else {
+                //you got permission to track, iOS 14 is not yet installed
+            }
+        }
         return true
     }
-    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        requestDataPermission()
+    }
+    func requestDataPermission() {
+       
+    }
     // MARK: UISceneSession Lifecycle
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
